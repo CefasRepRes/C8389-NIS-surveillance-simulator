@@ -46,16 +46,6 @@ p_establish <- getEstablishProbability(method = establish_risk, n_sites = num_si
 p_intro_establish <- getIntroAndEstablishProbability(method = intro_risk, n_sites = num_sites, p_establish = p_establish)
 
 
-
-##########################################################################################################################################################
-# 1. assuming  constant probability of detecting (p=1, so that it will be detected if present) introduction through time dertemine time to detection 
-##########################################################################################################################################################
-# a) random surveillance strategy - independent of risk
-# b) risk based surveillance 1 - surveillance focused on high risk site (but overall site visits are the same)
-# c) risk based - surveillance heavilty focussed on high risk sites (but again overall number of sites visits are the same as for the random surveillance)
-###########################################################################################################################################################
-
-
 ## SCENARIO 1: ASSUME CONSTANT PROBABILITY OF DETECTING NIS INTRODUCTION THROUGH TIME ----
 ## SCENARIO 1A: RANDOM SURVEILLANCE STRATEGY (independent of risk) -----------------------
 # 1A: rate at which random sites are visited (vector)
@@ -116,8 +106,6 @@ Probabilityrisk2 <- (0:(length(results1ba)-1)/length(results1ba)-1)
 lines(sort(results1ba),Probabilityrisk2+1,col='green')
 
 legend("bottomright", c("random", "risk-based", "heavy risk-based"), col=c("black", "red", "green"), cex=0.6,pch=19)
-
-
 
 
 
