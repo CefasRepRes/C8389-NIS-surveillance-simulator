@@ -1,9 +1,20 @@
 # Simulator to evaluate time to detection based on a variety of surveillance strategies
 # (assuming no spread from initial intro site)
 
+## LOAD FUNCTIONS --------------------------------------------------------------------
+source("functions/getEstablishProbability.R")
+
+
 ## INPUTS ----------------------------------------------------------------------------
 # number of sites to survey
 num_sites <- 100
+
+# define distribution to use for establishment probabilities
+# establishment is either: (1) 'random uniform' OR (2) 'equal uniform' (case insensitive)
+establish_risk <- "equal uniform"
+
+# equal uniform probability of establishment
+establish_prob <- 0.8
 
 # frequency of site visits (e.g. 0.5 = once every 2 years)
 mean_visit_rate <- 1 # sites visited once per year
@@ -13,14 +24,13 @@ mean_visit_rate <- 1 # sites visited once per year
 # create vector of sites
 site_vector <- 1:num_sites
 
+# probability of establishment
+p_establish <- getEstablishProbability(method = establish_risk, n_sites = num_sites, x = establish_prob)
 
-#probabiliyt of establishment
-p_establishment <- runif(length(site_vector)) 				#probability of establishment at each site - random unifrom distn
-p_establishment <- rep(0.8,length(site_vector))      #probability of establishment at each site - equal for all sites (0.8) 
 
 
 #intro and establishement - random uniform
-site_intro_rate_vector <- runif(length(site_vector))*p_establishment	#rate of introduction and establishment - random uniform intro + either establishement (dependent on above)
+site_intro_rate_vector <- runif(length(site_vector))*p_establish	#rate of introduction and establishment - random uniform intro + either establishement (dependent on above)
 hist(site_intro_rate_vector, breaks=10)# check distribution 
 
 #intro and etablishment - randon normal
@@ -30,7 +40,7 @@ hist(site_intro_rate_vector)# check distribution
 site_intro_rate_vector <- (site_intro_rate_vector+(min(site_intro_rate_vector)*-1))	#rate at which sites are contacted and become established, positive normal distribution
 hist(site_intro_rate_vector)# check distn
 
-site_intro_rate_vector <- (site_intro_rate_vector/(mean(site_intro_rate_vector)))*p_establishment# combine the rate of introductino with rate of establishment (dependent on above)
+site_intro_rate_vector <- (site_intro_rate_vector/(mean(site_intro_rate_vector)))*p_establish# combine the rate of introductino with rate of establishment (dependent on above)
 site_intro_rate_vector
 hist(site_intro_rate_vector)# reduce rates to between 0 and 2.
 
@@ -52,7 +62,7 @@ hist(site_intro_rate_vector)# check distribution
 site_intro_rate_vector <- (site_intro_rate_vector+(min(site_intro_rate_vector)*-1))	#rate at which sites are contacted and become established, positive normal distribution
 hist(site_intro_rate_vector)# check dist
 
-site_intro_rate_vector <- (site_intro_rate_vector/(mean(site_intro_rate_vector)))*p_establishment# combine the rate of introductino with rate of establishment (0.8 for all)
+site_intro_rate_vector <- (site_intro_rate_vector/(mean(site_intro_rate_vector)))*p_establish# combine the rate of introductino with rate of establishment (0.8 for all)
 site_intro_rate_vector
 hist(site_intro_rate_vector)
 
