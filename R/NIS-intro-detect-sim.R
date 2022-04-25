@@ -22,6 +22,9 @@ establish_prob <- 0.8
 # frequency of site visits (e.g. 0.5 = once every 2 years)
 mean_visit_rate <- 1 # sites visited once per year
 
+# mean, minimum and maximum detection probability
+det_prob <- 0.9 # assume that introduction will be detected
+
 
 ## CREATE SIMULATION INPUTS -----------------------------------------------------------
 # create vector of sites
@@ -44,9 +47,6 @@ p_intro_establish <- getIntroAndEstablishProbability(method = intro_risk, n_site
 # b) risk based surveillance 1 - surveillance focused on high risk site (but overall site visits are the same)
 # c) risk based - surveillance heavilty focussed on high risk sites (but again overall number of sites visits are the same as for the random surveillance)
 ###########################################################################################################################################################
-
-det_prob <- 0.9# assume that introduction will be detected.
-
 
 
 #a) random surveillance
