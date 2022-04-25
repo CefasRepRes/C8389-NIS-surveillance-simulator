@@ -86,28 +86,32 @@ results1c <- runSurveillanceSimulation(n_simulations = num_sim,
 
 
 
-results1a# this is the last result of the simulation, so 1000 results in all. 
-#plot(results1a)
-summary(results1a)
-hist(results1a, breaks=10)
-Probability1random <- (0:(length(results1a)-1)/length(results1a)-1)
-plot(jitter(sort(results1a)),Probability1random+1,type='l', xlim=c(0,10), xlab='Time (years)', ylab='Probability of Detection', main="constant rate of detection")
+## SCENARIO 1: (A, B, C) RESULTS -----------------------------------------------------------------
+## TODO: sort this code out - output report?
+par(mfrow=c(3,1))
+hist(site_visit_rate_1a); hist(site_visit_rate_1b); hist(site_visit_rate_1c)
+hist(results1a, breaks=10, freq = T); hist(results1b, breaks = 10, freq = T); hist(results1c, breaks = 10, freq = T)
+plot(results1a); plot(results1b); plot(results1c)
+summary(results1a); summary(results1b); summary(results1c)
 
+plotProbability <- (0:(num_sim - 1) / num_sim - 1)
 
-summary(results1b)
-#hist(results, freq=T)
-Probabilityrisk1 <- (0:(length(results1b)-1)/length(results1b)-1)
-lines(sort(results1b),Probabilityrisk1+1,col='red')
-
-
-summary(results1ba)
-#hist(results, freq=T)
-Probabilityrisk2 <- (0:(length(results1ba)-1)/length(results1ba)-1)
-lines(sort(results1ba),Probabilityrisk2+1,col='green')
-
-legend("bottomright", c("random", "risk-based", "heavy risk-based"), col=c("black", "red", "green"), cex=0.6,pch=19)
-
-
+# line plot for results 1a, 1b and 1c
+par(mfrow=c(1,1))
+plot(jitter(sort(results1a)),
+     plotProbability + 1, 
+     type = 'l',
+     xlim = c(0, num_years), # TODO: THIS CAN BE THE SURVEIILLANCE PERIOD?
+     xlab = 'Time (years)',
+     ylab = 'Probability of Detection',
+     main = "Scenario 1: Constant rate of detection")
+lines(sort(results1b), plotProbability + 1, col = 'red')
+lines(sort(results1c), plotProbability + 1, col= 'blue')
+legend("bottomright",
+       c("random", "risk-based", "heavy risk-based"),
+       col = c("black", "red", "blue"),
+       cex = 0.6,
+       pch = 19)
 
 
 ####################################################################################################
