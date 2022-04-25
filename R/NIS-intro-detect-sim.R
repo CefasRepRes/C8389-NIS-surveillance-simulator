@@ -125,7 +125,7 @@ legend("bottomright",
 ## SCENARIO 2A: RANDOM SURVEILLANCE STRATEGY (independent of risk) -----------------------
 # uses previously defined uniform site visit rate with uniform surveillance effort (visits - one per year)
 
-# run simulation 2A to determine the number of years which is takes to detect an introduction (num_sim simulations)
+# run simulation 2A to determine the number of years it takes to detect an introduction (num_sim simulations)
 results2a <- runSurveillanceSimulation(n_simulations = num_sim,
                                        site_revisit = F,
                                        surveillance_period = num_years,
@@ -133,7 +133,7 @@ results2a <- runSurveillanceSimulation(n_simulations = num_sim,
                                        p_detection = det_prob,
                                        detection_dynamic = "increasing")
 
-# run simulation 2B to determine the number of years which is takes to detect an introduction (num_sim simulations)
+# run simulation 2B to determine the number of years it takes to detect an introduction (num_sim simulations)
 results2b <- runSurveillanceSimulation(n_simulations = num_sim,
                                        site_revisit = F,
                                        surveillance_period = num_years,
@@ -141,7 +141,7 @@ results2b <- runSurveillanceSimulation(n_simulations = num_sim,
                                        p_detection = det_prob,
                                        detection_dynamic = "increasing")
 
-# run simulation 2C to determine the number of years which is takes to detect an introduction (num_sim simulations)
+# run simulation 2C to determine the number of years it takes to detect an introduction (num_sim simulations)
 results2c <- runSurveillanceSimulation(n_simulations = num_sim,
                                        site_revisit = F,
                                        surveillance_period = num_years,
