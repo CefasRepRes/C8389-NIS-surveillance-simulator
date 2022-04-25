@@ -1,10 +1,18 @@
 # Simulator to evaluate time to detection based on a variety of surveillance strategies
 # (assuming no spread from initial intro site)
 
+## INPUTS ----------------------------------------------------------------------------
+# number of sites to survey
+num_sites <- 100
 
-site_vector <- 1:100     					#Number of sites of interest, 100
+# frequency of site visits (e.g. 0.5 = once every 2 years)
+mean_visit_rate <- 1 # sites visited once per year
 
-mean_visit_rate <- 0.5							# Average rate at which sutes are visited - once every 2 years
+
+## CREATE SIMULATION INPUTS -----------------------------------------------------------
+# create vector of sites
+site_vector <- 1:num_sites
+
 
 #probabiliyt of establishment
 p_establishment <- runif(length(site_vector)) 				#probability of establishment at each site - random unifrom distn
@@ -35,9 +43,6 @@ hist(site_intro_rate_vector)# reduce rates to between 0 and 2.
 # b) risk based surveillance 1 - surveillance focused on high risk site (but overall site visits are the same)
 # c) risk based - surveillance heavilty focussed on high risk sites (but again overall number of sites visits are the same as for the random surveillance)
 ###########################################################################################################################################################
-
-mean_visit_rate <- 1 # each site visited once a year
-site_vector <- 1:100
 
 det_prob <- 0.9# assume that introduction will be detected.
 #site risk = normal distribution
