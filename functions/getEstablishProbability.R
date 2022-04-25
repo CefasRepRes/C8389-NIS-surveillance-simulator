@@ -39,6 +39,6 @@ getEstablishProbability <- function(method, n_sites, ...) {
     return(p_establish)
     
   } else {
-    print("WARNING: establish_dist contains an invalid entry and is not calculated.")
+    print("WARNING: method contains an invalid entry and is not calculated.")
   }
 }
