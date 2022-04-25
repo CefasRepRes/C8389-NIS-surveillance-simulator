@@ -43,7 +43,7 @@ getIntroAndEstablishProbability <- function(method, n_sites, p_establish) {
     return(p_intro_establish)
     
   } else {
-    print("WARNING: intro_dist contains an invalid entry and is not calculated.")
+    print("WARNING: method contains an invalid entry and is not calculated.")
     
   }
 }
