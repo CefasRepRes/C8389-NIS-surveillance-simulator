@@ -4,6 +4,7 @@
 ## LOAD FUNCTIONS --------------------------------------------------------------------
 source("functions/getEstablishProbability.R")
 source("functions/getIntroAndEstablishProbability.R")
+source("functions/runSurveillanceSimulation.R")
 
 
 ## INPUTS ----------------------------------------------------------------------------
@@ -21,6 +22,12 @@ establish_prob <- 0.8
 
 # frequency of site visits (e.g. 0.5 = once every 2 years)
 mean_visit_rate <- 1 # sites visited once per year
+
+# number of simulations to run
+num_sim <- 1000
+
+# number of years that sites are visited
+num_years <- 11
 
 # mean, minimum and maximum detection probability
 det_prob <- 0.9 # assume that introduction will be detected
@@ -49,51 +56,39 @@ p_intro_establish <- getIntroAndEstablishProbability(method = intro_risk, n_site
 ###########################################################################################################################################################
 
 
-#a) random surveillance
-#########################
-random_site_visit_rate_vector <- rep(mean_visit_rate, length(site_vector))
-random_site_visit_rate_vector # each site visited once, all sites have a score of 1
+## SCENARIO 1: ASSUME CONSTANT PROBABILITY OF DETECTING NIS INTRODUCTION THROUGH TIME ----
+## SCENARIO 1A: RANDOM SURVEILLANCE STRATEGY (independent of risk) -----------------------
+# 1A: rate at which random sites are visited (vector)
+site_visit_rate_1a <- rep(mean_visit_rate, length(site_vector)) # each site visited once (mean_visit_rate = 1)
 
-#run simulation to determine the number of years which is takes to detect an introduction. (1000 simulations in total)                                                                                                                  
-
-results1random <- numeric(1000)
-for(i in 1:length(results1random))
-{
-  time <- 0 #set start time to 0
-  
-  
-  inf_site <- sample(site_vector, 1, replace=F,prob=(p_intro_establish)/sum(p_intro_establish)) # introduction seeeded at site dependent on risk
-                                                                                                  # risk distn of site follows random normal 
-                                                                                                      #(most sites have intermediate risk)
-  
-  #loop through site visit until the infected site is detected
-  
-  while(results1random[i]==0 && time<11)# surveillance over 10 years?
-  {
-    new_time <- rexp(1,100)#??? (sum(random_site_visit_rate_vector=100)) This is working out the average time taken to visit one site assuming that 
-                                                              #on average 100 sites will be visited in 1 year.
-    
-    
-  # for more info on rexp (http://www.stanford.edu/class/cs109l/unrestricted/code/week6/exponential.R)
-  time <- time+new_time
-    visit <- sample(site_vector,1, replace=F,prob=random_site_visit_rate_vector)
-    
-   
-    detect <- (rbinom(1,1,det_prob)) #return a 0/1 based on p of detection
-    
-    results1random[i] <- ifelse(visit==inf_site & detect==1,time,0)# detect is 1 if get to infected site, record the time at which the infected site is visited. 
-  }	
-  results1random[i] <- ifelse(results1random[i]==0,100,results1random[i])# if not infected site then detect=0.
+# run simulation 1A to determine the number of years which is takes to detect an introduction (1000 simulations in total)
+results1a <- runSurveillanceSimulation(n_simulations = num_sim,
+                                        site_revisit = F,
+                                        surveillance_period = num_years,
+                                        site_visit_rate = site_visit_rate_1a,
+                                        p_detection = det_prob)
 
 
-}
+## SCENARIO 1B: RISK BASED SURVEILLANCE FOCUSSED ON HIGH RISK SITES ----------------------
+# CONSTANT DETECTION WITH SAME OVERALL SITE VISITS
+# ESTABLISH RISK: equal uniform distribution with establish_prob
+## TODO: SITE AND ESTABLISH RISK THE SAME AS PREVIOUS - DO THESE NEED TO BE EDITABLE?
+site_visit_rate_1b <- rep(mean_visit_rate, num_sites) * p_intro_establish / mean(p_intro_establish)
 
-results1random# this is the last result of the simulation, so 1000 results in all. 
-#plot(results1random)
-summary(results1random)
-hist(results1random, breaks=10)
-Probability1random <- (0:(length(results1random)-1)/length(results1random)-1)
-plot(jitter(sort(results1random)),Probability1random+1,type='l', xlim=c(0,10), xlab='Time (years)', ylab='Probability of Detection', main="constant rate of detection")
+results1b <- runSurveillanceSimulation2(n_simulations = num_sim,
+                                        site_revisit = F,
+                                        surveillance_period = num_years,
+                                        site_visit_rate = site_visit_rate_1b,
+                                        p_detection = det_prob)
+
+
+
+results1a# this is the last result of the simulation, so 1000 results in all. 
+#plot(results1a)
+summary(results1a)
+hist(results1a, breaks=10)
+Probability1random <- (0:(length(results1a)-1)/length(results1a)-1)
+plot(jitter(sort(results1a)),Probability1random+1,type='l', xlim=c(0,10), xlab='Time (years)', ylab='Probability of Detection', main="constant rate of detection")
 
 
 #b) risk based surveillance 
