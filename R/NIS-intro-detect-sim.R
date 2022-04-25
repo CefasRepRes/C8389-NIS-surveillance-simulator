@@ -82,6 +82,17 @@ results1b <- runSurveillanceSimulation(n_simulations = num_sim,
                                        p_detection = det_prob)
 
 
+## SCENARIO 1C: RISK BASED SURVEILLANCE VERY FOCUSSED ON HIGH RISK SITES -----------------
+# site visit rate with heavy focus on high risk sites
+# note overall number of sites visits are the same as for the random surveillance (1A)
+site_visit_rate_1c <- (rep(mean_visit_rate, num_sites) * p_intro_establish ^ 3) / mean(p_intro_establish ^ 3)
+
+## TODO: WHY IS THE SITE_REVISIT PARAMETER NOW TRUE?
+results1c <- runSurveillanceSimulation(n_simulations = num_sim,
+                                       site_revisit = T,
+                                       surveillance_period = num_years,
+                                       site_visit_rate = site_visit_rate_1c,
+                                       p_detection = det_prob)
 
 
 
