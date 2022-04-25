@@ -31,7 +31,7 @@ runSurveillanceSimulation <- function(n_simulations, site_revisit, surveillance_
     # set the time to 0
     time <- 0
     
-    # introduction seeded at site dependent on risk (risk distribution is random normal so most sites intermediate risk)
+    # introduction seeded at site dependent on risk (if risk distribution is random normal most sites intermediate risk)
     seed_site <- sample(x = site_vector,
                         size = 1,
                         replace = site_revisit, # if set to F site is not revisited
@@ -40,7 +40,7 @@ runSurveillanceSimulation <- function(n_simulations, site_revisit, surveillance_
     # loop through site visits until the seed site is visited and detection = 1
     while(results[i] == 0 && time <= surveillance_period) {
       
-      # work out average time to visit one site assuming n_sites will be visited per year
+      # work out average time to visit one site assuming sum of visit rate sites will be visited per year
       new_time <- rexp(n = 1, rate = sum(site_visit_rate))
       
       # add period of time to original (simulate time passing)
@@ -52,7 +52,7 @@ runSurveillanceSimulation <- function(n_simulations, site_revisit, surveillance_
                       replace = site_revisit, # if set to F site is not revisited
                       prob = site_visit_rate)
       
-      # if constant detection probability ove time:
+      # if constant detection probability over time:
       if (grepl("constant", detection_dynamic, ignore.case = T)) {
         # return a 0/1 based on p of detection
         detect <- rbinom(n = 1, size = 1, prob = p_detection)
