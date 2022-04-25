@@ -2,27 +2,27 @@
 # (assuming no spread from initial intro site)
 
 
-site_vector=1:100     					#Number of sites of interest, 100
+site_vector <- 1:100     					#Number of sites of interest, 100
 
-mean_visit_rate=0.5							# Average rate at which sutes are visited - once every 2 years
+mean_visit_rate <- 0.5							# Average rate at which sutes are visited - once every 2 years
 
 #probabiliyt of establishment
-p_establishment=runif(length(site_vector)) 				#probability of establishment at each site - random unifrom distn
-p_establishment=rep(0.8,length(site_vector))      #probability of establishment at each site - equal for all sites (0.8) 
+p_establishment <- runif(length(site_vector)) 				#probability of establishment at each site - random unifrom distn
+p_establishment <- rep(0.8,length(site_vector))      #probability of establishment at each site - equal for all sites (0.8) 
 
 
 #intro and establishement - random uniform
-site_intro_rate_vector=runif(length(site_vector))*p_establishment	#rate of introduction and establishment - random uniform intro + either establishement (dependent on above)
+site_intro_rate_vector <- runif(length(site_vector))*p_establishment	#rate of introduction and establishment - random uniform intro + either establishement (dependent on above)
 hist(site_intro_rate_vector, breaks=10)# check distribution 
 
 #intro and etablishment - randon normal
-site_intro_rate_vector=rnorm(length(site_vector))	#rate of introduction only - random normal distn 
+site_intro_rate_vector <- rnorm(length(site_vector))	#rate of introduction only - random normal distn 
 hist(site_intro_rate_vector)# check distribution
 
-site_intro_rate_vector=(site_intro_rate_vector+(min(site_intro_rate_vector)*-1))	#rate at which sites are contacted and become established, positive normal distribution
+site_intro_rate_vector <- (site_intro_rate_vector+(min(site_intro_rate_vector)*-1))	#rate at which sites are contacted and become established, positive normal distribution
 hist(site_intro_rate_vector)# check distn
 
-site_intro_rate_vector=(site_intro_rate_vector/(mean(site_intro_rate_vector)))*p_establishment# combine the rate of introductino with rate of establishment (dependent on above)
+site_intro_rate_vector <- (site_intro_rate_vector/(mean(site_intro_rate_vector)))*p_establishment# combine the rate of introductino with rate of establishment (dependent on above)
 site_intro_rate_vector
 hist(site_intro_rate_vector)# reduce rates to between 0 and 2.
 
@@ -36,36 +36,36 @@ hist(site_intro_rate_vector)# reduce rates to between 0 and 2.
 # c) risk based - surveillance heavilty focussed on high risk sites (but again overall number of sites visits are the same as for the random surveillance)
 ###########################################################################################################################################################
 
-mean_visit_rate=1 # each site visited once a year
-site_vector=1:100
+mean_visit_rate <- 1 # each site visited once a year
+site_vector <- 1:100
 
-det_prob=0.9# assume that introduction will be detected.
+det_prob <- 0.9# assume that introduction will be detected.
 #site risk = normal distribution
-site_intro_rate_vector=rnorm(length(site_vector))  #random normal distribution.
+site_intro_rate_vector <- rnorm(length(site_vector))  #random normal distribution.
 hist(site_intro_rate_vector)# check distribution
 
-site_intro_rate_vector=(site_intro_rate_vector+(min(site_intro_rate_vector)*-1))	#rate at which sites are contacted and become established, positive normal distribution
+site_intro_rate_vector <- (site_intro_rate_vector+(min(site_intro_rate_vector)*-1))	#rate at which sites are contacted and become established, positive normal distribution
 hist(site_intro_rate_vector)# check dist
 
-site_intro_rate_vector=(site_intro_rate_vector/(mean(site_intro_rate_vector)))*p_establishment# combine the rate of introductino with rate of establishment (0.8 for all)
+site_intro_rate_vector <- (site_intro_rate_vector/(mean(site_intro_rate_vector)))*p_establishment# combine the rate of introductino with rate of establishment (0.8 for all)
 site_intro_rate_vector
 hist(site_intro_rate_vector)
 
 
 #a) random surveillance
 #########################
-random_site_visit_rate_vector=re(mean_visit_rate, length(site_vector))
+random_site_visit_rate_vector <- re(mean_visit_rate, length(site_vector))
 random_site_visit_rate_vector # each site visited once, all sites have a score of 1
 
 #run simulation to determine the number of years which is takes to detect an introduction. (1000 simulations in total)                                                                                                                  
 
-results1random=numeric(1000)
+results1random <- numeric(1000)
 for(i in 1:length(results1random))
 {
-  time=0 #set start time to 0
+  time <- 0 #set start time to 0
   
   
-  inf_site=sample(site_vector, 1, replace=F,prob=(site_intro_rate_vector)/sum(site_intro_rate_vector)) # introduction seeeded at site dependent on risk
+  inf_site <- sample(site_vector, 1, replace=F,prob=(site_intro_rate_vector)/sum(site_intro_rate_vector)) # introduction seeeded at site dependent on risk
                                                                                                   # risk distn of site follows random normal 
                                                                                                       #(most sites have intermediate risk)
   
@@ -73,20 +73,20 @@ for(i in 1:length(results1random))
   
   while(results1random[i]==0 && time<11)# surveillance over 10 years?
   {
-    new_time=rexp(1,100)#??? (sum(random_site_visit_rate_vector=100)) This is working out the average time taken to visit one site assuming that 
+    new_time <- rexp(1,100)#??? (sum(random_site_visit_rate_vector=100)) This is working out the average time taken to visit one site assuming that 
                                                               #on average 100 sites will be visited in 1 year.
     
     
   # for more info on rexp (http://www.stanford.edu/class/cs109l/unrestricted/code/week6/exponential.R)
-  time=time+new_time
-    visit=sample(site_vector,1, replace=F,prob=random_site_visit_rate_vector)
+  time <- time+new_time
+    visit <- sample(site_vector,1, replace=F,prob=random_site_visit_rate_vector)
     
    
-    detect=(rbinom(1,1,det_prob)) #return a 0/1 based on p of detection
+    detect <- (rbinom(1,1,det_prob)) #return a 0/1 based on p of detection
     
-    results1random[i]=ifelse(visit==inf_site & detect==1,time,0)# detect is 1 if get to infected site, record the time at which the infected site is visited. 
+    results1random[i] <- ifelse(visit==inf_site & detect==1,time,0)# detect is 1 if get to infected site, record the time at which the infected site is visited. 
   }	
-  results1random[i]=ifelse(results1random[i]==0,100,results1random[i])# if not infected site then detect=0.
+  results1random[i] <- ifelse(results1random[i]==0,100,results1random[i])# if not infected site then detect=0.
 
 
 }
@@ -95,7 +95,7 @@ results1random# this is the last result of the simulation, so 1000 results in al
 #plot(results1random)
 summary(results1random)
 hist(results1random, breaks=10)
-Probability1random=(0:(length(results1random)-1)/length(results1random)-1)
+Probability1random <- (0:(length(results1random)-1)/length(results1random)-1)
 plot(jitter(sort(results1random)),Probability1random+1,type='l', xlim=c(0,10), xlab='Time (years)', ylab='Probability of Detection', main="constant rate of detection")
 
 
@@ -106,69 +106,69 @@ plot(jitter(sort(results1random)),Probability1random+1,type='l', xlim=c(0,10), x
 
 #hist(site_intro_rate_vector)
 
-risk1_site_visit_rate_vector=(rep(mean_visit_rate,length(site_vector))*site_intro_rate_vector)/(mean(site_intro_rate_vector))	#vists to sites 
+risk1_site_visit_rate_vector <- (rep(mean_visit_rate,length(site_vector))*site_intro_rate_vector)/(mean(site_intro_rate_vector))	#vists to sites 
 risk1_site_visit_rate_vector
 #hist(risk1_site_visit_rate_vector)# site visits follow same distn as the intro probabilities
 #plot(site_intro_rate_vector)# vist and intro rate follow the same pattern. more visits and site which have higher risk of introduction.
 #plot(risk1_site_visit_rate_vector)
 
-resultsrisk1=numeric(1000)
+resultsrisk1 <- numeric(1000)
 for(i in 1:length(resultsrisk1))
 {
-  time=0 #set start time to 0
-  inf_site=sample(site_vector, 1, replace=F,prob=(site_intro_rate_vector)/sum(site_intro_rate_vector)) #select site to be infected
+  time <- 0 #set start time to 0
+  inf_site <- sample(site_vector, 1, replace=F,prob=(site_intro_rate_vector)/sum(site_intro_rate_vector)) #select site to be infected
   
   #loop through site visit is until the infected site is detected
   
   while(resultsrisk1[i]==0 && time<11)
   {
-    new_time=rexp(1,sum(risk1_site_visit_rate_vector))# the average time a single visit will take given that on average 100 visits will be made in a year. sum=100
-    time=time+new_time
-    visit=sample(site_vector,1, replace=F,prob=(risk1_site_visit_rate_vector)/sum(risk1_site_visit_rate_vector)) # replace=F so that site not revisited.
+    new_time <- rexp(1,sum(risk1_site_visit_rate_vector))# the average time a single visit will take given that on average 100 visits will be made in a year. sum=100
+    time <- time+new_time
+    visit <- sample(site_vector,1, replace=F,prob=(risk1_site_visit_rate_vector)/sum(risk1_site_visit_rate_vector)) # replace=F so that site not revisited.
     
-    detect=(rbinom(1,1,det_prob)) #return a 0/1 based on p of detection
+    detect <- (rbinom(1,1,det_prob)) #return a 0/1 based on p of detection
     
-    resultsrisk1[i]=ifelse(visit==inf_site & detect==1,time,0)
+    resultsrisk1[i] <- ifelse(visit==inf_site & detect==1,time,0)
   }	
-  resultsrisk1[i]=ifelse(resultsrisk1[i]==0,100,resultsrisk1[i])
+  resultsrisk1[i] <- ifelse(resultsrisk1[i]==0,100,resultsrisk1[i])
 }
 
 summary(resultsrisk1)
 #hist(results, freq=T)
-Probabilityrisk1=(0:(length(resultsrisk1)-1)/length(resultsrisk1)-1)
+Probabilityrisk1 <- (0:(length(resultsrisk1)-1)/length(resultsrisk1)-1)
 lines(sort(resultsrisk1),Probabilityrisk1+1,col='red')
 
 
 # c)risk based 2 - very focused on risky sites.
 ##############################################
 
-risk1asite_visit_rate_vector=(rep(mean_visit_rate,length(site_vector))*site_intro_rate_vector^3)/(mean(site_intro_rate_vector^3))	
+risk1asite_visit_rate_vector <- (rep(mean_visit_rate,length(site_vector))*site_intro_rate_vector^3)/(mean(site_intro_rate_vector^3))	
 
-resultsrisk1a=numeric(1000)
+resultsrisk1a <- numeric(1000)
 for(i in 1:length(resultsrisk1a))
 {
-  time=0 #set start time to 0
-  inf_site=sample(site_vector, 1, replace=T,prob=(site_intro_rate_vector)/sum(site_intro_rate_vector)) #select site to be infected
+  time <- 0 #set start time to 0
+  inf_site <- sample(site_vector, 1, replace=T,prob=(site_intro_rate_vector)/sum(site_intro_rate_vector)) #select site to be infected
   
   #loop through site visit is until the infected site is detected
   
   while(resultsrisk1a[i]==0 && time<11)
   {
-    new_time=rexp(1,sum(risk1asite_visit_rate_vector))
-    time=time+new_time
-    visit=sample(site_vector,1, replace=T,prob=(risk1asite_visit_rate_vector)/sum(risk1asite_visit_rate_vector)) #to determine site visited NOTE REPLACE SET to F NOT T as it is in next sim
+    new_time <- rexp(1,sum(risk1asite_visit_rate_vector))
+    time <- time+new_time
+    visit <- sample(site_vector,1, replace=T,prob=(risk1asite_visit_rate_vector)/sum(risk1asite_visit_rate_vector)) #to determine site visited NOTE REPLACE SET to F NOT T as it is in next sim
     
-    detect=(rbinom(1,1,det_prob)) #return a 0/1 based on p of detection
+    detect <- (rbinom(1,1,det_prob)) #return a 0/1 based on p of detection
     
   
-    resultsrisk1a[i]=ifelse(visit==inf_site & detect==1,time,0)
+    resultsrisk1a[i] <- ifelse(visit==inf_site & detect==1,time,0)
   }	
-  resultsrisk1a[i]=ifelse(resultsrisk1a[i]==0,100,resultsrisk1a[i])
+  resultsrisk1a[i] <- ifelse(resultsrisk1a[i]==0,100,resultsrisk1a[i])
 }
 
 summary(resultsrisk1a)
 #hist(results, freq=T)
-Probabilityrisk2=(0:(length(resultsrisk1a)-1)/length(resultsrisk1a)-1)
+Probabilityrisk2 <- (0:(length(resultsrisk1a)-1)/length(resultsrisk1a)-1)
 lines(sort(resultsrisk1a),Probabilityrisk2+1,col='green')
 
 legend("bottomright", c("random", "risk-based", "heavy risk-based"), col=c("black", "red", "green"), cex=0.6,pch=19)
@@ -187,39 +187,39 @@ legend("bottomright", c("random", "risk-based", "heavy risk-based"), col=c("blac
 #c)heavy risk based
 #######################################################################################################
 
-det_prob=1 #mean detection probability
+det_prob <- 1 #mean detection probability
 # a) non risk based - radom surveillance approach
 
 random_site_visit_rate_vector 		#Uniform surv effort (rate of visits), presently assumes 1 visit per year
 
-resultsrandom2=numeric(1000)
+resultsrandom2 <- numeric(1000)
 for(i in 1:length(resultsrandom2))
 {
-  time=0 #set start time to 0
-  inf_site=sample(site_vector, 1, replace=T,prob=(site_intro_rate_vector)/sum(site_intro_rate_vector)) #select site to be infected
+  time <- 0 #set start time to 0
+  inf_site <- sample(site_vector, 1, replace=T,prob=(site_intro_rate_vector)/sum(site_intro_rate_vector)) #select site to be infected
   
   #loop through site visit is until the infected site is detected
   
   while(resultsrandom2[i]==0 && time<11)
   {
-    new_time=rexp(1,sum(site_visit_rate_vector))
-    time=time+new_time
-    visit=sample(site_vector,1, replace=T,prob=(site_visit_rate_vector)/sum(site_visit_rate_vector)) #to determine site visited NOTE REPLACE SET to F NOT T as it is in next sim
+    new_time <- rexp(1,sum(site_visit_rate_vector))
+    time <- time+new_time
+    visit <- sample(site_vector,1, replace=T,prob=(site_visit_rate_vector)/sum(site_visit_rate_vector)) #to determine site visited NOTE REPLACE SET to F NOT T as it is in next sim
     
-    #detect=(rbinom(1,1,det_prob)) #return a 0/1 based on p of detection
+    #detect <- (rbinom(1,1,det_prob)) #return a 0/1 based on p of detection
     
-    scaling=ifelse(exp(-time)>det_prob_max,det_prob_max,exp(-time)) #ensure p of detection does not exceed max limit
-    scaling=ifelse(scaling<det_prob_min,det_prob_min,scaling) #ensure p of detection does not go below min limit
+    scaling <- ifelse(exp(-time)>det_prob_max,det_prob_max,exp(-time)) #ensure p of detection does not exceed max limit
+    scaling <- ifelse(scaling<det_prob_min,det_prob_min,scaling) #ensure p of detection does not go below min limit
     
-    detect=(rbinom(1,1,det_prob-scaling)) #return a 0/1 based on p of detection which increases with time
-    #detect=(rbinom(1,1,det_prob-(1-scaling))) #return a 0/1 based on p of detection which decreases with time
+    detect <- (rbinom(1,1,det_prob-scaling)) #return a 0/1 based on p of detection which increases with time
+    #detect <- (rbinom(1,1,det_prob-(1-scaling))) #return a 0/1 based on p of detection which decreases with time
     
-    resultsrandom2[i]=ifelse(visit==inf_site & detect==1,time,0)
+    resultsrandom2[i] <- ifelse(visit==inf_site & detect==1,time,0)
   }	
-  resultsrandom2[i]=ifelse(resultsrandom2[i]==0,100,resultsrandom2[i])
+  resultsrandom2[i] <- ifelse(resultsrandom2[i]==0,100,resultsrandom2[i])
 }
 
 summary(resultsrandom2)
 #hist(resultsrandom2, freq=T)
-Probability=(0:(length(resultsrandom2)-1)/length(resultsrandom2)-1)
+Probability <- (0:(length(resultsrandom2)-1)/length(resultsrandom2)-1)
 plot(sort(resultsrandom2),Probability+1,type='l', xlim=c(0,10), xlab='Time (years)', ylab='Probability of Detection')
