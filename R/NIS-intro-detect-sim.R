@@ -1,11 +1,5 @@
-#######################################################################
-#simulator to evaluate time to detection based on a variety of surveillence strategies (assuming no sread from initial intro site)
-#this is for C5995
-#Script amended from original script
-#Jan 14
-###########################
-
-
+# Simulator to evaluate time to detection based on a variety of surveillance strategies
+# (assuming no spread from initial intro site)
 
 par(mfrow=c(1,2))               #set up plot window
 site_vector=1:100     					#Number of sites of interest, 100
