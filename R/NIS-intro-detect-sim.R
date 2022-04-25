@@ -3,15 +3,18 @@
 
 ## LOAD FUNCTIONS --------------------------------------------------------------------
 source("functions/getEstablishProbability.R")
+source("functions/getIntroAndEstablishProbability.R")
 
 
 ## INPUTS ----------------------------------------------------------------------------
 # number of sites to survey
 num_sites <- 100
 
-# define distribution to use for establishment probabilities
+# define distributions to use for introduction and establishment probabilities
 # establishment is either: (1) 'random uniform' OR (2) 'equal uniform' (case insensitive)
+# introduction is either: (1) 'random uniform' OR (2) 'positive normal' (case insensitive)
 establish_risk <- "equal uniform"
+intro_risk <- "positive normal" # for normal majority of sites are intermediate risk
 
 # equal uniform probability of establishment
 establish_prob <- 0.8
@@ -27,22 +30,10 @@ site_vector <- 1:num_sites
 # probability of establishment
 p_establish <- getEstablishProbability(method = establish_risk, n_sites = num_sites, x = establish_prob)
 
-
-
-#intro and establishement - random uniform
-site_intro_rate_vector <- runif(length(site_vector))*p_establish	#rate of introduction and establishment - random uniform intro + either establishement (dependent on above)
-hist(site_intro_rate_vector, breaks=10)# check distribution 
-
-#intro and etablishment - randon normal
-site_intro_rate_vector <- rnorm(length(site_vector))	#rate of introduction only - random normal distn 
-hist(site_intro_rate_vector)# check distribution
-
-site_intro_rate_vector <- (site_intro_rate_vector+(min(site_intro_rate_vector)*-1))	#rate at which sites are contacted and become established, positive normal distribution
-hist(site_intro_rate_vector)# check distn
-
-site_intro_rate_vector <- (site_intro_rate_vector/(mean(site_intro_rate_vector)))*p_establish# combine the rate of introductino with rate of establishment (dependent on above)
-site_intro_rate_vector
-hist(site_intro_rate_vector)# reduce rates to between 0 and 2.
+# probability of introduction AND establishment
+# this function defines the introduction rates using intro_risk defined above
+# introduction rate is then combined with rate of establishment to give overall introduction rate
+p_intro_establish <- getIntroAndEstablishProbability(method = intro_risk, n_sites = num_sites, p_establish = p_establish)
 
 
 
@@ -55,16 +46,7 @@ hist(site_intro_rate_vector)# reduce rates to between 0 and 2.
 ###########################################################################################################################################################
 
 det_prob <- 0.9# assume that introduction will be detected.
-#site risk = normal distribution
-site_intro_rate_vector <- rnorm(length(site_vector))  #random normal distribution.
-hist(site_intro_rate_vector)# check distribution
 
-site_intro_rate_vector <- (site_intro_rate_vector+(min(site_intro_rate_vector)*-1))	#rate at which sites are contacted and become established, positive normal distribution
-hist(site_intro_rate_vector)# check dist
-
-site_intro_rate_vector <- (site_intro_rate_vector/(mean(site_intro_rate_vector)))*p_establish# combine the rate of introductino with rate of establishment (0.8 for all)
-site_intro_rate_vector
-hist(site_intro_rate_vector)
 
 
 #a) random surveillance
@@ -80,7 +62,7 @@ for(i in 1:length(results1random))
   time <- 0 #set start time to 0
   
   
-  inf_site <- sample(site_vector, 1, replace=F,prob=(site_intro_rate_vector)/sum(site_intro_rate_vector)) # introduction seeeded at site dependent on risk
+  inf_site <- sample(site_vector, 1, replace=F,prob=(p_intro_establish)/sum(p_intro_establish)) # introduction seeeded at site dependent on risk
                                                                                                   # risk distn of site follows random normal 
                                                                                                       #(most sites have intermediate risk)
   
@@ -119,19 +101,19 @@ plot(jitter(sort(results1random)),Probability1random+1,type='l', xlim=c(0,10), x
 #remeber that the introduvtion probability across all sites is normally distributed so that some sites are at low risk of introuction and some sites
 # are at high risk of introduction but the majority are have intermdediate risk of introduction.
 
-#hist(site_intro_rate_vector)
+#hist(p_intro_establish)
 
-risk1_site_visit_rate_vector <- (rep(mean_visit_rate,length(site_vector))*site_intro_rate_vector)/(mean(site_intro_rate_vector))	#vists to sites 
+risk1_site_visit_rate_vector <- (rep(mean_visit_rate,length(site_vector))*p_intro_establish)/(mean(p_intro_establish))	#vists to sites 
 risk1_site_visit_rate_vector
 #hist(risk1_site_visit_rate_vector)# site visits follow same distn as the intro probabilities
-#plot(site_intro_rate_vector)# vist and intro rate follow the same pattern. more visits and site which have higher risk of introduction.
+#plot(p_intro_establish)# vist and intro rate follow the same pattern. more visits and site which have higher risk of introduction.
 #plot(risk1_site_visit_rate_vector)
 
 resultsrisk1 <- numeric(1000)
 for(i in 1:length(resultsrisk1))
 {
   time <- 0 #set start time to 0
-  inf_site <- sample(site_vector, 1, replace=F,prob=(site_intro_rate_vector)/sum(site_intro_rate_vector)) #select site to be infected
+  inf_site <- sample(site_vector, 1, replace=F,prob=(p_intro_establish)/sum(p_intro_establish)) #select site to be infected
   
   #loop through site visit is until the infected site is detected
   
@@ -157,13 +139,13 @@ lines(sort(resultsrisk1),Probabilityrisk1+1,col='red')
 # c)risk based 2 - very focused on risky sites.
 ##############################################
 
-risk1asite_visit_rate_vector <- (rep(mean_visit_rate,length(site_vector))*site_intro_rate_vector^3)/(mean(site_intro_rate_vector^3))	
+risk1asite_visit_rate_vector <- (rep(mean_visit_rate,length(site_vector))*p_intro_establish^3)/(mean(p_intro_establish^3))	
 
 resultsrisk1a <- numeric(1000)
 for(i in 1:length(resultsrisk1a))
 {
   time <- 0 #set start time to 0
-  inf_site <- sample(site_vector, 1, replace=T,prob=(site_intro_rate_vector)/sum(site_intro_rate_vector)) #select site to be infected
+  inf_site <- sample(site_vector, 1, replace=T,prob=(p_intro_establish)/sum(p_intro_establish)) #select site to be infected
   
   #loop through site visit is until the infected site is detected
   
@@ -211,7 +193,7 @@ resultsrandom2 <- numeric(1000)
 for(i in 1:length(resultsrandom2))
 {
   time <- 0 #set start time to 0
-  inf_site <- sample(site_vector, 1, replace=T,prob=(site_intro_rate_vector)/sum(site_intro_rate_vector)) #select site to be infected
+  inf_site <- sample(site_vector, 1, replace=T,prob=(p_intro_establish)/sum(p_intro_establish)) #select site to be infected
   
   #loop through site visit is until the infected site is detected
   
