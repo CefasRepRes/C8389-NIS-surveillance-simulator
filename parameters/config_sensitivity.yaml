@@ -1,0 +1,33 @@
+# sensitivity parameters
+# define the minimum, maximum and interval of values between these ranges to test output sensitivity
+
+seed_n: 
+  min: 0 # Zero will be replaced with 1 within the script after sequence generation. 
+  max: 100
+  interval: 10
+
+num_sites:
+  min: 50
+  max: 200
+  interval: 25
+
+num_years:
+  min: 10
+  max: 50
+  interval: 5
+  
+mean_visit_rate:
+  min: 0.25
+  max: 4
+  interval: 0.25
+
+p_detection:
+  min: 0.1
+  max: 1
+  interval: 0.1
+  
+establish_prob:
+  min: 0.1
+  max: 1
+  interval: 0.1
+

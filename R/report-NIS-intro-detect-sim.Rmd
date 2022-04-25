@@ -1,0 +1,313 @@
+---
+title: "NIS-intro-detect-report"
+output: html_document 
+keep_md: yes
+params:
+  user_inputs: !r config
+  p_establish: p_establish
+  p_intro: p_intro
+  p_intro_establish: p_intro_establish
+  resultsA: resultsA
+  resultsB: resultsB
+  resultsC: resultsC
+  site_visit_rate_A: site_visit_rate_A
+  site_visit_rate_B: site_visit_rate_B
+  site_visit_rate_C: site_visit_rate_C
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("ggplot2")
+library("patchwork")
+```
+\
+
+**Date:** `r Sys.time()` \
+**Author:** `r params$user_inputs$user` \
+**Run Name:** `r params$user_inputs$run_name` \
+
+\
+
+Three scenarios for site surveillance to detect non indigenous species (NIS) introduction are presented and the time to detection is reported.
+
+* **A.** Random surveillance, where sites are visited at an equal rate independent of the risk of NIS introduction and establishment at each site.
+
+* **B.** Risk-based surveillance, where sites with a higher probability of NIS introduction and establishment are visited at a higher visit rate due to their elevated risk.
+
+* **C.** Heavy risk-based surveillance, where sites with higher probability of NIS introduction and establishment form the main focus of surveillance programmes and are visited at a substantially higher visit rate due to their elevated risk. 
+
+\
+
+#### Input Parameters
+
+```{r, echo = FALSE}
+setNames(stack(params$user_inputs)[2:1], c("Parameter Name", "Input Value"))
+```
+
+\
+
+#### Introduction and establishment probabilities across sites
+
+For all three surveillance scenarios a probability of establishment, probability of introduction, and probability of introduction and establishment are randomly generated or calculated per site. These are displayed below.
+
+\
+
+
+```{r probabilities, echo = FALSE, fig.width = 12, fig.height = 4, fig.align = 'center'}
+# generate data frame of probabilities
+df_probs <- data.frame("p_establish" = params$p_establish,
+                       "p_intro" = params$p_intro,
+                       "p_intro_establish" = params$p_intro_establish)
+
+# generate histograms of probabilities
+p1 <- ggplot2::ggplot(df_probs, aes(x = p_establish)) +
+  geom_histogram(binwidth = 0.05, colour = "black", fill = "gray") +
+  theme_bw() +
+  scale_x_continuous(name = "Probability of Establishment",
+                     limits = c(0, 1)) +
+  ylab("Frequency") +
+  ggtitle("Probability of Establishment")
+
+p2 <- ggplot2::ggplot(df_probs, aes(x = p_intro)) +
+  geom_histogram(binwidth = 0.05, colour = "black", fill = "gray") +
+  theme_bw() +
+  scale_x_continuous(name = "Probability of Introduction",
+                     limits = c(0, 1)) +
+  ylab("Frequency") +
+  ggtitle("Probability of Introduction")
+
+p3 <- ggplot2::ggplot(df_probs, aes(x = p_intro_establish)) +
+  geom_histogram(binwidth = 0.05, colour = "black", fill = "gray") +
+  theme_bw() +
+  scale_x_continuous(name = "Probability",
+                     limits = c(0, 1)) +
+  ylab("Frequency") +
+  ggtitle("Probability of Introduction and Establishment")
+
+# display plots side by side
+p1 + p2 + p3
+
+```
+
+\
+
+#### Site-specific visit rate for each surveillance scenario
+
+Note that for each of these surveillance strategies the overall visit rate, as determined in the input parameters `mean_visit_rate` (in this run: `r params$user_inputs$mean_visit_rate`) remains the same. The site visit rate is artificially increased for sites with higher probability of introduction and establishment in risk-based surveillance and lowered for those with lower probability of introduction and establishment. These plots demonstrate this.
+
+\
+
+```{r, echo = FALSE, fig.width = 12, fig.height = 4, fig.align = 'center'}
+# generate data frame of site visit rates
+# added plus 0.05 to xlim as it was cutting off site visit rates all at 1.0
+df_visits <- data.frame("site_visit_rate_A" = params$site_visit_rate_A,
+                        "site_visit_rate_B" = params$site_visit_rate_B,
+                        "site_visit_rate_C" = params$site_visit_rate_C)
+
+p1 <- ggplot2::ggplot(df_visits, aes(x = site_visit_rate_A)) +
+  geom_histogram(binwidth = 0.05, colour = "gray", fill = "gray") +
+  theme_bw() +
+  scale_x_continuous(name = "Site Visit Rate (per year)",
+                     limits = c(0, max(df_visits$site_visit_rate_C)+0.05)) +
+  
+  ylab("Frequency") +
+  
+  ggtitle("Random Surveillance")
+
+p2 <- ggplot2::ggplot(df_visits, aes(x = site_visit_rate_B)) +
+  geom_histogram(binwidth = 0.05, colour = "lightblue2", fill = "lightblue2") +
+  theme_bw() +
+  scale_x_continuous(name = "Site Visit Rate (per year)",
+                     limits = c(0, max(df_visits$site_visit_rate_C)+0.05)) +
+  ylab("Frequency") +
+  ggtitle("Risk-based surveillance")
+
+p3 <- ggplot2::ggplot(df_visits, aes(x = site_visit_rate_C)) +
+  geom_histogram(binwidth = 0.05, colour = "royalblue3", fill = "royalblue3") +
+  theme_bw() +
+  scale_x_continuous(name = "Site Visit Rate (per year)",
+                     limits = c(0, max(df_visits$site_visit_rate_C)+0.05)) +
+  ylab("Frequency") +
+  ggtitle("Heavy risk-based surveillance")
+
+p1 + p2 + p3
+
+```
+\
+
+#### Time to detection for each site 
+
+The time it takes in years to visit a site where the NIS has been introduced and also detect it is illustrated in the histograms below. Where an NIS introduction is not detected within the surveillance period of `r params$user_inputs$num_years` the time to detection reported is 1000 years.
+
+\
+
+
+```{r, echo = FALSE, fig.width = 12, fig.height = 4, fig.align = 'center'}
+# generate data frame of site visit rates
+df_results <- data.frame("resultsA" = params$resultsA,
+                         "resultsB" = params$resultsB,
+                         "resultsC" = params$resultsC)
+
+p1 <- ggplot2::ggplot(df_results, aes(x = resultsA)) +
+  geom_histogram(binwidth = 0.05, colour = "gray", fill = "gray") +
+  theme_bw() +
+  ylab("Frequency") +
+  ggtitle("Random surveillance") +
+  scale_x_continuous(name = "Time to Detection (Years)",
+                     limits = c(0, 101))
+
+p2 <- ggplot2::ggplot(df_results, aes(x = resultsB)) +
+  geom_histogram(binwidth = 0.05, colour = "lightblue2", fill = "lightblue2") +
+  theme_bw() +
+  ylab("Frequency") +
+  ggtitle("Risk-based surveillance") +
+  scale_x_continuous(name = "Time to Detection (Years)",
+                     limits = c(0, 101))
+
+p3 <- ggplot2::ggplot(df_results, aes(x = resultsC)) +
+  geom_histogram(binwidth = 0.05, colour = "royalblue3", fill = "royalblue3") +
+  theme_bw() +
+  ylab("Frequency") +
+  ggtitle("Heavy risk-based surveillance") +
+  scale_x_continuous(name = "Time to Detection (Years)",
+                     limits = c(0, 101))
+p1 + p2 + p3
+
+```
+
+\
+
+The time it takes in years to visit a site where the NIS has been introduced is also shown per simulation below.
+
+\
+
+```{r, echo = FALSE, fig.width = 12, fig.height = 4, fig.align = 'center'}
+
+p1 <- ggplot2::ggplot(df_results, aes(x = 1:params$user_inputs$num_sim, y = resultsA)) +
+  geom_point(color = "gray", shape = 1) +
+  theme_bw() +
+  xlab("Simulation") +
+  scale_y_continuous(name = "Time to detection (Years)",
+                     limits = c(0, 101)) +
+  ggtitle("Random surveillance")
+  
+p2 <- ggplot2::ggplot(df_results, aes(x = 1:params$user_inputs$num_sim, y = resultsB)) +
+  geom_point(color = "lightblue2", shape = 1) +
+  theme_bw() +
+  xlab("Simulation") +
+  scale_y_continuous(name = "Time to detection (Years)",
+                     limits = c(0, 101)) +
+  ggtitle("Risk-based surveillance")
+
+p3 <- ggplot2::ggplot(df_results, aes(x = 1:params$user_inputs$num_sim, y = resultsC)) +
+  geom_point(color = "royalblue3", shape = 1) +
+  theme_bw() +
+  xlab("Simulation") +
+  scale_y_continuous(name = "Time to detection (Years)",
+                     limits = c(0, 101)) +
+  ggtitle("Heavy risk-based surveillance")
+
+
+p1 + p2 + p3
+
+```
+
+\
+
+#### Probability of NIS Detection Over Time Depending on Surveillance Method
+
+The probability of detection an NIS introduction over time using the three surveillance methods is also shown for quick visual comparison.
+
+\
+
+```{r, echo = FALSE, fig.width = 8, fig.height = 4, fig.align = 'center'}
+df_scenarios <- data.frame("probability" = rep((0:(params$user_inputs$num_sim - 1)
+                                                / params$user_inputs$num_sim - 1) + 1,
+                                               times = 3),
+                           "results" = c(sort(params$resultsA),
+                                         sort(params$resultsB),
+                                         sort(params$resultsC)),
+                           "scenario" = rep(c("Random", "Risk-based", "Heavy risk-based"),
+                                            each = params$user_inputs$num_sim))
+
+df_scenarios$scenario <- factor(df_scenarios$scenario,
+                                levels = c("Random",
+                                           "Risk-based",
+                                           "Heavy risk-based"))
+
+ggplot2::ggplot(df_scenarios, aes(results, y = probability, group = scenario)) +
+  geom_line(aes(color = scenario)) +
+  theme_bw() +
+  ggtitle("Probability of NIS Detection Through Time") +
+  scale_x_continuous(name = "Time (Years)",
+                     limits = c(0, params$user_inputs$num_years),
+                     breaks = c(0:params$user_inputs$num_years)) +
+  scale_y_continuous(name = "Probability of Detection\n",
+                     limits = c(0, 1)) +
+  guides(color = guide_legend("Surveillance Scenario")) +
+  scale_color_manual(values = c("gray", "lightblue2", "royalblue3"))
+
+```
+
+\
+
+#### Summary of detection times:
+
+**A:** Random surveillance
+
+```{r, echo = FALSE}
+summary(params$resultsA[!params$resultsA == 1000])
+```
+
+\
+
+**B:** Risk-based surveillance
+
+```{r, echo = FALSE}
+summary(params$resultsB[!params$resultsB == 1000])
+```
+
+\
+
+**C:** Heavy risk-based surveillance
+
+```{r, echo = FALSE}
+summary(params$resultsC[!params$resultsC == 1000])
+```
+
+\
+
+#### Simulations with No Detections (%):
+
+**A:** Random surveillance
+
+```{r, echo = F}
+
+(length(params$resultsA[params$resultsA == 1000])/length(params$resultsA))*100
+
+```
+
+**B:** Risk-based surveillance
+
+```{r, echo = F}
+
+(length(params$resultsB[params$resultsB == 1000])/length(params$resultsB))*100
+
+```
+
+**C:** Heavy risk-based surveillance
+
+```{r, echo = F}
+
+(length(params$resultsC[params$resultsC == 1000])/length(params$resultsC))*100
+
+```
+
+#### Version
+
+The version (sha) of https://github.com/CefasRepRes/NIS-intro-detect-sim repository used was: **`r system("git rev-parse HEAD", intern = TRUE)`**
+
+```{r, echo = FALSE}
+sessionInfo()
+```
+
