@@ -104,77 +104,16 @@ Probability1random <- (0:(length(results1a)-1)/length(results1a)-1)
 plot(jitter(sort(results1a)),Probability1random+1,type='l', xlim=c(0,10), xlab='Time (years)', ylab='Probability of Detection', main="constant rate of detection")
 
 
-#b) risk based surveillance 
-############################
-#remeber that the introduvtion probability across all sites is normally distributed so that some sites are at low risk of introuction and some sites
-# are at high risk of introduction but the majority are have intermdediate risk of introduction.
-
-#hist(p_intro_establish)
-
-risk1_site_visit_rate_vector <- (rep(mean_visit_rate,length(site_vector))*p_intro_establish)/(mean(p_intro_establish))	#vists to sites 
-risk1_site_visit_rate_vector
-#hist(risk1_site_visit_rate_vector)# site visits follow same distn as the intro probabilities
-#plot(p_intro_establish)# vist and intro rate follow the same pattern. more visits and site which have higher risk of introduction.
-#plot(risk1_site_visit_rate_vector)
-
-resultsrisk1 <- numeric(1000)
-for(i in 1:length(resultsrisk1))
-{
-  time <- 0 #set start time to 0
-  inf_site <- sample(site_vector, 1, replace=F,prob=(p_intro_establish)/sum(p_intro_establish)) #select site to be infected
-  
-  #loop through site visit is until the infected site is detected
-  
-  while(resultsrisk1[i]==0 && time<11)
-  {
-    new_time <- rexp(1,sum(risk1_site_visit_rate_vector))# the average time a single visit will take given that on average 100 visits will be made in a year. sum=100
-    time <- time+new_time
-    visit <- sample(site_vector,1, replace=F,prob=(risk1_site_visit_rate_vector)/sum(risk1_site_visit_rate_vector)) # replace=F so that site not revisited.
-    
-    detect <- (rbinom(1,1,det_prob)) #return a 0/1 based on p of detection
-    
-    resultsrisk1[i] <- ifelse(visit==inf_site & detect==1,time,0)
-  }	
-  resultsrisk1[i] <- ifelse(resultsrisk1[i]==0,100,resultsrisk1[i])
-}
-
-summary(resultsrisk1)
+summary(results1b)
 #hist(results, freq=T)
-Probabilityrisk1 <- (0:(length(resultsrisk1)-1)/length(resultsrisk1)-1)
-lines(sort(resultsrisk1),Probabilityrisk1+1,col='red')
+Probabilityrisk1 <- (0:(length(results1b)-1)/length(results1b)-1)
+lines(sort(results1b),Probabilityrisk1+1,col='red')
 
 
-# c)risk based 2 - very focused on risky sites.
-##############################################
-
-risk1asite_visit_rate_vector <- (rep(mean_visit_rate,length(site_vector))*p_intro_establish^3)/(mean(p_intro_establish^3))	
-
-resultsrisk1a <- numeric(1000)
-for(i in 1:length(resultsrisk1a))
-{
-  time <- 0 #set start time to 0
-  inf_site <- sample(site_vector, 1, replace=T,prob=(p_intro_establish)/sum(p_intro_establish)) #select site to be infected
-  
-  #loop through site visit is until the infected site is detected
-  
-  while(resultsrisk1a[i]==0 && time<11)
-  {
-    new_time <- rexp(1,sum(risk1asite_visit_rate_vector))
-    time <- time+new_time
-    visit <- sample(site_vector,1, replace=T,prob=(risk1asite_visit_rate_vector)/sum(risk1asite_visit_rate_vector)) #to determine site visited NOTE REPLACE SET to F NOT T as it is in next sim
-    
-    detect <- (rbinom(1,1,det_prob)) #return a 0/1 based on p of detection
-    
-  
-    resultsrisk1a[i] <- ifelse(visit==inf_site & detect==1,time,0)
-  }	
-  resultsrisk1a[i] <- ifelse(resultsrisk1a[i]==0,100,resultsrisk1a[i])
-}
-
-summary(resultsrisk1a)
+summary(results1ba)
 #hist(results, freq=T)
-Probabilityrisk2 <- (0:(length(resultsrisk1a)-1)/length(resultsrisk1a)-1)
-lines(sort(resultsrisk1a),Probabilityrisk2+1,col='green')
+Probabilityrisk2 <- (0:(length(results1ba)-1)/length(results1ba)-1)
+lines(sort(results1ba),Probabilityrisk2+1,col='green')
 
 legend("bottomright", c("random", "risk-based", "heavy risk-based"), col=c("black", "red", "green"), cex=0.6,pch=19)
 
