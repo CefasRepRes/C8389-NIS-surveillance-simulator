@@ -51,7 +51,7 @@ p_intro_establish <- getIntroAndEstablishProbability(method = intro_risk, n_site
 
 #a) random surveillance
 #########################
-random_site_visit_rate_vector <- re(mean_visit_rate, length(site_vector))
+random_site_visit_rate_vector <- rep(mean_visit_rate, length(site_vector))
 random_site_visit_rate_vector # each site visited once, all sites have a score of 1
 
 #run simulation to determine the number of years which is takes to detect an introduction. (1000 simulations in total)                                                                                                                  
