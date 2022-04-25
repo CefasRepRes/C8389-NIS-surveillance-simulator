@@ -63,10 +63,10 @@ site_visit_rate_1a <- rep(mean_visit_rate, length(site_vector)) # each site visi
 
 # run simulation 1A to determine the number of years which is takes to detect an introduction (1000 simulations in total)
 results1a <- runSurveillanceSimulation(n_simulations = num_sim,
-                                        site_revisit = F,
-                                        surveillance_period = num_years,
-                                        site_visit_rate = site_visit_rate_1a,
-                                        p_detection = det_prob)
+                                       site_revisit = F,
+                                       surveillance_period = num_years,
+                                       site_visit_rate = site_visit_rate_1a,
+                                       p_detection = det_prob)
 
 
 ## SCENARIO 1B: RISK BASED SURVEILLANCE FOCUSSED ON HIGH RISK SITES ----------------------
@@ -75,11 +75,13 @@ results1a <- runSurveillanceSimulation(n_simulations = num_sim,
 ## TODO: SITE AND ESTABLISH RISK THE SAME AS PREVIOUS - DO THESE NEED TO BE EDITABLE?
 site_visit_rate_1b <- rep(mean_visit_rate, num_sites) * p_intro_establish / mean(p_intro_establish)
 
-results1b <- runSurveillanceSimulation2(n_simulations = num_sim,
-                                        site_revisit = F,
-                                        surveillance_period = num_years,
-                                        site_visit_rate = site_visit_rate_1b,
-                                        p_detection = det_prob)
+results1b <- runSurveillanceSimulation(n_simulations = num_sim,
+                                       site_revisit = F,
+                                       surveillance_period = num_years,
+                                       site_visit_rate = site_visit_rate_1b,
+                                       p_detection = det_prob)
+
+
 
 
 
