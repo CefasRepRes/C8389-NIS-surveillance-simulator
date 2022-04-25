@@ -150,7 +150,27 @@ results2c <- runSurveillanceSimulation(n_simulations = num_sim,
                                        detection_dynamic = "increasing")
 
 
-summary(results2a)
-#hist(results2a, freq=T)
-Probability <- (0:(length(results2a)-1)/length(results2a)-1)
-plot(sort(results2a),Probability+1,type='l', xlim=c(0,10), xlab='Time (years)', ylab='Probability of Detection')
+## SCENARIO 2: (A, B, C) RESULTS -----------------------------------------------------------------
+## TODO: sort this code out - output report?
+par(mfrow=c(3,1))
+hist(site_visit_rate_2a); hist(site_visit_rate_2b); hist(site_visit_rate_2c)
+hist(results2a, breaks=10, freq = T); hist(results2b, breaks = 10, freq = T); hist(results2c, breaks = 10, freq = T)
+plot(results2a); plot(results2b); plot(results2c)
+summary(results2a); summary(results2b); summary(results2c)
+
+probability <- (0:(length(results2a) - 1) / length(results2a) - 1)
+par(mfrow = c(1, 1))
+plot(sort(results2a),
+     probability + 1,
+     type='l',
+     xlim = c(0,10),
+     xlab = 'Time (years)',
+     ylab = 'Probability of Detection',
+     main = "Scenario 2: Decreasing rate of detection")
+lines(sort(results2b), probability + 1, col = 'red')
+lines(sort(results2c), probability + 1, col = 'blue')
+legend("bottomright",
+       c("random", "risk-based", "heavy risk-based"),
+       col = c("black", "red", "blue"),
+       cex = 0.6,
+       pch = 19)
