@@ -30,7 +30,9 @@ num_sim <- 1000
 num_years <- 11
 
 # mean, minimum and maximum detection probability
-det_prob <- 0.9 # assume that introduction will be detected
+det_prob <- 0.9 # assume that introduction will be detected.
+det_prob_min <- 0
+det_prob_max <- 1
 
 
 ## CREATE SIMULATION INPUTS -----------------------------------------------------------
@@ -56,7 +58,8 @@ results1a <- runSurveillanceSimulation(n_simulations = num_sim,
                                        site_revisit = F,
                                        surveillance_period = num_years,
                                        site_visit_rate = site_visit_rate_1a,
-                                       p_detection = det_prob)
+                                       p_detection = det_prob,
+                                       detection_dynamic = "constant")
 
 
 ## SCENARIO 1B: RISK BASED SURVEILLANCE FOCUSSED ON HIGH RISK SITES ----------------------
@@ -69,7 +72,8 @@ results1b <- runSurveillanceSimulation(n_simulations = num_sim,
                                        site_revisit = F,
                                        surveillance_period = num_years,
                                        site_visit_rate = site_visit_rate_1b,
-                                       p_detection = det_prob)
+                                       p_detection = det_prob,
+                                       detection_dynamic = "constant")
 
 
 ## SCENARIO 1C: RISK BASED SURVEILLANCE VERY FOCUSSED ON HIGH RISK SITES -----------------
@@ -82,7 +86,8 @@ results1c <- runSurveillanceSimulation(n_simulations = num_sim,
                                        site_revisit = T,
                                        surveillance_period = num_years,
                                        site_visit_rate = site_visit_rate_1c,
-                                       p_detection = det_prob)
+                                       p_detection = det_prob,
+                                       detection_dynamic = "constant")
 
 
 
@@ -114,48 +119,38 @@ legend("bottomright",
        pch = 19)
 
 
-####################################################################################################
-#2. dectection increases with time - this could mimic a situation where the population expands over time following introduction and therefore becomes easier to detect as time incerase.
-####################################################################################################
-#(this requires scaling of detectio probability so that it increases with time)
-#a) non risk based
-#b)risk based
-#c)heavy risk based
-#######################################################################################################
+## SCENARIO 2: DETECTION INCREASES WITH TIME
+## (TO MIMIC POPULATION EXPANSION FOLLOWING INTRODUCTION LEADING TO INCREASED DETECTION)
+## Requires scaling of the detection probability so that it increases with time
+## SCENARIO 2A: RANDOM SURVEILLANCE STRATEGY (independent of risk) -----------------------
+# uses previously defined uniform site visit rate with uniform surveillance effort (visits - one per year)
 
-det_prob <- 1 #mean detection probability
-# a) non risk based - radom surveillance approach
+# run simulation 2A to determine the number of years which is takes to detect an introduction (num_sim simulations)
+results2a <- runSurveillanceSimulation(n_simulations = num_sim,
+                                       site_revisit = F,
+                                       surveillance_period = num_years,
+                                       site_visit_rate = site_visit_rate_1a,
+                                       p_detection = det_prob,
+                                       detection_dynamic = "increasing")
 
-random_site_visit_rate_vector 		#Uniform surv effort (rate of visits), presently assumes 1 visit per year
+# run simulation 2B to determine the number of years which is takes to detect an introduction (num_sim simulations)
+results2b <- runSurveillanceSimulation(n_simulations = num_sim,
+                                       site_revisit = F,
+                                       surveillance_period = num_years,
+                                       site_visit_rate = site_visit_rate_1b,
+                                       p_detection = det_prob,
+                                       detection_dynamic = "increasing")
 
-resultsrandom2 <- numeric(1000)
-for(i in 1:length(resultsrandom2))
-{
-  time <- 0 #set start time to 0
-  inf_site <- sample(site_vector, 1, replace=T,prob=(p_intro_establish)/sum(p_intro_establish)) #select site to be infected
-  
-  #loop through site visit is until the infected site is detected
-  
-  while(resultsrandom2[i]==0 && time<11)
-  {
-    new_time <- rexp(1,sum(site_visit_rate_vector))
-    time <- time+new_time
-    visit <- sample(site_vector,1, replace=T,prob=(site_visit_rate_vector)/sum(site_visit_rate_vector)) #to determine site visited NOTE REPLACE SET to F NOT T as it is in next sim
-    
-    #detect <- (rbinom(1,1,det_prob)) #return a 0/1 based on p of detection
-    
-    scaling <- ifelse(exp(-time)>det_prob_max,det_prob_max,exp(-time)) #ensure p of detection does not exceed max limit
-    scaling <- ifelse(scaling<det_prob_min,det_prob_min,scaling) #ensure p of detection does not go below min limit
-    
-    detect <- (rbinom(1,1,det_prob-scaling)) #return a 0/1 based on p of detection which increases with time
-    #detect <- (rbinom(1,1,det_prob-(1-scaling))) #return a 0/1 based on p of detection which decreases with time
-    
-    resultsrandom2[i] <- ifelse(visit==inf_site & detect==1,time,0)
-  }	
-  resultsrandom2[i] <- ifelse(resultsrandom2[i]==0,100,resultsrandom2[i])
-}
+# run simulation 2C to determine the number of years which is takes to detect an introduction (num_sim simulations)
+results2c <- runSurveillanceSimulation(n_simulations = num_sim,
+                                       site_revisit = F,
+                                       surveillance_period = num_years,
+                                       site_visit_rate = site_visit_rate_1c,
+                                       p_detection = det_prob,
+                                       detection_dynamic = "increasing")
 
-summary(resultsrandom2)
-#hist(resultsrandom2, freq=T)
-Probability <- (0:(length(resultsrandom2)-1)/length(resultsrandom2)-1)
-plot(sort(resultsrandom2),Probability+1,type='l', xlim=c(0,10), xlab='Time (years)', ylab='Probability of Detection')
+
+summary(results2a)
+#hist(results2a, freq=T)
+Probability <- (0:(length(results2a)-1)/length(results2a)-1)
+plot(sort(results2a),Probability+1,type='l', xlim=c(0,10), xlab='Time (years)', ylab='Probability of Detection')

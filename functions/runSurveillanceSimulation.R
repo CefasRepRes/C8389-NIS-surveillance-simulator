@@ -1,4 +1,4 @@
-#' runSurveillanceSimulation
+#' #' runSurveillanceSimulation
 #'
 #' @param n_simulations numeric number of simulations to run.
 #' @param site_revisit logical TRUE/FALSE whether sites can be revisited or not 
@@ -10,6 +10,7 @@
 #' a rate of 0.5 indicates one visit every two years.
 #' @param p_detection numeric containing the probability that the event (e.g. 
 #' infection or NIS) is detected.
+#' @param detection_dynamic string 
 #'
 #' @return numeric vector of length n_simulations containing the time taken for 
 #' an event to be detected at a seed site given set parameters such as site 
@@ -22,7 +23,7 @@
 #'                                                   p_detection = 0.9)
 #'                                                   
 runSurveillanceSimulation <- function(n_simulations, site_revisit, surveillance_period,
-                                      site_visit_rate, p_detection) {
+                                       site_visit_rate, p_detection, detection_dynamic) {
   # define empty result vector of length n_simulations
   results <- numeric(n_simulations)
   
@@ -51,15 +52,47 @@ runSurveillanceSimulation <- function(n_simulations, site_revisit, surveillance_
                       replace = site_revisit, # if set to F site is not revisited
                       prob = site_visit_rate)
       
-      # return a 0/1 based on p of detection
-      detect <- rbinom(n = 1, size = 1, prob = p_detection)
-      
+      # if constant detection probability ove time:
+      if (grepl("constant", detection_dynamic, ignore.case = T)) {
+        # return a 0/1 based on p of detection
+        detect <- rbinom(n = 1, size = 1, prob = p_detection)
+        
+        # else if increasing detection probability over time:
+      } else if (grepl("increasing", detection_dynamic, ignore.case = T)) {
+        # scale the detection probability up by (1 - exponent of negative time)
+        scaled_prob <- det_prob + (1 - (exp(-time)))
+        
+        # check scaled probability within min and max range
+        scaling <- ifelse(scaled_prob > det_prob_max, det_prob_max, scaled_prob)
+        scaling <- ifelse(scaling < det_prob_min, det_prob_min, scaling)
+        
+        # return a 0/1 based on p of detection which increases with time
+        detect <- (rbinom(n = 1, size = 1, prob = scaling))
+        
+        # else if decreasing detection probability over time:
+      } else if (grepl("decreasing", detection_dynamic, ignore.case = T)) {
+        # scale the detection probability down by (1 - exponent of negative time)
+        scaled_prob <- det_prob - (1 - (exp(-time)))
+        
+        # check scaled probability within min and max range
+        scaling <- ifelse(scaled_prob > det_prob_max, det_prob_max, scaled_prob)
+        scaling <- ifelse(scaling < det_prob_min, det_prob_min, scaling)
+        
+        # return a 0/1 based on p of detection which decreases with time
+        detect <- (rbinom(n = 1, size = 1, prob = scaling))
+        
+      } else {
+        print("WARNING: detection_dynamic contains an invalid entry, see function documentation.")
+        
+      }
       # report time if seed site visited and detected otherwise result remains at 0
       results[i] <- ifelse(visit == seed_site & detect == 1, time, 0)
+      
     }
-    
     # if surveillance_period passes with no detection report 100 otherwise report the time to detection (results[i])
     results[i] <- ifelse(results[i] == 0, 100, results[i])
+    
   }
   return(results)
+  
 }
