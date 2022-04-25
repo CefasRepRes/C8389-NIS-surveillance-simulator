@@ -1,7 +1,7 @@
 # Simulator to evaluate time to detection based on a variety of surveillance strategies
 # (assuming no spread from initial intro site)
 
-par(mfrow=c(1,2))               #set up plot window
+
 site_vector=1:100     					#Number of sites of interest, 100
 
 mean_visit_rate=0.5							# Average rate at which sutes are visited - once every 2 years
@@ -36,7 +36,6 @@ hist(site_intro_rate_vector)# reduce rates to between 0 and 2.
 # c) risk based - surveillance heavilty focussed on high risk sites (but again overall number of sites visits are the same as for the random surveillance)
 ###########################################################################################################################################################
 
-par(mfrow=c(3,1))
 mean_visit_rate=1 # each site visited once a year
 site_vector=1:100
 
@@ -224,6 +223,3 @@ summary(resultsrandom2)
 #hist(resultsrandom2, freq=T)
 Probability=(0:(length(resultsrandom2)-1)/length(resultsrandom2)-1)
 plot(sort(resultsrandom2),Probability+1,type='l', xlim=c(0,10), xlab='Time (years)', ylab='Probability of Detection')
-
-
-
