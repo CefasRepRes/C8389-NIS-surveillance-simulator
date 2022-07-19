@@ -29,7 +29,7 @@ getEstablishProbability <- function(method, n_sites, ...) {
     
   } else if (grepl("equal uniform", method, ignore.case = T)) {
     # equal uniform distribution
-    p_establish <- rep(establish_prob, n_sites)
+    p_establish <- rep(..., n_sites)
     
     # print histogram of p_establish
     par(mfrow=c(1,1))
