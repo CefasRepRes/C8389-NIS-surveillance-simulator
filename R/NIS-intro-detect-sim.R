@@ -59,7 +59,9 @@ results1a <- runSurveillanceSimulation(n_simulations = num_sim,
                                        surveillance_period = num_years,
                                        site_visit_rate = site_visit_rate_1a,
                                        p_detection = det_prob,
-                                       detection_dynamic = "constant")
+                                       detection_dynamic = "constant",
+                                       site_vector = site_vector,
+                                       p_intro_establish = p_intro_establish)
 
 
 ## SCENARIO 1B: RISK BASED SURVEILLANCE FOCUSSED ON HIGH RISK SITES ----------------------
@@ -73,7 +75,9 @@ results1b <- runSurveillanceSimulation(n_simulations = num_sim,
                                        surveillance_period = num_years,
                                        site_visit_rate = site_visit_rate_1b,
                                        p_detection = det_prob,
-                                       detection_dynamic = "constant")
+                                       detection_dynamic = "constant",
+                                       site_vector = site_vector,
+                                       p_intro_establish = p_intro_establish)
 
 
 ## SCENARIO 1C: RISK BASED SURVEILLANCE VERY FOCUSSED ON HIGH RISK SITES -----------------
@@ -87,7 +91,9 @@ results1c <- runSurveillanceSimulation(n_simulations = num_sim,
                                        surveillance_period = num_years,
                                        site_visit_rate = site_visit_rate_1c,
                                        p_detection = det_prob,
-                                       detection_dynamic = "constant")
+                                       detection_dynamic = "constant",
+                                       site_vector = site_vector,
+                                       p_intro_establish = p_intro_establish)
 
 
 
@@ -131,7 +137,9 @@ results2a <- runSurveillanceSimulation(n_simulations = num_sim,
                                        surveillance_period = num_years,
                                        site_visit_rate = site_visit_rate_1a,
                                        p_detection = det_prob,
-                                       detection_dynamic = "increasing")
+                                       detection_dynamic = "increasing",
+                                       site_vector = site_vector,
+                                       p_intro_establish = p_intro_establish)
 
 # run simulation 2B to determine the number of years it takes to detect an introduction (num_sim simulations)
 results2b <- runSurveillanceSimulation(n_simulations = num_sim,
@@ -139,7 +147,9 @@ results2b <- runSurveillanceSimulation(n_simulations = num_sim,
                                        surveillance_period = num_years,
                                        site_visit_rate = site_visit_rate_1b,
                                        p_detection = det_prob,
-                                       detection_dynamic = "increasing")
+                                       detection_dynamic = "increasing",
+                                       site_vector = site_vector,
+                                       p_intro_establish = p_intro_establish)
 
 # run simulation 2C to determine the number of years it takes to detect an introduction (num_sim simulations)
 results2c <- runSurveillanceSimulation(n_simulations = num_sim,
@@ -147,7 +157,9 @@ results2c <- runSurveillanceSimulation(n_simulations = num_sim,
                                        surveillance_period = num_years,
                                        site_visit_rate = site_visit_rate_1c,
                                        p_detection = det_prob,
-                                       detection_dynamic = "increasing")
+                                       detection_dynamic = "increasing",
+                                       site_vector = site_vector,
+                                       p_intro_establish = p_intro_establish)
 
 
 ## SCENARIO 2: (A, B, C) RESULTS -----------------------------------------------------------------

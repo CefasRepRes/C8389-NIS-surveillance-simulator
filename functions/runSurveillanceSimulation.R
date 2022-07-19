@@ -10,7 +10,12 @@
 #' a rate of 0.5 indicates one visit every two years.
 #' @param p_detection numeric containing the probability that the event (e.g. 
 #' infection or NIS) is detected.
-#' @param detection_dynamic string 
+#' @param detection_dynamic string stating whether detection of NIS remains constant
+#' throughout the surveillance period or increases over time. Inputs are either: 
+#' "constant" or "increasing". 
+#' @param site_vector numeric vector of sites
+#' @param p_intro_establish numeric vector stating probability of introduction and 
+#' establishment of NIS at each site.
 #'
 #' @return numeric vector of length n_simulations containing the time taken for 
 #' an event to be detected at a seed site given set parameters such as site 
@@ -20,10 +25,13 @@
 #'                                                   site_revisit = F,
 #'                                                   surveillance_period = 10,
 #'                                                   site_visit_rate = c(1, 1, 1, 1, ...),
-#'                                                   p_detection = 0.9)
+#'                                                   p_detection = 0.9,
+#'                                                   site_vector = c(1, 2, 3, 4, ..),
+#'                                                   p_intro_establish = c(0.008, 0.21, 0.045, ...))
 #'                                                   
 runSurveillanceSimulation <- function(n_simulations, site_revisit, surveillance_period,
-                                       site_visit_rate, p_detection, detection_dynamic) {
+                                      site_visit_rate, p_detection, detection_dynamic,
+                                      site_vector, p_intro_establish) {
   # define empty result vector of length n_simulations
   results <- numeric(n_simulations)
   
