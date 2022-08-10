@@ -43,9 +43,9 @@ getIntroAndEstablishProbability <- function(method, n_sites, p_establish) {
     p_intro_establish <- (p_intro_pnd / mean(p_intro_pnd)) * p_establish
     
     # produce plots to check outputs
-    par(mfrow=c(1,3))   
+    par(mfrow = c(1, 3))   
     hist(p_intro_rnd); hist(p_intro_pnd); hist(p_intro_establish)
-    par(mfrow=c(1,1))
+    par(mfrow = c(1, 1))
     
     # return desired output
     return(p_intro_establish)
