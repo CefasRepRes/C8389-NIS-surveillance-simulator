@@ -25,7 +25,9 @@ p_establish <- getEstablishProbability(method = params$establish_risk,
 # probability of introduction AND establishment
 # this function defines the introduction rates using intro_risk input parameter
 # introduction rate is then combined with rate of establishment to give overall introduction rate
-p_intro_establish <- getIntroAndEstablishProbability(method = params$intro_risk, n_sites = params$num_sites, p_establish = p_establish)
+p_intro_establish <- getIntroAndEstablishProbability(method = params$intro_risk,
+                                                     n_sites = params$num_sites,
+                                                     p_establish = p_establish)
 
 
 ## SCENARIO 1: ASSUME CONSTANT PROBABILITY OF DETECTING NIS INTRODUCTION THROUGH TIME ----
