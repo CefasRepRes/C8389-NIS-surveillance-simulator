@@ -48,7 +48,6 @@ results1a <- runSurveillanceSimulation(n_simulations = params$num_sim,
 
 ## SCENARIO B: RISK BASED SURVEILLANCE FOCUSSED ON HIGH RISK SITES ----------------------
 # B: rate at which risk-based sites are visited (vector)
-## TODO: SITE AND ESTABLISH RISK THE SAME AS PREVIOUS - DO THESE NEED TO BE EDITABLE?
 site_visit_rate_1b <- rep(x = params$mean_visit_rate,
                           times = params$num_sites) * p_intro_establish / mean(p_intro_establish)
 
