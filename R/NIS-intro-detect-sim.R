@@ -33,7 +33,7 @@ p_intro_establish <- getIntroAndEstablishProbability(method = params$intro_risk,
 ## SCENARIO A: RANDOM SURVEILLANCE STRATEGY (independent of risk) -----------------------
 # A: rate at which random sites are visited (vector)
 site_visit_rate_A <- rep(x = params$mean_visit_rate,
-                          times = params$num_sites) # each site visited once (mean_visit_rate = 1)
+                         times = params$num_sites) # each site visited once (mean_visit_rate = 1)
 
 # run simulation A to determine the number of years which is takes to detect an introduction (1000 simulations in total)
 resultsA <- runSurveillanceSimulation(n_simulations = params$num_sim,
@@ -51,7 +51,7 @@ resultsA <- runSurveillanceSimulation(n_simulations = params$num_sim,
 ## SCENARIO B: RISK BASED SURVEILLANCE FOCUSSED ON HIGH RISK SITES ----------------------
 # B: rate at which risk-based sites are visited (vector)
 site_visit_rate_B <- rep(x = params$mean_visit_rate,
-                          times = params$num_sites) * p_intro_establish / mean(p_intro_establish)
+                         times = params$num_sites) * p_intro_establish / mean(p_intro_establish)
 
 resultsB <- runSurveillanceSimulation(n_simulations = params$num_sim,
                                       site_revisit = F,
@@ -70,7 +70,7 @@ resultsB <- runSurveillanceSimulation(n_simulations = params$num_sim,
 # note overall number of sites visits are the same as for the random surveillance (A)
 # C: rate at which high risk-based sites are visited (vector)
 site_visit_rate_C <- (rep(x = params$mean_visit_rate,
-                           times = params$num_sites) * p_intro_establish ^ 3) / mean(p_intro_establish ^ 3)
+                          times = params$num_sites) * p_intro_establish ^ 3) / mean(p_intro_establish ^ 3)
 
 ## TODO: WHY IS THE SITE_REVISIT PARAMETER NOW TRUE?
 resultsC <- runSurveillanceSimulation(n_simulations = params$num_sim,
