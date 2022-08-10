@@ -1,0 +1,25 @@
+# number of simulations to run
+num_sim: 1000
+
+# number of years that sites are visited
+num_years: 11
+
+# number of sites to survey
+num_sites: 100
+
+# define distributions to use for introduction and establishment probabilities
+# establishment is either: (1) 'random uniform' OR (2) 'equal uniform' (case insensitive)
+# introduction is either: (1) 'random uniform' OR (2) 'positive normal' (case insensitive)
+establish_risk: "equal uniform"
+intro_risk: "positive normal"  # if normal majority of sites are intermediate risk
+
+# probability of establishment, required if 'equal uniform' establish_risk
+establish_prob: 0.8
+
+# frequency of site visits (e.g. 0.5 = once every 2 years)
+mean_visit_rate: 1
+
+# mean, minimum and maximum detection probability
+det_prob: 0.8
+det_prob_min: 0
+det_prob_max: 1
