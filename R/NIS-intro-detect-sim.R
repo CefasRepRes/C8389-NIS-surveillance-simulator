@@ -32,14 +32,14 @@ p_intro_establish <- getIntroAndEstablishProbability(method = params$intro_risk,
 
 ## SCENARIO A: RANDOM SURVEILLANCE STRATEGY (independent of risk) -----------------------
 # A: rate at which random sites are visited (vector)
-site_visit_rate_1a <- rep(x = params$mean_visit_rate,
+site_visit_rate_A <- rep(x = params$mean_visit_rate,
                           times = params$num_sites) # each site visited once (mean_visit_rate = 1)
 
 # run simulation A to determine the number of years which is takes to detect an introduction (1000 simulations in total)
-results1a <- runSurveillanceSimulation(n_simulations = params$num_sim,
+resultsA <- runSurveillanceSimulation(n_simulations = params$num_sim,
                                        site_revisit = F,
                                        surveillance_period = params$num_years,
-                                       site_visit_rate = site_visit_rate_1a,
+                                       site_visit_rate = site_visit_rate_A,
                                        p_detection = params$det_prob,
                                        detection_dynamic = params$detect_dynamic,
                                        site_vector = site_vector,
@@ -48,13 +48,13 @@ results1a <- runSurveillanceSimulation(n_simulations = params$num_sim,
 
 ## SCENARIO B: RISK BASED SURVEILLANCE FOCUSSED ON HIGH RISK SITES ----------------------
 # B: rate at which risk-based sites are visited (vector)
-site_visit_rate_1b <- rep(x = params$mean_visit_rate,
+site_visit_rate_B <- rep(x = params$mean_visit_rate,
                           times = params$num_sites) * p_intro_establish / mean(p_intro_establish)
 
-results1b <- runSurveillanceSimulation(n_simulations = params$num_sim,
+resultsB <- runSurveillanceSimulation(n_simulations = params$num_sim,
                                        site_revisit = F,
                                        surveillance_period = params$num_years,
-                                       site_visit_rate = site_visit_rate_1b,
+                                       site_visit_rate = site_visit_rate_B,
                                        p_detection = params$det_prob,
                                        detection_dynamic = params$detect_dynamic,
                                        site_vector = site_vector,
@@ -65,14 +65,14 @@ results1b <- runSurveillanceSimulation(n_simulations = params$num_sim,
 # site visit rate with heavy focus on high risk sites
 # note overall number of sites visits are the same as for the random surveillance (A)
 # C: rate at which high risk-based sites are visited (vector)
-site_visit_rate_1c <- (rep(x = params$mean_visit_rate,
+site_visit_rate_C <- (rep(x = params$mean_visit_rate,
                            times = params$num_sites) * p_intro_establish ^ 3) / mean(p_intro_establish ^ 3)
 
 ## TODO: WHY IS THE SITE_REVISIT PARAMETER NOW TRUE?
-results1c <- runSurveillanceSimulation(n_simulations = params$num_sim,
+resultsC <- runSurveillanceSimulation(n_simulations = params$num_sim,
                                        site_revisit = T,
                                        surveillance_period = params$num_years,
-                                       site_visit_rate = site_visit_rate_1c,
+                                       site_visit_rate = site_visit_rate_C,
                                        p_detection = params$det_prob,
                                        detection_dynamic = params$detect_dynamic,
                                        site_vector = site_vector,
@@ -83,24 +83,24 @@ results1c <- runSurveillanceSimulation(n_simulations = params$num_sim,
 ## SCENARIO 1: (A, B, C) RESULTS -----------------------------------------------------------------
 ## TODO: sort this code out - output report?
 par(mfrow=c(3,1))
-hist(site_visit_rate_1a); hist(site_visit_rate_1b); hist(site_visit_rate_1c)
-hist(results1a, breaks=10, freq = T); hist(results1b, breaks = 10, freq = T); hist(results1c, breaks = 10, freq = T)
-plot(results1a); plot(results1b); plot(results1c)
-summary(results1a); summary(results1b); summary(results1c)
+hist(site_visit_rate_A); hist(site_visit_rate_B); hist(site_visit_rate_C)
+hist(resultsA, breaks=10, freq = T); hist(resultsB, breaks = 10, freq = T); hist(resultsC, breaks = 10, freq = T)
+plot(resultsA); plot(resultsB); plot(resultsC)
+summary(resultsA); summary(resultsB); summary(resultsC)
 
 plotProbability <- (0:(params$num_sim - 1) / params$num_sim - 1)
 
-# line plot for results 1a, 1b and 1c
+# line plot for results A, B and C
 par(mfrow=c(1,1))
-plot(jitter(sort(results1a)),
+plot(jitter(sort(resultsA)),
      plotProbability + 1, 
      type = 'l',
      xlim = c(0, params$num_years), # TODO: THIS CAN BE THE SURVEIILLANCE PERIOD?
      xlab = 'Time (years)',
      ylab = 'Probability of Detection',
      main = "Scenario 1: Constant rate of detection")
-lines(sort(results1b), plotProbability + 1, col = 'red')
-lines(sort(results1c), plotProbability + 1, col= 'blue')
+lines(sort(resultsB), plotProbability + 1, col = 'red')
+lines(sort(resultsC), plotProbability + 1, col= 'blue')
 legend("bottomright",
        c("random", "risk-based", "heavy risk-based"),
        col = c("black", "red", "blue"),
