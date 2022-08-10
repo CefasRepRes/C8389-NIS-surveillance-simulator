@@ -18,7 +18,9 @@ params <- yaml.load_file("parameters/config.yaml")
 site_vector <- 1:params$num_sites
 
 # probability of establishment
-p_establish <- getEstablishProbability(method = params$establish_risk, n_sites = params$num_sites, x = params$establish_prob)
+p_establish <- getEstablishProbability(method = params$establish_risk,
+                                       n_sites = params$num_sites,
+                                       x = params$establish_prob)
 
 # probability of introduction AND establishment
 # this function defines the introduction rates using intro_risk input parameter
