@@ -19,6 +19,12 @@ establish_prob: 0.8
 # frequency of site visits (e.g. 0.5 = once every 2 years)
 mean_visit_rate: 1
 
+# detection dynamic
+# if "constant" the probabilty detection remains the same with time
+# if "increasing" the probability of detection increases with time and can mimic spread/expansion
+# if "decreasing" the probability of detection decreases with time and may mimic die out
+detect_dynamic: "constant"
+
 # mean, minimum and maximum detection probability
 det_prob: 0.8
 det_prob_min: 0
