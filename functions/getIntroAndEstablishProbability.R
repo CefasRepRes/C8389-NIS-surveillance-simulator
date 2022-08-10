@@ -24,6 +24,14 @@ getIntroAndEstablishProbability <- function(method, n_sites, p_establish) {
     # random uniform distributon (p_intro) * p_establish
     p_intro_establish <- runif(n_sites) * p_establish
     
+    # produce plots to check outputs
+    par(mfrow = c(1, 1))   
+    hist(p_intro_establish)
+    par(mfrow = c(1, 1))
+    
+    # return desired output
+    return(p_intro_establish)
+    
   } else if (grepl("positive normal", method, ignore.case = T)) {
     # random normal distribution
     p_intro_rnd <- rnorm(n_sites)
