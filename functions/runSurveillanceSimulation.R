@@ -42,7 +42,6 @@ runSurveillanceSimulation <- function(n_simulations, site_revisit, surveillance_
     # introduction seeded at site dependent on risk (if risk distribution is random normal most sites intermediate risk)
     seed_site <- sample(x = site_vector,
                         size = 1,
-                        replace = site_revisit, # if set to F site is not revisited
                         prob = p_intro_establish / sum(p_intro_establish))
     
     # loop through site visits until the seed site is visited and detection = 1
