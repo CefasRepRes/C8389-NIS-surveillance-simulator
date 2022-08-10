@@ -10,6 +10,10 @@
 #' a rate of 0.5 indicates one visit every two years.
 #' @param p_detection numeric containing the probability that the event (e.g. 
 #' infection or NIS) is detected.
+#' @param max_p_detection numeric containing the maximum probability that the event
+#' (e.g. infection or NIS) is detected.
+#' @param min_p_detection numeric containing the minimum probability that the event
+#' (e.g. infection or NIS) is detected.
 #' @param detection_dynamic string stating whether detection of NIS remains constant
 #' throughout the surveillance period or increases over time. Inputs are either: 
 #' "constant" or "increasing". 
@@ -29,9 +33,16 @@
 #'                                                   site_vector = c(1, 2, 3, 4, ..),
 #'                                                   p_intro_establish = c(0.008, 0.21, 0.045, ...))
 #'                                                   
-runSurveillanceSimulation <- function(n_simulations, site_revisit, surveillance_period,
-                                      site_visit_rate, p_detection, detection_dynamic,
-                                      site_vector, p_intro_establish) {
+runSurveillanceSimulation <- function(n_simulations,
+                                      site_revisit,
+                                      surveillance_period,
+                                      site_visit_rate,
+                                      p_detection,
+                                      max_p_detection,
+                                      min_p_detection,
+                                      detection_dynamic,
+                                      site_vector,
+                                      p_intro_establish) {
   # define empty result vector of length n_simulations
   results <- numeric(n_simulations)
   
@@ -67,11 +78,11 @@ runSurveillanceSimulation <- function(n_simulations, site_revisit, surveillance_
         # else if increasing detection probability over time:
       } else if (grepl("increasing", detection_dynamic, ignore.case = T)) {
         # scale the detection probability up by (1 - exponent of negative time)
-        scaled_prob <- det_prob + (1 - (exp(-time)))
+        scaled_prob <- p_detection + (1 - (exp(-time)))
         
         # check scaled probability within min and max range
-        scaling <- ifelse(scaled_prob > det_prob_max, det_prob_max, scaled_prob)
-        scaling <- ifelse(scaling < det_prob_min, det_prob_min, scaling)
+        scaling <- ifelse(scaled_prob > max_p_detection, max_p_detection, scaled_prob)
+        scaling <- ifelse(scaling < min_p_detection, min_p_detection, scaling)
         
         # return a 0/1 based on p of detection which increases with time
         detect <- (rbinom(n = 1, size = 1, prob = scaling))
@@ -79,11 +90,11 @@ runSurveillanceSimulation <- function(n_simulations, site_revisit, surveillance_
         # else if decreasing detection probability over time:
       } else if (grepl("decreasing", detection_dynamic, ignore.case = T)) {
         # scale the detection probability down by (1 - exponent of negative time)
-        scaled_prob <- det_prob - (1 - (exp(-time)))
+        scaled_prob <- p_detection - (1 - (exp(-time)))
         
         # check scaled probability within min and max range
-        scaling <- ifelse(scaled_prob > det_prob_max, det_prob_max, scaled_prob)
-        scaling <- ifelse(scaling < det_prob_min, det_prob_min, scaling)
+        scaling <- ifelse(scaled_prob > max_p_detection, max_p_detection, scaled_prob)
+        scaling <- ifelse(scaling < min_p_detection, min_p_detection, scaling)
         
         # return a 0/1 based on p of detection which decreases with time
         detect <- (rbinom(n = 1, size = 1, prob = scaling))

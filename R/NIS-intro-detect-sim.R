@@ -37,13 +37,15 @@ site_visit_rate_A <- rep(x = params$mean_visit_rate,
 
 # run simulation A to determine the number of years which is takes to detect an introduction (1000 simulations in total)
 resultsA <- runSurveillanceSimulation(n_simulations = params$num_sim,
-                                       site_revisit = F,
-                                       surveillance_period = params$num_years,
-                                       site_visit_rate = site_visit_rate_A,
-                                       p_detection = params$det_prob,
-                                       detection_dynamic = params$detect_dynamic,
-                                       site_vector = site_vector,
-                                       p_intro_establish = p_intro_establish)
+                                      site_revisit = F,
+                                      surveillance_period = params$num_years,
+                                      site_visit_rate = site_visit_rate_A,
+                                      p_detection = params$det_prob,
+                                      max_p_detect = params$det_prob_max,
+                                      min_p_detect = params$det_prob_min,
+                                      detection_dynamic = params$detect_dynamic,
+                                      site_vector = site_vector,
+                                      p_intro_establish = p_intro_establish)
 
 
 ## SCENARIO B: RISK BASED SURVEILLANCE FOCUSSED ON HIGH RISK SITES ----------------------
@@ -52,13 +54,15 @@ site_visit_rate_B <- rep(x = params$mean_visit_rate,
                           times = params$num_sites) * p_intro_establish / mean(p_intro_establish)
 
 resultsB <- runSurveillanceSimulation(n_simulations = params$num_sim,
-                                       site_revisit = F,
-                                       surveillance_period = params$num_years,
-                                       site_visit_rate = site_visit_rate_B,
-                                       p_detection = params$det_prob,
-                                       detection_dynamic = params$detect_dynamic,
-                                       site_vector = site_vector,
-                                       p_intro_establish = p_intro_establish)
+                                      site_revisit = F,
+                                      surveillance_period = params$num_years,
+                                      site_visit_rate = site_visit_rate_B,
+                                      p_detection = params$det_prob,
+                                      max_p_detection = params$det_prob_max,
+                                      min_p_detection = params$det_prob_min,
+                                      detection_dynamic = params$detect_dynamic,
+                                      site_vector = site_vector,
+                                      p_intro_establish = p_intro_establish)
 
 
 ## SCENARIO C: RISK BASED SURVEILLANCE VERY FOCUSSED ON HIGH RISK SITES -----------------
@@ -70,14 +74,15 @@ site_visit_rate_C <- (rep(x = params$mean_visit_rate,
 
 ## TODO: WHY IS THE SITE_REVISIT PARAMETER NOW TRUE?
 resultsC <- runSurveillanceSimulation(n_simulations = params$num_sim,
-                                       site_revisit = T,
-                                       surveillance_period = params$num_years,
-                                       site_visit_rate = site_visit_rate_C,
-                                       p_detection = params$det_prob,
-                                       detection_dynamic = params$detect_dynamic,
-                                       site_vector = site_vector,
-                                       p_intro_establish = p_intro_establish)
-
+                                      site_revisit = T,
+                                      surveillance_period = params$num_years,
+                                      site_visit_rate = site_visit_rate_C,
+                                      p_detection = params$det_prob,
+                                      max_p_detection = params$det_prob_max,
+                                      min_p_detection = params$det_prob_min,
+                                      detection_dynamic = params$detect_dynamic,
+                                      site_vector = site_vector,
+                                      p_intro_establish = p_intro_establish)
 
 
 ## SCENARIO 1: (A, B, C) RESULTS -----------------------------------------------------------------
