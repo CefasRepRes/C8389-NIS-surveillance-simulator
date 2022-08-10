@@ -33,7 +33,8 @@ p_intro_establish <- getIntroAndEstablishProbability(method = params$intro_risk,
 ## SCENARIO 1: ASSUME CONSTANT PROBABILITY OF DETECTING NIS INTRODUCTION THROUGH TIME ----
 ## SCENARIO 1A: RANDOM SURVEILLANCE STRATEGY (independent of risk) -----------------------
 # 1A: rate at which random sites are visited (vector)
-site_visit_rate_1a <- rep(params$mean_visit_rate, length(site_vector)) # each site visited once (mean_visit_rate = 1)
+site_visit_rate_1a <- rep(x = params$mean_visit_rate,
+                          times = params$num_sites) # each site visited once (mean_visit_rate = 1)
 
 # run simulation 1A to determine the number of years which is takes to detect an introduction (1000 simulations in total)
 results1a <- runSurveillanceSimulation(n_simulations = params$num_sim,
@@ -50,7 +51,8 @@ results1a <- runSurveillanceSimulation(n_simulations = params$num_sim,
 # CONSTANT DETECTION WITH SAME OVERALL SITE VISITS
 # ESTABLISH RISK: equal uniform distribution with establish_prob
 ## TODO: SITE AND ESTABLISH RISK THE SAME AS PREVIOUS - DO THESE NEED TO BE EDITABLE?
-site_visit_rate_1b <- rep(params$mean_visit_rate, params$num_sites) * p_intro_establish / mean(p_intro_establish)
+site_visit_rate_1b <- rep(x = params$mean_visit_rate,
+                          times = params$num_sites) * p_intro_establish / mean(p_intro_establish)
 
 results1b <- runSurveillanceSimulation(n_simulations = params$num_sim,
                                        site_revisit = F,
@@ -65,7 +67,8 @@ results1b <- runSurveillanceSimulation(n_simulations = params$num_sim,
 ## SCENARIO 1C: RISK BASED SURVEILLANCE VERY FOCUSSED ON HIGH RISK SITES -----------------
 # site visit rate with heavy focus on high risk sites
 # note overall number of sites visits are the same as for the random surveillance (1A)
-site_visit_rate_1c <- (rep(params$mean_visit_rate, params$num_sites) * p_intro_establish ^ 3) / mean(p_intro_establish ^ 3)
+site_visit_rate_1c <- (rep(x = params$mean_visit_rate,
+                           times = params$num_sites) * p_intro_establish ^ 3) / mean(p_intro_establish ^ 3)
 
 ## TODO: WHY IS THE SITE_REVISIT PARAMETER NOW TRUE?
 results1c <- runSurveillanceSimulation(n_simulations = params$num_sim,
