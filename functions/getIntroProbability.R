@@ -33,16 +33,13 @@ getIntroProbability <-
       # random normal distribution
       p_intro_rnd <- rnorm(n_sites)
       
-      # convert to positive normal distribution (remove negatives)
-      p_intro_pnd <- (p_intro_rnd + (min(p_intro_rnd) * -1))
-      
-      # rescale positive normal
-      p_intro <- p_intro_pnd / mean(p_intro_pnd)
+      # convert to positive normal distribution (remove negatives) and rescale
+      positiveRescale <- function(x){(x-min(x))/(max(x)-min(x))}
+      p_intro <- positiveRescale(p_intro_rnd)
       
       # produce plots to check outputs
-      par(mfrow = c(1, 3))
+      par(mfrow = c(1, 2))
       hist(p_intro_rnd)
-      hist(p_intro_pnd)
       hist(p_intro)
       par(mfrow = c(1, 1))
       
