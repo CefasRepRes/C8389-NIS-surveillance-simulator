@@ -22,18 +22,18 @@ p_establish <- getEstablishProbability(method = params$establish_risk,
                                        n_sites = params$num_sites,
                                        x = params$establish_prob)
 
-# probability of introduction AND establishment
-# this function defines the introduction rates using intro_risk input parameter
-# introduction rate is then combined with rate of establishment to give overall introduction rate
-p_intro_establish <- getIntroAndEstablishProbability(method = params$intro_risk,
-                                                     n_sites = params$num_sites,
-                                                     p_establish = p_establish)
+# probability of introduction
+p_intro <- getIntroProbability(method = params$intro_risk,
+                               n_sites = params$num_sites)
+
+# combined introduction and establishment probs to give overall introduction rate
+p_intro_establish <- p_intro * p_establish
 
 
 ## SCENARIO A: RANDOM SURVEILLANCE STRATEGY (independent of risk) -----------------------
 # A: rate at which random sites are visited (vector)
-site_visit_rate_A <- rep(x = params$mean_visit_rate,
-                         times = params$num_sites) # each site visited once (mean_visit_rate = 1)
+site_visit_rate_A <- rep(x = params$mean_visit_rate, # if each site visited once (mean_visit_rate = 1)
+                         times = params$num_sites)
 
 # run simulation A to determine the number of years which is takes to detect an introduction (1000 simulations in total)
 resultsA <- runSurveillanceSimulation(n_simulations = params$num_sim,
