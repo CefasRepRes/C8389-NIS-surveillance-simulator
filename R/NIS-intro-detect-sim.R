@@ -6,7 +6,8 @@ source("functions/getEstablishProbability.R")
 source("functions/getIntroProbability.R")
 source("functions/runSurveillanceSimulation.R")
 
-library("yaml")
+pkgs <- c("yaml", "truncnorm")
+lapply(pkgs, library, character.only = T)
 
 ## INPUTS ----------------------------------------------------------------------------
 # load input parameters from config file
