@@ -15,6 +15,7 @@
 #' @examples p_intro <- getIntroProbability(method = "positive_normal",
 #'                                          n_sites = 100)
 #'
+#' @importFrom truncnorm rtruncnorm
 getIntroProbability <-
   function(method, n_sites) {
     if (grepl("random uniform", method, ignore.case = T)) {
@@ -24,24 +25,21 @@ getIntroProbability <-
       # produce plots to check outputs
       par(mfrow = c(1, 1))
       hist(p_intro)
-      par(mfrow = c(1, 1))
       
       # return desired output
       return(p_intro)
       
     } else if (grepl("positive normal", method, ignore.case = T)) {
-      # random normal distribution
-      p_intro_rnd <- rnorm(n_sites)
-      
-      # convert to positive normal distribution (remove negatives) and rescale
-      positiveRescale <- function(x){(x-min(x))/(max(x)-min(x))}
-      p_intro <- positiveRescale(p_intro_rnd)
+      # random truncated normal distribution
+      p_intro <- truncnorm::rtruncnorm(n = n_sites,
+                                       a = 0, # min
+                                       b = 1, # max
+                                       mean = 0.5,
+                                       sd = 0.25)
       
       # produce plots to check outputs
-      par(mfrow = c(1, 2))
-      hist(p_intro_rnd)
-      hist(p_intro)
       par(mfrow = c(1, 1))
+      hist(p_intro)
       
       # return desired output
       return(p_intro)
