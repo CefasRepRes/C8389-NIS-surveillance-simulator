@@ -21,7 +21,7 @@ getEstablishProbability <- function(method, n_sites, ...) {
     p_establish <- runif(n_sites)
     
     # print histogram of p_establish
-    par(mfrow=c(1,1))
+    par(mfrow = c(1, 1))
     plot(p_establish)
     
     # return p_establish as output
@@ -32,10 +32,10 @@ getEstablishProbability <- function(method, n_sites, ...) {
     p_establish <- rep(..., n_sites)
     
     # print histogram of p_establish
-    par(mfrow=c(1,1))
+    par(mfrow = c(1, 1))
     plot(p_establish)
     
-  # return p_establish as output
+    # return p_establish as output
     return(p_establish)
     
   } else {
