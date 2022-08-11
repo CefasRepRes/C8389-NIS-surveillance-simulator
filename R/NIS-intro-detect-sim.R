@@ -3,7 +3,7 @@
 
 ## LOAD FUNCTIONS/PACKAGES -----------------------------------------------------------
 source("functions/getEstablishProbability.R")
-source("functions/getIntroAndEstablishProbability.R")
+source("functions/getIntroProbability.R")
 source("functions/runSurveillanceSimulation.R")
 
 library("yaml")
