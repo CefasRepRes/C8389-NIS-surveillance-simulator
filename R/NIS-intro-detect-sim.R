@@ -6,12 +6,18 @@ source("functions/getEstablishProbability.R")
 source("functions/getIntroProbability.R")
 source("functions/runSurveillanceSimulation.R")
 
-pkgs <- c("yaml", "truncnorm")
+pkgs <- c("yaml", "here", "truncnorm")
 lapply(pkgs, library, character.only = T)
 
 ## INPUTS ----------------------------------------------------------------------------
 # load input parameters from config file
 config <- yaml.load_file("parameters/config.yaml")
+
+# create output directory
+dirs <- c("outputs" = here::here("outputs"),
+          "results" = here::here("outputs", config$run_name))
+
+lapply(dirs, dir.create, showWarnings = FALSE)
 
 
 ## CREATE SIMULATION INPUTS -----------------------------------------------------------
@@ -86,29 +92,19 @@ resultsC <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       p_intro_establish = p_intro_establish)
 
 
-## SCENARIO 1: (A, B, C) RESULTS -----------------------------------------------------------------
-## TODO: sort this code out - output report?
-par(mfrow=c(3,1))
-hist(site_visit_rate_A); hist(site_visit_rate_B); hist(site_visit_rate_C)
-hist(resultsA, breaks=10, freq = T); hist(resultsB, breaks = 10, freq = T); hist(resultsC, breaks = 10, freq = T)
-plot(resultsA); plot(resultsB); plot(resultsC)
-summary(resultsA); summary(resultsB); summary(resultsC)
-
-plotProbability <- (0:(config$num_sim - 1) / config$num_sim - 1)
-
-# line plot for results A, B and C
-par(mfrow=c(1,1))
-plot(jitter(sort(resultsA)),
-     plotProbability + 1, 
-     type = 'l',
-     xlim = c(0, config$num_years), # TODO: THIS CAN BE THE SURVEIILLANCE PERIOD?
-     xlab = 'Time (years)',
-     ylab = 'Probability of Detection',
-     main = "Scenario 1: Constant rate of detection")
-lines(sort(resultsB), plotProbability + 1, col = 'red')
-lines(sort(resultsC), plotProbability + 1, col= 'blue')
-legend("bottomright",
-       c("random", "risk-based", "heavy risk-based"),
-       col = c("black", "red", "blue"),
-       cex = 0.6,
-       pch = 19)
+## GENERATE RESULTS REPORT -----------------------------------------------------------------------
+rmarkdown::render(input = "R/report-NIS-intro-detect-sim.Rmd", # Rmd to run
+                  output_format ="html_document",
+                  output_file = paste0("report-", config$run_name, ".html"),
+                  output_dir = dirs[["results"]],
+                  params = list(user_inputs = config,
+                                p_establish = p_establish,
+                                p_intro = p_intro,
+                                p_intro_establish = p_intro_establish,
+                                resultsA = resultsA,
+                                resultsB = resultsB,
+                                resultsC = resultsC,
+                                site_visit_rate_A = site_visit_rate_A,
+                                site_visit_rate_B = site_visit_rate_B,
+                                site_visit_rate_C = site_visit_rate_C)
+                  )

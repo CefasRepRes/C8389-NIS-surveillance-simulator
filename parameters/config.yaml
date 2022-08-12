@@ -1,3 +1,9 @@
+# user running simulations
+user: "Your Name Here"
+
+# unique run name (directory and results name)
+run_name: "test_run1"
+
 # number of simulations to run
 num_sim: 1000
 
