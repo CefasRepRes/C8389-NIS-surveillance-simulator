@@ -13,6 +13,9 @@ lapply(pkgs, library, character.only = T)
 # load input parameters from config file
 config <- yaml.load_file("parameters/config.yaml")
 
+# set seed
+set.seed(config$seed)
+
 # create output directory
 dirs <- c("outputs" = here::here("outputs"),
           "results" = here::here("outputs", config$run_name))

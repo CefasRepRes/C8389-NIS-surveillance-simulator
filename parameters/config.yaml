@@ -2,7 +2,12 @@
 user: "Your Name Here"
 
 # unique run name (directory and results name)
+# to include letters, numbers, underscores or dashes, no special characters
 run_name: "test_run1"
+
+# seed number
+seed: 2022
+
 
 # number of simulations to run
 num_sim: 1000
