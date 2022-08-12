@@ -23,6 +23,7 @@ library("patchwork")
 
 **Date:** `r Sys.time()` \
 **Author:** `r params$user_inputs$user` \
+**Run Name:** `r params$user_inputs$run_name` \
 
 \
 
