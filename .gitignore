@@ -49,3 +49,4 @@ po/*~
 # specific files in structure
 R/NIS_introdetectsim.R
 R/introdetectsim_fromnick_mynotes2.R
+outputs/*
