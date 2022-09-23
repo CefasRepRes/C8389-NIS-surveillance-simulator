@@ -5,8 +5,12 @@
 source("functions/getEstablishProbability.R")
 source("functions/getIntroProbability.R")
 source("functions/runSurveillanceSimulation.R")
+source("functions/makeSensitivityParamsTable.R")
+source("functions/runSurveillanceSensitivity.R")
+source("functions/formatSensitivityResults.R")
 
-pkgs <- c("yaml", "here", "truncnorm")
+pkgs <- c("yaml", "here", "truncnorm", "reshape2", "gtools",
+          "ggplot2", "patchwork")
 lapply(pkgs, library, character.only = T)
 
 ## INPUTS ----------------------------------------------------------------------------
@@ -111,3 +115,72 @@ rmarkdown::render(input = "R/report-NIS-intro-detect-sim.Rmd", # Rmd to run
                                 site_visit_rate_B = site_visit_rate_B,
                                 site_visit_rate_C = site_visit_rate_C)
                   )
+
+
+## RUN SENSITIVITY ANALYSIS ----------------------------------------------------------------------
+if (config$sensitivity_analysis == TRUE) {
+  
+  # read in sensitivity analysis configuration settings
+  sens <- yaml.load_file("parameters/config_sensitivity.yaml")
+  
+  # generate a data frame of default parameters
+  defaults <- data.frame(
+    name = "default",
+    num_sites = 100,
+    num_years = 11,
+    establish_risk = "equal uniform",
+    establish_prob = 0.5,
+    intro_risk = "random uniform",
+    mean_visit_rate = 1,
+    p_detection = 0.5,
+    max_p_detect = 1,
+    min_p_detect = 0,
+    detect_dynamic = "constant"
+  )
+  
+  # adjust each parameter according to input sensitivity config
+  scenarios <- makeSensitivityParamsTable(defaults = defaults,
+                                          params = sens)
+  
+  # scenarios[58, "establish_risk"] <- "random uniform"
+  # scenarios[58, "name"] <- paste0("establish_risk", scenarios[58, "establish_risk"])
+  # scenarios[59, "intro_risk"] <- "positive normal"
+  # scenarios[59, "name"] <- paste0("intro_risk", scenarios[59, "intro_risk"])
+  # detection_dynamic # max_p_detect # min_p_detect
+  
+  # run the surveillance sensitivity 
+  # NOTE this includes generation of p_intro and p_establish as well as runSurveillanceSimulation()
+  sens_results <- runSurveillanceSensitvity(X = scenarios)
+  
+  # summarise the sensitivity results
+  sens_results$ct_detect <- apply(sens_results, 1, function(x) length(unlist(x[[1]])[unlist(x[[1]]) != 100]))
+  sens_results$pct_detect <- apply(sens_results, 1, function(x) length(unlist(x[[1]])[unlist(x[[1]]) != 100])/config$num_sim * 100)
+  sens_results$mean <- apply(sens_results, 1, function(x) mean(unlist(x[[1]])[unlist(x[[1]]) != 100]))
+  sens_results$median <- apply(sens_results, 1, function(x) median(unlist(x[[1]])[unlist(x[[1]]) != 100]))
+  sens_results$min <- apply(sens_results, 1, function(x) min(unlist(x[[1]])[unlist(x[[1]]) != 100]))
+  sens_results$max <- apply(sens_results, 1, function(x) max(unlist(x[[1]])[unlist(x[[1]]) != 100]))
+  sens_results$ct_no_detect <- apply(sens_results, 1, function(x) length(unlist(x[[1]])[unlist(x[[1]]) == 100]))
+  sens_results$pct_no_detect <- apply(sens_results, 1, function(x) length(unlist(x[[1]])[unlist(x[[1]]) == 100])/config$num_sim * 100)
+  
+  # get the names of the sensitivity factors from config file
+  factors <- names(sens)
+  names(factors) <- factors
+  
+  # format sensitivity results and split by factor to plot
+  df_factors <- formatSensitivityResults(x = sens_results,
+                                         config = config,
+                                         factors = factors)
+  
+  ## PRODUCE SENSITIVITY ANALYSIS REPORT
+  rmarkdown::render(input = "R/report-NIS-intro-detect-sensitivity.Rmd", # Rmd to run
+                    output_format ="html_document",
+                    output_file = paste0("report-", config$run_name, "-sensitivity.html"),
+                    output_dir = dirs[["results"]],
+                    params = list(user_inputs = config,
+                                  sensitivity_inputs = sens,
+                                  factors = factors,
+                                  df_factors = df_factors,
+                                  defaults = defaults)
+  )
+
+}
