@@ -8,6 +8,8 @@ run_name: "test_run1"
 # seed number
 seed: 2022
 
+# logical stating whether sensitvity analysis and report should be generated
+sensitivity_analysis: TRUE
 
 # number of simulations to run
 num_sim: 1000

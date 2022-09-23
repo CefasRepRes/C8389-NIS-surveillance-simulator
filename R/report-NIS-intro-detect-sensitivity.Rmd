@@ -1,0 +1,124 @@
+---
+title: "NIS-intro-detect-report-sensivitiy"
+output: html_document
+params:
+  user_inputs: config
+  sensitivity_inputs: sens
+  factors: factors
+  df_factors: df_factors
+  defaults: defaults
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("ggplot2")
+library("patchwork")
+```
+\
+
+**Date:** `r Sys.time()` \
+**Author:** `r params$user_inputs$user` \
+**Run Name:** `r params$user_inputs$run_name` \
+
+\
+
+The sensitivity of each parameter within the NIS-intro-detect-sim script is tested and reported.
+
+A single scenario for site surveillance to detect non indigenous species (NIS) introductions is presented and the impact of changing single parameters on time to detection is reported.
+
+The scenario is:
+
+* **A.** Random surveillance, where sites are visited at an equal rate independent of the risk of NIS introduction and establishment at each site.
+
+\
+
+#### Input Parameters
+
+```{r, echo = FALSE}
+setNames(stack(params$user_inputs)[2:1], c("Parameter Name", "Input Value"))
+```
+
+\
+
+#### Default Sensitivity Parameters
+
+The default parameters used for each run were as follows:
+
+```{r, echo = F}
+params$defaults
+```
+
+\
+
+#### Input Sensitivity Parameters
+
+The ranges and intervals used to produce different values for each of the parameters used in the sensitivity test.
+
+```{r, echo = FALSE}
+data_frame <- as.data.frame(do.call(rbind, params$sensitivity_inputs))
+data_frame
+```
+
+\
+
+#### Sensivity Analysis
+
+```{r sensivitiy, echo = FALSE, fig.width = 12, fig.height = 4, fig.align = 'center', warnings = FALSE}
+# produce plots for each sensitivity factor tested
+plots <- lapply(params$factors, function(x) {
+  # violin plot - time taken to detect NIS where detection != 100
+  p1 <- ggplot2::ggplot(params$df_factors[[x]],
+                        aes(x = name, y = value, fill = name)) +
+    geom_violin() +
+    theme_bw() +
+    theme(legend.position = "none",
+          axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+    scale_x_discrete(name = params$factors[x],
+                      labels = c(gsub(
+                        pattern = paste0(params$factors[x], "_"),
+                        replacement = "",
+                        x = unique(params$df_factors[[x]][["name"]])
+                      ))) +
+    scale_y_continuous(name = "Time to detection (years)") +
+    ggtitle(paste("Sensivitiy analysis: ", x))
+
+    # bar plot - percentage of simulations where NIS not detected
+  p2 <- ggplot(params$df_factors[[x]],
+                aes(
+                  x = name,
+                  y = pct_no_detect / config$num_sim,
+                  fill = name
+                )) + # fill=name allow to automatically dedicate a color for each group
+    geom_bar(stat = 'identity') +
+    theme_bw() +
+    theme(legend.position = "none",
+          axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+    scale_x_discrete(name = params$factors[x],
+                      labels = c(gsub(
+                        pattern = paste0(params$factors[x], "_"),
+                        replacement = "",
+                        x = unique(params$df_factors[[x]][["name"]])
+                      ))) +
+    scale_y_continuous(name = "Simulations NIS not detected (%)",
+                        limits = c(seq(
+                          from = 0, to = 100, by = 10
+                        )))
+
+  # combine plots
+  p1 + p2
+
+})
+
+plots
+
+```
+
+
+#### Version
+
+The version (sha) of https://github.com/CefasRepRes/NIS-intro-detect-sim repository used was: **`r system("git rev-parse HEAD", intern = TRUE)`**
+
+```{r, echo = FALSE}
+sessionInfo()
+```
+
