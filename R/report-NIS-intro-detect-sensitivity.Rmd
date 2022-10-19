@@ -1,5 +1,5 @@
 ---
-title: "NIS-intro-detect-report-sensivitiy"
+title: "NIS-intro-detect-report-sensitivity"
 output: html_document
 params:
   user_inputs: config
