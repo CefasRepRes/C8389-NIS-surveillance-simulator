@@ -169,15 +169,6 @@ if (config$sensitivity_analysis == TRUE) {
     
   })
   
-  # # run the surveillance sensitivity 
-  # # NOTE this includes generation of p_intro and p_establish as well as runSurveillanceSimulation()
-  # s_results <- runSurveillanceSensitvity(X = scenarios,
-  #                                        visit_scenario = "a_random")
-  # 
-  # # summarise sensitivity results: total non detected/percent detected etc
-  # s_results <- summariseSensitvityResults(results = s_results,
-  #                                         config = config)
-  
   # get the names of the sensitivity factors from config file
   factors <- names(sens)
   names(factors) <- factors
@@ -189,11 +180,6 @@ if (config$sensitivity_analysis == TRUE) {
                                            factors = factors)
     
   })
-  
-  # # format sensitivity results and split by factor to plot
-  # df_factors <- formatSensitivityResults(x = s_results,
-  #                                        config = config,
-  #                                        factors = factors)
   
   ## PRODUCE SENSITIVITY ANALYSIS REPORT
   rmarkdown::render(input = "R/report-NIS-intro-detect-sensitivity.Rmd", # Rmd to run
@@ -251,14 +237,6 @@ if (config$elasticity_analysis == TRUE) {
     
   })
   
-  
-  # e_results <- runSurveillanceSensitvity(X = scenarios,
-  #                                        surveillance_scenario = surveillance)
-  # 
-  # # summarise elasticity results: total non detected/percent detected etc
-  # e_results <- summariseElasticityResults(e_results,
-  #                                         config)
-  
   # define columns to remove
   cols_to_remove <- c("sim_results", "name")
   cols_elasticity <- colnames(e_results_all[[1]])[!colnames(e_results_all[[1]]) %in% cols_to_remove]
@@ -310,9 +288,9 @@ if (config$elasticity_analysis == TRUE) {
     outputs <- list(Reduced = elasticity_calcs_reduce,
                     Increased = elasticity_calcs_increase)
     return(outputs)
+    
   })
   
-  # generate report of plots with sensitivity results
   ## PRODUCE ELASTICITY ANALYSIS REPORT
   rmarkdown::render(input = "R/report-NIS-intro-detect-elasticity.Rmd", # Rmd to run
                     output_format ="html_document",
@@ -322,6 +300,4 @@ if (config$elasticity_analysis == TRUE) {
                                   factors = factors,
                                   elasticity_dfs = elasticity_dfs))
   
-  
 }
-
