@@ -31,8 +31,8 @@ formatSensitivityResults <- function(x, config, factors) {
   x_long <- reshape2::melt(x,
                            id.vars = colnames(x)[-pmatch(cols, colnames(x))])
   
-  # make results of 100 equal to NA for plotting
-  x_long$value[x_long$value == 100] <- NA
+  # make results of 1000 equal to NA for plotting
+  x_long$value[x_long$value == 1000] <- NA
   
   # apply natural order to name factor for plotting
   x_long$name <- factor(x = x_long$name,
