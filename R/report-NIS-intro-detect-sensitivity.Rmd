@@ -1,11 +1,11 @@
 ---
-title: "NIS-intro-detect-report-sensivitiy"
+title: "NIS-intro-detect-report-sensitivity"
 output: html_document
 params:
   user_inputs: config
   sensitivity_inputs: sens
   factors: factors
-  df_factors: df_factors
+  df_factors_all: df_factors_all
   defaults: defaults
 ---
 
@@ -24,11 +24,14 @@ library("patchwork")
 
 The sensitivity of each parameter within the NIS-intro-detect-sim script is tested and reported.
 
-A single scenario for site surveillance to detect non indigenous species (NIS) introductions is presented and the impact of changing single parameters on time to detection is reported.
-
-The scenario is:
+Three scenarios for site surveillance to detect non indigenous species (NIS) introduction are presented and the time to detection is reported.
 
 * **A.** Random surveillance, where sites are visited at an equal rate independent of the risk of NIS introduction and establishment at each site.
+
+* **B.** Risk-based surveillance, where sites with a higher probability of NIS introduction and establishment are visited at a higher visit rate due to their elevated risk.
+
+* **C.** Heavy risk-based surveillance, where sites with higher probability of NIS introduction and establishment form the main focus of surveillance programmes and are visited at a 
+
 
 \
 
@@ -65,9 +68,14 @@ data_frame
 
 ```{r sensivitiy, echo = FALSE, fig.width = 12, fig.height = 4, fig.align = 'center', warnings = FALSE}
 # produce plots for each sensitivity factor tested
-plots <- lapply(params$factors, function(x) {
+plots <- lapply(names(params$df_factors_all), function(w) {
+  
+  df_factors <- params$df_factors_all[[w]]
+  
+  lapply(params$factors, function(x) {
+    
   # violin plot - time taken to detect NIS where detection != 100
-  p1 <- ggplot2::ggplot(params$df_factors[[x]],
+  p1 <- ggplot2::ggplot(df_factors[[x]],
                         aes(x = name, y = value, fill = name)) +
     geom_violin() +
     theme_bw() +
@@ -77,13 +85,14 @@ plots <- lapply(params$factors, function(x) {
                       labels = c(gsub(
                         pattern = paste0(params$factors[x], "_"),
                         replacement = "",
-                        x = unique(params$df_factors[[x]][["name"]])
+                        x = unique(df_factors[[x]][["name"]])
                       ))) +
     scale_y_continuous(name = "Time to detection (years)") +
-    ggtitle(paste("Sensivitiy analysis: ", x))
+    labs(title = paste(w),
+         subtitle = paste("Sensivitiy analysis: ", x))
 
     # bar plot - percentage of simulations where NIS not detected
-  p2 <- ggplot(params$df_factors[[x]],
+  p2 <- ggplot(df_factors[[x]],
                 aes(
                   x = name,
                   y = pct_no_detect / config$num_sim,
@@ -97,7 +106,7 @@ plots <- lapply(params$factors, function(x) {
                       labels = c(gsub(
                         pattern = paste0(params$factors[x], "_"),
                         replacement = "",
-                        x = unique(params$df_factors[[x]][["name"]])
+                        x = unique(df_factors[[x]][["name"]])
                       ))) +
     scale_y_continuous(name = "Simulations NIS not detected (%)",
                         limits = c(seq(
@@ -107,6 +116,8 @@ plots <- lapply(params$factors, function(x) {
   # combine plots
   p1 + p2
 
+  })
+  
 })
 
 plots

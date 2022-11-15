@@ -108,7 +108,7 @@ runSurveillanceSimulation <- function(n_simulations,
       
     }
     # if surveillance_period passes with no detection report 100 otherwise report the time to detection (results[i])
-    results[i] <- ifelse(results[i] == 0, 100, results[i])
+    results[i] <- ifelse(results[i] == 0, 1000, results[i])
     
   }
   return(results)
