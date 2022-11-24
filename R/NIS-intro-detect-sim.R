@@ -242,7 +242,7 @@ if (config$elasticity_analysis == TRUE) {
   cols_elasticity <- colnames(e_results_all[[1]])[!colnames(e_results_all[[1]]) %in% cols_to_remove]
   
   # define names of factors to analyse elasticity for
-  factors <- c("num_sites", "num_years", "mean_visit_rate", "p_detection", "establish_prob" )
+  factors <- c("num_sites", "num_years", "mean_visit_rate", "p_detection", "establish_prob", "min_p_detect", "max_p_detect" )
   
   # set up data frames to record results
   elasticity_calcs_reduce <- data.frame(matrix(nrow = length(factors),
