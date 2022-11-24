@@ -59,8 +59,26 @@ makeElasticityParamsTable <- function(defaults, elasticity_prop) {
                                  return(defaults)
                                })
   
+  min_p_detect <- lapply(seq(from = defaults$min_p_detect - (defaults$min_p_detect * elasticity_prop),
+                               to = defaults$min_p_detect + (defaults$min_p_detect * elasticity_prop),
+                               by = (defaults$min_p_detect * elasticity_prop)), function(x) {
+                                 defaults[ , "min_p_detect"] <- x # edit the value
+                                 defaults[ , "establish_risk"] <- "equal uniform"
+                                 defaults[ , "name"] <- paste0("min_p_detect_", x) # rename the column 
+                                 return(defaults)
+                               })
+  
+  max_p_detect <- lapply(seq(from = defaults$max_p_detect - (defaults$max_p_detect * elasticity_prop),
+                                to = defaults$max_p_detect + (defaults$max_p_detect * elasticity_prop),
+                                by = (defaults$max_p_detect * elasticity_prop)), function(x) {
+                                  defaults[ , "max_p_detect"] <- x # edit the value
+                                  defaults[ , "establish_risk"] <- "equal uniform"
+                                  defaults[ , "name"] <- paste0("max_p_detect_", x) # rename the column 
+                                  return(defaults)
+                                })
+  
   # combine the list of rows containing parameters to test
-  rows <- c(num_sites, num_years, mean_visit_rate, p_detection, establish_prob)
+  rows <- c(num_sites, num_years, mean_visit_rate, p_detection, establish_prob, min_p_detect, max_p_detect)
   scenarios <- do.call(rbind.data.frame, rows)
   scenarios <- rbind(defaults, scenarios)
   

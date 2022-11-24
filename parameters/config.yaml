@@ -1,5 +1,5 @@
 # user running simulations
-user: "Your Name Here"
+user: "Rebecca Millard"
 
 # unique run name (directory and results name)
 # to include letters, numbers, underscores or dashes, no special characters
@@ -50,7 +50,7 @@ sensitivity_analysis: TRUE
 elasticity_analysis: TRUE
 
 # percentage of change to test each parameters
-elasticity_proportion: 0.5
+elasticity_proportion: 0.01
 
 defaults:
     name: "default"
@@ -61,6 +61,6 @@ defaults:
     intro_risk: "random uniform"
     mean_visit_rate: 1
     p_detection: 0.5
-    max_p_detect: 1
-    min_p_detect: 0
+    max_p_detect: 0.9
+    min_p_detect: 0.1
     detect_dynamic: "constant"
