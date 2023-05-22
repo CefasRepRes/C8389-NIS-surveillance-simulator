@@ -13,7 +13,7 @@ source("functions/summariseSensitivityResults.R")
 source("functions/summariseElasticityResults.R")
 
 pkgs <- c("yaml", "here", "truncnorm", "reshape2", "gtools",
-          "ggplot2", "patchwork")
+          "ggplot2", "patchwork", "EnvStats", "ReIns")
 lapply(pkgs, library, character.only = T)
 
 ## INPUTS ----------------------------------------------------------------------------
@@ -42,13 +42,10 @@ p_establish <- getEstablishProbability(method = config$establish_risk,
                                        n_sites = config$num_sites,
                                        x = config$establish_prob)
 
-# probability of introduction
-p_intro <- getIntroProbability(method = config$intro_risk,
-                               n_sites = config$num_sites)
+p_intro <- getIntroProbability(method = "equal uniform", n_sites = config$num_sites, x = 0.8)
 
 # combined introduction and establishment probs to give overall introduction rate
 p_intro_establish <- p_intro * p_establish
-
 
 ## SCENARIO A: RANDOM SURVEILLANCE STRATEGY (independent of risk) -----------------------
 # A: rate at which random sites are visited (vector)
