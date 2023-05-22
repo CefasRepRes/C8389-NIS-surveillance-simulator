@@ -51,34 +51,48 @@ runSurveillanceSimulation <- function(n_simulations,
     time <- 0
     
     # introduction seeded at site dependent on risk (if risk distribution is random normal most sites intermediate risk)
+    # single site selected based on the prob but proportional to the other intro_establish probabilities sum(p_intro_establish)
     seed_site <- sample(x = site_vector,
-                        size = 1,
+                        size = 1, 
                         prob = p_intro_establish / sum(p_intro_establish))
     
     # loop through site visits until the seed site is visited and detection = 1
+    # i.e. there are no results and the time i not over the surveillance period. 
     while(results[i] == 0 && time <= surveillance_period) {
       
       # work out average time to visit one site assuming sum of visit rate sites will be visited per year
+      # random deviates of the exponential distribution with rate = 100. 
+      # exp. dist. skewed distribution that applies when the variable is the time to the first 
+      # occurrence of an event. 1/rate = mean time to first occurrence i.e. 1/100 = 0.01
+      # This is adding variation to the time it takes to visit somewhere. 
+      
       new_time <- rexp(n = 1, rate = sum(site_visit_rate))
       
-      # add period of time to original (simulate time passing)
+      # add period of time to original (simulate time passing) 
       time <- time + new_time
       
-      # select site visited at this time
+      # select site visited at this time based on the site vector and the 
+      # site_visit_rate i.e. more likely to visit sites under the higher scenario. 
+      # replacement is false if site revisiting is false. 
+      
       visit <- sample(x = site_vector,
                       size = 1,
                       replace = site_revisit, # if set to F site is not revisited
                       prob = site_visit_rate)
       
       # if constant detection probability over time:
-      if (grepl("constant", detection_dynamic, ignore.case = T)) {
-        # return a 0/1 based on p of detection
+      if (grepl("constant", detection_dynamic, ignore.case = T)) { # i.e. is detection constant. 
+        # return a 0/1 based on p of detection 
         detect <- rbinom(n = 1, size = 1, prob = p_detection)
+        
+        # rbinomial gives you a 1 or a 0, n = obs., size = n.trials
+        # prob - probability of success i.e. detection on each trial. 
+        # if this just tells you was it found or not... 
         
         # else if increasing detection probability over time:
       } else if (grepl("increasing", detection_dynamic, ignore.case = T)) {
         # scale the detection probability up by (1 - exponent of negative time)
-        scaled_prob <- p_detection + (1 - (exp(-time)))
+        scaled_prob <- p_detection + (1 - (exp(-time))) # this will increase the probability of detection overtime. 
         
         # check scaled probability within min and max range
         scaling <- ifelse(scaled_prob > max_p_detection, max_p_detection, scaled_prob)
@@ -106,11 +120,12 @@ runSurveillanceSimulation <- function(n_simulations,
       # report time if seed site visited and detected otherwise result remains at 0
       results[i] <- ifelse(visit == seed_site & detect == 1, time, 0)
       
-    }
-    # if surveillance_period passes with no detection report 100 otherwise report the time to detection (results[i])
+    } # possible error? 100 vs. 1000? 
+    # if surveillance_period passes with no detection report 1000 otherwise report the time to detection (results[i])
     results[i] <- ifelse(results[i] == 0, 1000, results[i])
     
   }
   return(results)
   
 }
+
