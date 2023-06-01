@@ -13,7 +13,7 @@ source("functions/summariseSensitivityResults.R")
 source("functions/summariseElasticityResults.R")
 
 pkgs <- c("yaml", "here", "truncnorm", "reshape2", "gtools",
-          "ggplot2", "patchwork", "EnvStats", "ReIns")
+          "ggplot2", "patchwork", "EnvStats", "ReIns", "data.table")
 lapply(pkgs, library, character.only = T)
 
 ## INPUTS ----------------------------------------------------------------------------
@@ -62,7 +62,7 @@ resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       min_p_detect = config$det_prob_min,
                                       detection_dynamic = config$detect_dynamic,
                                       site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish)
+                                      p_intro_establish = p_intro_establish, multiple_seed = F, seed_prop = 0.01)
 
 
 ## SCENARIO B: RISK BASED SURVEILLANCE FOCUSSED ON HIGH RISK SITES ----------------------
@@ -79,7 +79,7 @@ resultsB <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       min_p_detection = config$det_prob_min,
                                       detection_dynamic = config$detect_dynamic,
                                       site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish)
+                                      p_intro_establish = p_intro_establish, multiple_seed = F, seed_prop = 0.01)
 
 
 ## SCENARIO C: RISK BASED SURVEILLANCE VERY FOCUSSED ON HIGH RISK SITES -----------------
@@ -99,7 +99,7 @@ resultsC <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       min_p_detection = config$det_prob_min,
                                       detection_dynamic = config$detect_dynamic,
                                       site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish)
+                                      p_intro_establish = p_intro_establish, multiple_seed = F, seed_prop = 0.01)
 
 
 ## GENERATE RESULTS REPORT -----------------------------------------------------------------------
