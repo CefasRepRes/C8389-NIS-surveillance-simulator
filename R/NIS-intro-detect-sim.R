@@ -62,8 +62,9 @@ resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       min_p_detect = config$det_prob_min,
                                       detection_dynamic = config$detect_dynamic,
                                       site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish, multiple_seed = F, seed_prop = 0.01)
-
+                                      p_intro_establish = p_intro_establish, 
+                                      multiple_seed = T, 
+                                      seed_prop = 0.01)
 
 ## SCENARIO B: RISK BASED SURVEILLANCE FOCUSSED ON HIGH RISK SITES ----------------------
 # B: rate at which risk-based sites are visited (vector)
