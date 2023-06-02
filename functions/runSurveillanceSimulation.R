@@ -1,4 +1,4 @@
-#' #' runSurveillanceSimulation # this code needs checking tommorrow. 
+#' #' runSurveillanceSimulation # this code needs checking and checking with Hannah.  
 #'
 #' @param n_simulations numeric number of simulations to run.
 #' @param site_revisit logical TRUE/FALSE whether sites can be revisited or not 
@@ -20,7 +20,6 @@
 #' @param site_vector numeric vector of sites. 
 #' @param p_intro_establish numeric vector stating probability of introduction and 
 #' establishment of NIS at each site.
-#'
 #' @param multiple_seed logical indicating if invasive species can occur at multiple sites
 #' @param seed_prop numeric giving the proportion of sites where NIS maybe found
 #'
@@ -46,24 +45,28 @@ runSurveillanceSimulation <- function(n_simulations,
                                       detection_dynamic,
                                       site_vector,
                                       p_intro_establish,
-                                      multiple_seed = T,
-                                      seed_prop = 0.01){
+                                      multiple_seed,
+                                      seed_prop){
   
-  # define empty results list of length n_simulations
+  ## define empty results list of length n_simulations
   results <- vector(length = n_simulations, mode = "list")
   
+  ## Run simulations
   for (i in 1:n_simulations){ # for every simulation
-    
+  
     # set the time to 0
     time <- 0
     
+    ## Bind site_vector and site_visit_rate into a data.frame to allow resampling, or no resampling. 
+    site_df <- data.frame(site_vector, site_visit_rate)
+
     # introduction seeded at site dependent on risk (if risk distribution is random normal most sites intermediate risk)
     # single site or multiple sites selected based on the prob but proportional to the other intro_establish probabilities sum(p_intro_establish)
     
     # if multiple sites are needed
     if(multiple_seed == T){ 
 
-      # create seed_sites
+      # create multiple seed_sites
       seed_site <- sample(x = site_vector,
                           size = length(site_vector)*seed_prop, 
                           prob = p_intro_establish / sum(p_intro_establish))
@@ -85,7 +88,7 @@ runSurveillanceSimulation <- function(n_simulations,
     # i.e. there are no results and the time i not over the surveillance period. 
     # while results are not equal to the length of seed site. 
     
-    while(0 %in% results[[i]]$dtime && time <= surveillance_period) {
+    while(0 %in% results[[i]]$dtime && time <= surveillance_period){
       
       # work out average time to visit one site assuming sum of visit rate sites will be visited per year
       # random deviates of the exponential distribution with rate = total of site_visit_rates e.g. 100 
@@ -100,12 +103,14 @@ runSurveillanceSimulation <- function(n_simulations,
       
       # select site visited at this time based on the site vector and the 
       # site_visit_rate i.e. more likely to visit sites under the higher scenario. 
-      # replacement is false if site revisiting is false. 
+      # due to the way this while loop works, replacement cannot be controlled by sample as it is 
+      # being repeatedly re-run and does not 'remember the site' drawn in the previous run. 
+      # this is controlled later. Therefore replace is effective TRUE. 
       
-      visit <- sample(x = site_vector,
+      visit <- sample(x = site_df$site_vector,
                       size = 1,
-                      replace = site_revisit, # if set to F site is not revisited
-                      prob = site_visit_rate)
+                      replace = F, # kept as a default
+                      prob = site_df$site_visit_rate)
       
       # if constant detection probability over time:
       if (grepl("constant", detection_dynamic, ignore.case = T)) { # i.e. is detection constant. 
@@ -141,30 +146,37 @@ runSurveillanceSimulation <- function(n_simulations,
         detect <- (rbinom(n = 1, size = 1, prob = scaling))
         
       } else {
-        print("WARNING: detection_dynamic contains an invalid entry, see function documentation.")
-        
-      }
+        print("WARNING: detection_dynamic contains an invalid entry, see function documentation.")}
       
+      # To add detection time result 
       if(multiple_seed == T){
         
         # report detection time if a seed site visited and detected otherwise result remains at 0
-        if(visit %in% seed_site & detect == 1){results[[i]]$dtime[results[[i]]$seed_site == visit] <- time}else{}
+        if(visit %in% seed_site & detect == 1){
+          results[[i]]$dtime[results[[i]]$seed_site == visit] <- time
+          
+          if(site_revisit == F){ # if sampling without replacement is desired. 
+
+            # Drop the visited site off the site_vector in site_df so it cannot be resampled
+            site_df <- site_df[!site_df$site_vector %in% visit,]
+            
+          }else{} # nothing the site_vector remains the same and all sites can be withdrawn
+          
+          }else{} # nothing continue with simulation...
         
       }else{
         
         # report detection time if seed site visited and detected otherwise result remains at 0
-        results[[i]]$dtime <- ifelse(visit == seed_site & detect == 1, time, 0)
-        
-      }
+        results[[i]]$dtime <- ifelse(visit == seed_site & detect == 1, time, 0)}
       
-    }
+    } # end of while loop
     
     # if surveillance_period passes with i.e. 0 change time to detection to 1000
     results[[i]]$dtime <- replace(results[[i]]$dtime, results[[i]]$dtime == 0, 1000)
     
     }
     
-    # Now turn results into a single continuous value. 
+  ## Now turn results into a single continuous value. 
     results <- as.data.frame(rbindlist(results))
     
     # For single results just convert this data to a single numeric vector
