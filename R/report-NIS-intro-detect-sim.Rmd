@@ -98,16 +98,16 @@ Note that for each of these surveillance strategies the overall visit rate, as d
 
 ```{r, echo = FALSE, fig.width = 12, fig.height = 4, fig.align = 'center'}
 # generate data frame of site visit rates
+# added plus 0.05 to xlim as it was cutting off site visit rates all at 1.0
 df_visits <- data.frame("site_visit_rate_A" = params$site_visit_rate_A,
                         "site_visit_rate_B" = params$site_visit_rate_B,
                         "site_visit_rate_C" = params$site_visit_rate_C)
-
 
 p1 <- ggplot2::ggplot(df_visits, aes(x = site_visit_rate_A)) +
   geom_histogram(aes(y = ..density..), binwidth = 0.05, colour = "gray", fill = "gray") +
   theme_bw() +
   scale_x_continuous(name = "Site Visit Rate (per year)",
-                     limits = c(0, max(df_visits$site_visit_rate_C))) +
+                     limits = c(0, max(df_visits$site_visit_rate_C)+0.05)) +
   ylab("Frequency") +
   ggtitle("Random Surveillance")
 
@@ -115,7 +115,7 @@ p2 <- ggplot2::ggplot(df_visits, aes(x = site_visit_rate_B)) +
   geom_histogram(aes(y = ..density..), binwidth = 0.05, colour = "lightblue2", fill = "lightblue2") +
   theme_bw() +
   scale_x_continuous(name = "Site Visit Rate (per year)",
-                     limits = c(0, max(df_visits$site_visit_rate_C))) +
+                     limits = c(0, max(df_visits$site_visit_rate_C)+0.05)) +
   ylab("Frequency") +
   ggtitle("Risk-based surveillance")
 
@@ -123,7 +123,7 @@ p3 <- ggplot2::ggplot(df_visits, aes(x = site_visit_rate_C)) +
   geom_histogram(aes(y = ..density..), binwidth = 0.05, colour = "royalblue3", fill = "royalblue3") +
   theme_bw() +
   scale_x_continuous(name = "Site Visit Rate (per year)",
-                     limits = c(0, max(df_visits$site_visit_rate_C))) +
+                     limits = c(0, max(df_visits$site_visit_rate_C)+0.05)) +
   ylab("Frequency") +
   ggtitle("Heavy risk-based surveillance")
 
