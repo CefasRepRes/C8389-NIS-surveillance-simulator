@@ -1,4 +1,4 @@
-#' #' runSurveillanceSimulation # this code needs checking and checking with Hannah.  
+#' #' runSurveillanceSimulation 
 #'
 #' @param n_simulations numeric number of simulations to run.
 #' @param site_revisit logical TRUE/FALSE whether sites can be revisited or not 
@@ -33,8 +33,12 @@
 #'                                                   site_visit_rate = c(1, 1, 1, 1, ...),
 #'                                                   p_detection = 0.9,
 #'                                                   site_vector = c(1, 2, 3, 4, ..),
-#'                                                   p_intro_establish = c(0.008, 0.21, 0.045, ...))
-#'                                                   
+#'                                                   p_intro_establish = c(0.008, 0.21, 0.045, ...), 
+#'                                                   multiple_seed = T, 
+#'                                                   seed_prop = 0.01)
+#'
+# Code Checked 05/06/2023 TG
+#'
 runSurveillanceSimulation <- function(n_simulations,
                                       site_revisit,
                                       surveillance_period,
@@ -75,14 +79,12 @@ runSurveillanceSimulation <- function(n_simulations,
       results[[i]]$dtime <- 0 # give a basic value of 0
       results[[i]]$sim_n <- i # give simulation number
     
-    # Or for single sites  
-    }else{seed_site <- sample(x = site_vector,
+     # Or for single sites  
+     }else{seed_site <- sample(x = site_vector,
                               size = 1, 
                               prob = p_intro_establish / sum(p_intro_establish))
           
-          results[[i]] <- data.frame(dtime = 0) # give the default time value of 1000
-    
-    }
+          results[[i]] <- data.frame(dtime = 0)} # give the default time value of 0
     
     # loop through site visits until the seed site is visited and detection = 1
     # i.e. there are no results and the time i not over the surveillance period. 
@@ -105,7 +107,7 @@ runSurveillanceSimulation <- function(n_simulations,
       # site_visit_rate i.e. more likely to visit sites under the higher scenario. 
       # due to the way this while loop works, replacement cannot be controlled by sample as it is 
       # being repeatedly re-run and does not 'remember the site' drawn in the previous run. 
-      # this is controlled later. Therefore replace is effective TRUE. 
+      # this is controlled later to allow replacement = F 
       
       visit <- sample(x = site_df$site_vector,
                       size = 1,
@@ -148,22 +150,23 @@ runSurveillanceSimulation <- function(n_simulations,
       } else {
         print("WARNING: detection_dynamic contains an invalid entry, see function documentation.")}
       
-      # To add detection time result 
+      # To add detection time result for multiple seed sites
       if(multiple_seed == T){
         
         # report detection time if a seed site visited and detected otherwise result remains at 0
         if(visit %in% seed_site & detect == 1){
           results[[i]]$dtime[results[[i]]$seed_site == visit] <- time
           
-          if(site_revisit == F){ # if sampling without replacement is desired. 
+           if(site_revisit == F){ # if a site should not be revisted after it has been sampled
 
-            # Drop the visited site off the site_vector in site_df so it cannot be resampled
-            site_df <- site_df[!site_df$site_vector %in% visit,]
+             # Remove row which matches site_vector in site_df so that site cannot be resampled
+             site_df <- site_df[!site_df$site_vector %in% visit,]
             
-          }else{} # nothing the site_vector remains the same and all sites can be withdrawn
+           }else{} # nothing the site_vector remains the same and all sites can be withdrawn
           
           }else{} # nothing continue with simulation...
-        
+      
+      # Add detection time for single seed sites
       }else{
         
         # report detection time if seed site visited and detected otherwise result remains at 0
@@ -171,15 +174,16 @@ runSurveillanceSimulation <- function(n_simulations,
       
     } # end of while loop
     
-    # if surveillance_period passes with i.e. 0 change time to detection to 1000
+    # if surveillance_period passes and nothing detected i.e. 0 change time to detection to 1000
     results[[i]]$dtime <- replace(results[[i]]$dtime, results[[i]]$dtime == 0, 1000)
     
-    }
+    } # end of simulation
     
-  ## Now turn results into a single continuous value. 
-    results <- as.data.frame(rbindlist(results))
+  ## Following simulation clean up results
+  
+    results <- as.data.frame(rbindlist(results)) # collapse list to data.frame
     
-    # For single results just convert this data to a single numeric vector
+    # For single results just convert data.frame into a single vector
     if(multiple_seed == F){results <- as.vector(results$dtime)}else{}
     
   # return results
