@@ -21,12 +21,12 @@
 
 #' @return N the population size at a given time. 
 
-GetAbun.t <- function(t.yr = time, g = gen.time, N0 = 10, R = pop.R, exp = pop.expon){
+GetAbun.t <- function(t.yr = time, g = gen_time, N0 = start_pop, R = pop_R, exp = growth_model){
   
   # Convert time (in years) into days 
   t <- t.yr*365
   
-  if(exp == T){ # Run exponential growth model 
+  if(exp == "exponential"){ # Run exponential growth model 
 
   N <- N0*R^(t/g)
 

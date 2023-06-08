@@ -60,11 +60,47 @@ resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       p_detection = config$det_prob,
                                       max_p_detect = config$det_prob_max,
                                       min_p_detect = config$det_prob_min,
-                                      detection_dynamic = config$detect_dynamic,
+                                      detection_dynamic = "increasing linear",
                                       site_vector = site_vector,
                                       p_intro_establish = p_intro_establish, 
-                                      multiple_seed = T, 
-                                      seed_prop = 0.01)
+                                      multiple_seed = F, 
+                                      seed_prop = 0.10,
+                                      gen_time = 50,
+                                      start_pop = 1000,
+                                      pop_R = 2,
+                                      growth_model = "exponential",
+                                      APrb = 10,
+                                      Abund_Threshold = 1000,
+                                      Prob_Below = 0.1,
+                                      Prob_Above = 0.8)
+
+summary(resultsA)
+
+resultsB <- runSurveillanceSimulation(n_simulations = config$num_sim,
+                                      site_revisit = F,
+                                      surveillance_period = config$num_years,
+                                      site_visit_rate = site_visit_rate_A,
+                                      p_detection = 0.5,
+                                      max_p_detect = config$det_prob_max,
+                                      min_p_detect = config$det_prob_min,
+                                      detection_dynamic = "constant",
+                                      site_vector = site_vector,
+                                      p_intro_establish = p_intro_establish, 
+                                      multiple_seed = F, 
+                                      seed_prop = 0.10,
+                                      gen_time = 50,
+                                      start_pop = 100,
+                                      pop_R = 2,
+                                      growth_model = "exponential",
+                                      APrb = 100,
+                                      Abund_Threshold = 1000,
+                                      Prob_Below = 0.1,
+                                      Prob_Above = 0.8)
+
+summary(resultsB)
+
+
+
 
 ## SCENARIO B: RISK BASED SURVEILLANCE FOCUSSED ON HIGH RISK SITES ----------------------
 # B: rate at which risk-based sites are visited (vector)
@@ -80,8 +116,8 @@ resultsB <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       min_p_detection = config$det_prob_min,
                                       detection_dynamic = config$detect_dynamic,
                                       site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish, multiple_seed = F, seed_prop = 0.01)
-
+                                      p_intro_establish = p_intro_establish, 
+                                      multiple_seed = T, seed_prop = 0.10)
 
 ## SCENARIO C: RISK BASED SURVEILLANCE VERY FOCUSSED ON HIGH RISK SITES -----------------
 # site visit rate with heavy focus on high risk sites
@@ -92,7 +128,7 @@ site_visit_rate_C <- (rep(x = config$mean_visit_rate,
 
 ## TODO: WHY IS THE SITE_REVISIT PARAMETER NOW TRUE?
 resultsC <- runSurveillanceSimulation(n_simulations = config$num_sim,
-                                      site_revisit = T,
+                                      site_revisit = F,
                                       surveillance_period = config$num_years,
                                       site_visit_rate = site_visit_rate_C,
                                       p_detection = config$det_prob,
@@ -100,8 +136,8 @@ resultsC <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       min_p_detection = config$det_prob_min,
                                       detection_dynamic = config$detect_dynamic,
                                       site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish, multiple_seed = F, seed_prop = 0.01)
-
+                                      p_intro_establish = p_intro_establish, 
+                                      multiple_seed = T, seed_prop = 0.10)
 
 ## GENERATE RESULTS REPORT -----------------------------------------------------------------------
 rmarkdown::render(input = "R/report-NIS-intro-detect-sim.Rmd", # Rmd to run
@@ -117,8 +153,7 @@ rmarkdown::render(input = "R/report-NIS-intro-detect-sim.Rmd", # Rmd to run
                                 resultsC = resultsC,
                                 site_visit_rate_A = site_visit_rate_A,
                                 site_visit_rate_B = site_visit_rate_B,
-                                site_visit_rate_C = site_visit_rate_C)
-                  )
+                                site_visit_rate_C = site_visit_rate_C))
 
 
 ## RUN SENSITIVITY ANALYSIS ----------------------------------------------------------------------

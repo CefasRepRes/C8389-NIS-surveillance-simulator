@@ -22,6 +22,10 @@
 #' establishment of NIS at each site.
 #' @param multiple_seed logical indicating if invasive species can occur at multiple sites
 #' @param seed_prop numeric giving the proportion of sites where NIS maybe found
+#' 
+#' Population Modelling Relevant Parameters
+#' gen.time, start.pop, pop.R, growth.model, 
+#' @APrb the abundance required to increase the probability of detection by 0.01
 #'
 #' @return numeric vector of length n_simulations containing the time taken for 
 #' an event to be detected at a seed site given set parameters such as site 
@@ -46,11 +50,19 @@ runSurveillanceSimulation <- function(n_simulations,
                                       p_detection,
                                       max_p_detection,
                                       min_p_detection,
-                                      detection_dynamic,
+                                      detection_dynamic = "constant",
                                       site_vector,
                                       p_intro_establish,
                                       multiple_seed,
-                                      seed_prop){
+                                      seed_prop,
+                                      gen_time, 
+                                      start_pop, 
+                                      pop_R,
+                                      growth_model = NULL,
+                                      APrb, 
+                                      Abund_Threshold = NULL, 
+                                      Prob_Below = 0.1, 
+                                      Prob_Above = 0.8){
   
   ## define empty results list of length n_simulations
   results <- vector(length = n_simulations, mode = "list")
@@ -79,6 +91,9 @@ runSurveillanceSimulation <- function(n_simulations,
       results[[i]]$dtime <- 0 # give a basic value of 0
       results[[i]]$sim_n <- i # give simulation number
     
+      # if abundances are required give the seed sites multiple starting values - more work needed here. 
+      # seed_site <- 
+      
      # Or for single sites  
      }else{seed_site <- sample(x = site_vector,
                               size = 1, 
@@ -98,7 +113,7 @@ runSurveillanceSimulation <- function(n_simulations,
       # occurrence of an event. 1/rate = mean time to first occurrence i.e. 1/100 = 0.01
       # This is adding variation to the time it takes to visit somewhere. 
       
-      new_time <- rexp(n = 1, rate = sum(site_visit_rate))
+      new_time <- rexp(n = 1, rate = sum(site_visit_rate)) 
       
       # add period of time to original (simulate time passing) 
       time <- time + new_time
@@ -122,34 +137,58 @@ runSurveillanceSimulation <- function(n_simulations,
         # rbinomial gives you a 1 or a 0, n = obs., size = n.trials
         # prob - probability of success i.e. detection on each trial. 
         # if this just tells you was it found or not... 
+      
+      # if abundance is exponentially increasing and has a linear relationship with detection probability
+      } else if(grepl("increasing linear", detection_dynamic, ignore.case = T)){ # stop here... 
         
-        # else if increasing detection probability over time:
-      } else if (grepl("increasing", detection_dynamic, ignore.case = T)) {
-        # scale the detection probability up by (1 - exponent of negative time)
-        scaled_prob <- p_detection + (1 - (exp(-time))) # this will increase the probability of detection overtime. 
+        if(growth_model == "exponential"){
+        # Get abundance at a given time point 
+        Abund <- GetAbun.t(t.yr = time, g = gen_time, N0 = start_pop, R = pop_R, exp = growth_model)
+        
+          }else{} # need to add logarithmic growth
+        
+        # Use the abundance divided by the APrb (abundance required to raise detection probability by 0.01) to increase p_detection
+        scaled_prob <- p_detection + (Abund/APrb)*0.01
         
         # check scaled probability within min and max range
-        scaling <- ifelse(scaled_prob > max_p_detection, max_p_detection, scaled_prob)
-        scaling <- ifelse(scaling < min_p_detection, min_p_detection, scaling)
+        scaling <- ifelse(scaled_prob > max_p_detect, max_p_detect, scaled_prob)
+        scaling <- ifelse(scaling < min_p_detect, min_p_detect, scaling)
         
         # return a 0/1 based on p of detection which increases with time
-        detect <- (rbinom(n = 1, size = 1, prob = scaling))
+        detect <- rbinom(n = 1, size = 1, prob = scaling)
+      
+      # if abundance is exponentially increasing and has a threshold relationship with detection probability
+      } else if(grepl("increasing threshold", detection_dynamic, ignore.case = T)){
         
-        # else if decreasing detection probability over time:
-      } else if (grepl("decreasing", detection_dynamic, ignore.case = T)) {
-        # scale the detection probability down by (1 - exponent of negative time)
-        scaled_prob <- p_detection - (1 - (exp(-time)))
+        # 
+        
+        
+        if(growth.model == "exponential"){
+        # Get abundance at a given time point 
+        Abund <- GetAbun.t(t.yr = time, g = gen_time, N0 = start_pop, R = pop_R, exp = growth_model)
+        
+          }else{} # need to add logarithmic growth
+        
+        if(Abund < Abund_Threshold){ # if abundance is below the threshold
+          
+          scaled_prob <- Prob_Below # give the low abundance probability value
+          
+        }else if(Abund >= Abund_Threshold){ # if abundance is above the threshold
+          
+          scaled_prob <- Prob_Above # give the high abundance probability value
+
+        }else{} # do nothing 
         
         # check scaled probability within min and max range
-        scaling <- ifelse(scaled_prob > max_p_detection, max_p_detection, scaled_prob)
-        scaling <- ifelse(scaling < min_p_detection, min_p_detection, scaling)
+        scaling <- ifelse(scaled_prob > max_p_detect, max_p_detect, scaled_prob)
+        scaling <- ifelse(scaling < min_p_detect, min_p_detect, scaling)
         
         # return a 0/1 based on p of detection which decreases with time
         detect <- (rbinom(n = 1, size = 1, prob = scaling))
-        
-      } else {
+
+      }else {
         print("WARNING: detection_dynamic contains an invalid entry, see function documentation.")}
-      
+        
       # To add detection time result for multiple seed sites
       if(multiple_seed == T){
         
