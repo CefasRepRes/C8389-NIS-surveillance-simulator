@@ -21,7 +21,7 @@
 
 #' @return N the population size at a given time. 
 
-GetAbun.t <- function(t.yr = time, g = gen_time, N0 = start_pop, R = pop_R, exp = growth_model){
+GetAbun.t <- function(t.yr = time, g = gen_time, N0 = pop, R = pop_R, exp = growth_model){
   
   # Convert time (in years) into days 
   t <- t.yr*365

@@ -91,10 +91,14 @@ runSurveillanceSimulation <- function(n_simulations,
       results[[i]]$dtime <- 0 # give a basic value of 0
       results[[i]]$sim_n <- i # give simulation number
     
-      # if abundances are required give the seed sites multiple starting values - more work needed here. 
-      # seed_site <- 
-      
-     # Or for single sites  
+      # if abundances are required give the seed sites multiple starting values 
+      if(detection_dynamic %in% c("increasing threshold", "increasing linear")){
+        
+        # Draw n random poisson distributed starting values, mean (lambda) = start_pop 
+        start_ab <- rpois(n = length(seed_site), lambda = start_pop)
+        seed_ab <- data.frame(seed_site, start_ab)} # add these to seed sites
+        
+     # Or for single sites
      }else{seed_site <- sample(x = site_vector,
                               size = 1, 
                               prob = p_intro_establish / sum(p_intro_establish))
@@ -130,7 +134,7 @@ runSurveillanceSimulation <- function(n_simulations,
                       prob = site_df$site_visit_rate)
       
       # if constant detection probability over time:
-      if (grepl("constant", detection_dynamic, ignore.case = T)) { # i.e. is detection constant. 
+      if (grepl("constant", detection_dynamic, ignore.case = T)){ # i.e. is detection constant. 
         # return a 0/1 based on p of detection 
         detect <- rbinom(n = 1, size = 1, prob = p_detection)
         
@@ -139,11 +143,18 @@ runSurveillanceSimulation <- function(n_simulations,
         # if this just tells you was it found or not... 
       
       # if abundance is exponentially increasing and has a linear relationship with detection probability
-      } else if(grepl("increasing linear", detection_dynamic, ignore.case = T)){ # stop here... 
+      
+        } else if(grepl("increasing linear", detection_dynamic, ignore.case = T)){ # stop here... 
         
+        # if multiple sites are present and the visited site is a seed site, otherwise pop is starting pop for single sites
+        # or if its a different site just get the mean value
+        if(multiple_seed == T & visit %in% seed_site){pop <- seed_ab$start_ab[seed_ab$seed_site == visit]}else{pop <- start_pop}
+          
+        # select population growth model
         if(growth_model == "exponential"){
+          
         # Get abundance at a given time point 
-        Abund <- GetAbun.t(t.yr = time, g = gen_time, N0 = start_pop, R = pop_R, exp = growth_model)
+        Abund <- GetAbun.t(t.yr = time, g = gen_time, N0 = pop, R = pop_R, exp = growth_model)
         
           }else{} # need to add logarithmic growth
         
@@ -160,12 +171,15 @@ runSurveillanceSimulation <- function(n_simulations,
       # if abundance is exponentially increasing and has a threshold relationship with detection probability
       } else if(grepl("increasing threshold", detection_dynamic, ignore.case = T)){
         
-        # 
+        # if multiple sites are present and the visited site is a seed site, otherwise pop is starting pop for single sites
+        # or if its a different site just get the mean value
+        if(multiple_seed == T & visit %in% seed_site){pop <- seed_ab$start_ab[seed_ab$seed_site == visit]}else{pop <- start_pop}
         
-        
+        # if growth is exponential 
         if(growth.model == "exponential"){
-        # Get abundance at a given time point 
-        Abund <- GetAbun.t(t.yr = time, g = gen_time, N0 = start_pop, R = pop_R, exp = growth_model)
+          
+          # Get abundance at a given time point 
+          Abund <- GetAbun.t(t.yr = time, g = gen_time, N0 = pop, R = pop_R, exp = growth_model)
         
           }else{} # need to add logarithmic growth
         

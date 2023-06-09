@@ -11,8 +11,9 @@
 
 #' @return final a processed vector of results, one element per simulation 
 
-ProcessMultipleResults <- function(result.df = resultsA, detection.summary = "last"){
+ProcessMultipleResults <- function(result.df = resultsA, detection.summary = "last", create.plot = T){
   
+  # Generate Summary Information
   if(detection.summary == "mean"){ # get the mean time to detection per simulation
     
     result.df %>% group_by(sim_n) %>% summarise(dtime = mean(dtime)) -> final.dat
@@ -35,8 +36,17 @@ ProcessMultipleResults <- function(result.df = resultsA, detection.summary = "la
 
   }else{return(print("Error: Wrongly specified process option"))}
   
+  # Create Plot - stops needs checking. 
+  if(create.plot == T){
+  
+  final.plot <- final # copy to prevent data loss. 
+  final.plot[final.plot == 1000] <- NA # remove any values of 1000 as they screw the graph up
+  
+  # Plot the histogram 
+  print(hist(x = final.plot, breaks = 100, main = paste("Summary Method:", detection.summary, "detection time"),
+             xlab = "Summarised Detection Time (yrs)", ylab = "Frequency"))}else{}
+    
   # Return final result
   return(final)
   
 }
-

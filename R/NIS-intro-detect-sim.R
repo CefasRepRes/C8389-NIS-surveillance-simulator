@@ -11,6 +11,8 @@ source("functions/runSurveillanceSensitivity.R")
 source("functions/formatSensitivityResults.R")
 source("functions/summariseSensitivityResults.R")
 source("functions/summariseElasticityResults.R")
+source("functions/GetAbundance.R")
+source("functions/ProcessMultipleResults.R")
 
 pkgs <- c("yaml", "here", "truncnorm", "reshape2", "gtools",
           "ggplot2", "patchwork", "EnvStats", "ReIns", "data.table")
@@ -60,10 +62,10 @@ resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       p_detection = config$det_prob,
                                       max_p_detect = config$det_prob_max,
                                       min_p_detect = config$det_prob_min,
-                                      detection_dynamic = "increasing linear",
+                                      detection_dynamic = "increasing threshold",
                                       site_vector = site_vector,
                                       p_intro_establish = p_intro_establish, 
-                                      multiple_seed = F, 
+                                      multiple_seed = T, 
                                       seed_prop = 0.10,
                                       gen_time = 50,
                                       start_pop = 1000,
@@ -74,7 +76,11 @@ resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       Prob_Below = 0.1,
                                       Prob_Above = 0.8)
 
-summary(resultsA)
+# stop here. 
+exmp <- resultsA
+
+exmp <- ProcessMultipleResults(result.df = resultsA, detection.summary = "fefea")
+summary(exmp)
 
 resultsB <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       site_revisit = F,
