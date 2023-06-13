@@ -54,6 +54,7 @@ p_intro_establish <- p_intro * p_establish
 site_visit_rate_A <- rep(x = config$mean_visit_rate, # if each site visited once (mean_visit_rate = 1)
                          times = config$num_sites)
 
+# Stopped here still working on this. 
 # run simulation A to determine the number of years which is takes to detect an introduction (1000 simulations in total)
 resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       site_revisit = F,
@@ -62,7 +63,7 @@ resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       p_detection = config$det_prob,
                                       max_p_detect = config$det_prob_max,
                                       min_p_detect = config$det_prob_min,
-                                      detection_dynamic = "increasing threshold",
+                                      detection_dynamic = "threshold",
                                       site_vector = site_vector,
                                       p_intro_establish = p_intro_establish, 
                                       multiple_seed = T, 
@@ -76,7 +77,8 @@ resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       Prob_Below = 0.1,
                                       Prob_Above = 0.8)
 
-# stop here. 
+
+
 exmp <- resultsA
 
 exmp <- ProcessMultipleResults(result.df = resultsA, detection.summary = "fefea")
