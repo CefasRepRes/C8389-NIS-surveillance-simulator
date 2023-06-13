@@ -1,38 +1,43 @@
 #' 08/06/2023
 #' Tom Gibson
 #' GetAbundance with GetAbun.t
-#' Checked 08/06/23 using graphs needs a logistic curve added. 
+#' Checked line by line and with plots on 13/06/23
 
 #' A helper function for runSurveillanceSimulation.R
-#' it abundance for a given time step based on user defined parameters
+#' gives abundance for a given time step (in years) based on user defined parameters
 
-#' Logistic model
-#' N = N0*R^(t/g)
+#' Exponential model
+# N = N0 * e^(r*t)
 
-#' Madigan, M., et al. Brock Biology of Microorganisms, Global Edition, Pearson Education, Limited, 2018. 
-#' and Vandermeer, J. (2010) How Populations Grow: The Exponential and Logistic Equations. 
-#' Nature Education Knowledge 3(10):15
+#' Logistic Model
+# N = K / (1 + ((K - N0) / N0) * e^(-r*t))
 
-#' @param exp draw from an exponential growth curve. logical, if F draw logistic curve. 
-#' @param t.yr the time from the simulation time step, in years generates t by t.yr*365
-#' @param g the generation time (in days). 
+#' Reference
+#' Rockwood, Larry L.. Introduction to Population Ecology, John Wiley & Sons, Incorporated, 2015. 
+#' ProQuest Ebook Central, https://ebookcentral.proquest.com/lib/uea/detail.action?docID=1895786.
+
+#' @param model choose exponential or logistic growth curve.  
 #' @param N0 the starting individuals (at the beginning of the simulation). 
-#' @param R the finite rate of population increase. 
+#' @param r the finite rate of population increase. 
+#  e is Euler's constant (exp1 in R). 
+#' @param K the carrying capacity in number of individuals. 
 
 #' @return N the population size at a given time. 
 
-GetAbun.t <- function(t.yr = time, g = gen_time, N0 = pop, R = pop_R, exp = growth_model){
+GetAbun.t <- function(t = time, N0 = pop, r = pop_R, model = pop_model, K = pop_cap){
   
-  # Convert time (in years) into days 
-  t <- t.yr*365
+  e <- exp(1) # Create e
   
-  if(exp == "exponential"){ # Run exponential growth model 
+  if(model == "exponential"){ # Run exponential growth model 
 
-  N <- N0*R^(t/g)
+    N <- N0 * e^(r*t)
+  
+  }else if(model == "logistic"){ # Run logistic growth model
+  
+    N <- K / (1 + ((K - N0) / N0) * e^(-r*t))
 
-  }else{} # Run logistic growth model - needs implementing not done yet
-
+  }else{return("error: population model mis-spelt, choose exponential or logistic")} # return error
+  
   return(N)
   
 } # end function
-
