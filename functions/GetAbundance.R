@@ -24,7 +24,7 @@
 
 #' @return N the population size at a given time. 
 
-GetAbun.t <- function(t = time, N0 = pop, r = pop_R, model = pop_model, K = pop_cap){
+GetAbun.t <- function(t = time, N0 = pop, r = pop_R, model = growth_model, K = pop_cap){
   
   e <- exp(1) # Create e
   
