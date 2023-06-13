@@ -55,14 +55,14 @@ runSurveillanceSimulation <- function(n_simulations,
                                       p_intro_establish,
                                       multiple_seed,
                                       seed_prop,
-                                      gen_time, 
                                       start_pop, 
                                       pop_R,
-                                      growth_model = NULL,
+                                      growth_model,
+                                      pop_cap,
                                       APrb, 
-                                      Abund_Threshold = NULL, 
-                                      Prob_Below = 0.1, 
-                                      Prob_Above = 0.8){
+                                      Abund_Threshold, 
+                                      Prob_Below, 
+                                      Prob_Above){
   
   ## define empty results list of length n_simulations
   results <- vector(length = n_simulations, mode = "list")
@@ -144,7 +144,7 @@ runSurveillanceSimulation <- function(n_simulations,
       
       # if abundance is exponentially increasing and has a linear relationship with detection probability
       
-        } else if(grepl("increasing linear", detection_dynamic, ignore.case = T)){ # stop here... 
+        } else if(grepl("linear", detection_dynamic, ignore.case = T)){ # stop here... 
         
         # if multiple sites are present and the visited site is a seed site, otherwise pop is starting pop for single sites
         # or if its a different site just get the mean value
