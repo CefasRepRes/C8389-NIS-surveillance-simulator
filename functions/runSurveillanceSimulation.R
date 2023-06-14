@@ -1,5 +1,6 @@
 #' #' runSurveillanceSimulation 
-#' # still needed checking but initial work showed it runs. 
+#' # still needed checking but initial work showed it runs. Superficial check done needs a re-check. 
+#' # This now needs fixing sort tommorrow. 
 #' @param n_simulations numeric number of simulations to run.
 #' @param site_revisit logical TRUE/FALSE whether sites can be revisited or not 
 #' in the simulation.
@@ -41,21 +42,21 @@
 #'                                                   multiple_seed = T, 
 #'                                                   seed_prop = 0.01)
 #'
-# Code Checked 05/06/2023 TG # needs more work. 
-#'
+
 runSurveillanceSimulation <- function(n_simulations,
                                       site_revisit,
                                       surveillance_period,
                                       site_visit_rate,
                                       p_detection,
-                                      max_p_detection,
-                                      min_p_detection,
+                                      max_p_detect,
+                                      min_p_detect,
                                       detection_dynamic,
                                       site_vector,
                                       p_intro_establish,
                                       multiple_seed,
                                       seed_prop,
                                       start_pop, 
+                                      start_possion, 
                                       pop_R,
                                       growth_model,
                                       pop_cap,
@@ -94,14 +95,20 @@ runSurveillanceSimulation <- function(n_simulations,
       # if abundances are required give the seed sites multiple starting values 
       if(detection_dynamic %in% c("threshold", "linear")){
         
+        # for randomly drawn poisson distributed values 
+        if(start_possion == T){
+          
         # Draw n random poisson distributed starting values, mean (lambda) = start_pop 
         start_ab <- rpois(n = length(seed_site), lambda = start_pop)
-        seed_ab <- data.frame(seed_site, start_ab)} # add these to seed sites
+        seed_ab <- data.frame(seed_site, start_ab) # add these to seed sites
         
-     # Or for single sites
-     }else{seed_site <- sample(x = site_vector,
-                              size = 1, 
-                              prob = p_intro_establish / sum(p_intro_establish))
+        # Instead give user defined values in start_pop
+        }else{
+          start_ab <- start_pop
+          seed_ab <- data.frame(seed_site, start_ab)}}
+      
+     # Or if single sites needed draw a site
+     }else{seed_site <- sample(x = site_vector, size = 1, prob = p_intro_establish / sum(p_intro_establish)) 
           
           results[[i]] <- data.frame(dtime = 0)} # give the default time value of 0
     
@@ -117,7 +124,7 @@ runSurveillanceSimulation <- function(n_simulations,
       # occurrence of an event. 1/rate = mean time to first occurrence i.e. 1/100 = 0.01
       # This is adding variation to the time it takes to visit somewhere. 
       
-      new_time <- rexp(n = 1, rate = sum(site_visit_rate)) 
+      new_time <- rexp(n = 1, rate = sum(site_visit_rate))
       
       # add period of time to original (simulate time passing) 
       time <- time + new_time
@@ -135,6 +142,7 @@ runSurveillanceSimulation <- function(n_simulations,
       
       # if constant detection probability over time:
       if (grepl("constant", detection_dynamic, ignore.case = T)){ # i.e. is detection constant. 
+        
         # return a 0/1 based on p of detection 
         detect <- rbinom(n = 1, size = 1, prob = p_detection)
         
@@ -144,7 +152,7 @@ runSurveillanceSimulation <- function(n_simulations,
       
       # if abundance change has a linear relationship with detection probability
       
-        } else if(grepl("linear", detection_dynamic, ignore.case = T)){ # stop here... 
+        } else if(grepl("linear", detection_dynamic, ignore.case = T)){
         
         # if multiple sites are present and the visited site is a seed site, otherwise pop is starting pop for single sites
         # or if its a different site just get the mean value
@@ -153,14 +161,14 @@ runSurveillanceSimulation <- function(n_simulations,
         # Get abundance at a given time point depending on growth model
         Abund <- GetAbun.t(t = time, N0 = pop, r = pop_R, model = growth_model, K = pop_cap)
         
-        # Use the abundance divided by the APrb (abundance required to raise detection probability by 0.01) to increase p_detection
+        # Use the abundance divided by the APrb (abundance required to raise detection probability by 0.01) to change p_detection
         scaled_prob <- p_detection + (Abund/APrb)*0.01
         
         # check scaled probability within min and max range
         scaling <- ifelse(scaled_prob > max_p_detect, max_p_detect, scaled_prob)
         scaling <- ifelse(scaling < min_p_detect, min_p_detect, scaling)
         
-        # return a 0/1 based on p of detection which increases with time
+        # return a 0/1 based on p of detection which changes with time
         detect <- rbinom(n = 1, size = 1, prob = scaling)
       
       # if abundance is exponentially increasing and has a threshold relationship with detection probability
@@ -168,8 +176,11 @@ runSurveillanceSimulation <- function(n_simulations,
         
         # if multiple sites are present and the visited site is a seed site, otherwise pop is starting pop for single sites
         # or if its a different site just get the mean value
-        if(multiple_seed == T & visit %in% seed_site){pop <- seed_ab$start_ab[seed_ab$seed_site == visit]}else{pop <- start_pop}
+        if(multiple_seed == T & visit %in% seed_site){pop <- seed_ab$start_ab[seed_ab$seed_site == visit]
         
+        # alternatively if its not multiple sites
+        }else if(multiple_seed == F & visit %in% seed_site){pop <- start_pop}else{pop <- 1} # add constant for none-seed sites
+      
         # Get abundance at a given time point depending on growth model
         Abund <- GetAbun.t(t = time, N0 = pop, r = pop_R, model = growth_model, K = pop_cap)
         
@@ -177,7 +188,7 @@ runSurveillanceSimulation <- function(n_simulations,
           
           scaled_prob <- Prob_Below # give the low abundance probability value
           
-        }else if(Abund >= Abund_Threshold){ # if abundance is above the threshold
+        }else if(Abund >= Abund_Threshold){ # if abundance is at or above the threshold
           
           scaled_prob <- Prob_Above # give the high abundance probability value
 
@@ -188,7 +199,7 @@ runSurveillanceSimulation <- function(n_simulations,
         scaling <- ifelse(scaling < min_p_detect, min_p_detect, scaling)
         
         # return a 0/1 based on p of detection which decreases with time
-        detect <- (rbinom(n = 1, size = 1, prob = scaling))
+        detect <- rbinom(n = 1, size = 1, prob = scaling)
 
       }else {
         print("WARNING: detection_dynamic contains an invalid entry, see function documentation.")}
@@ -198,6 +209,7 @@ runSurveillanceSimulation <- function(n_simulations,
         
         # report detection time if a seed site visited and detected otherwise result remains at 0
         if(visit %in% seed_site & detect == 1){
+          
           results[[i]]$dtime[results[[i]]$seed_site == visit] <- time
           
            if(site_revisit == F){ # if a site should not be revisted after it has been sampled
