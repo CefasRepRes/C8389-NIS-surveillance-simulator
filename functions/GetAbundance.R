@@ -19,7 +19,7 @@
 #' @param model choose exponential or logistic growth curve.  
 #' @param N0 the starting individuals (at the beginning of the simulation). 
 #' @param r the finite rate of population increase. 
-#  e is Euler's constant (exp1 in R). 
+#  e is Euler's number (exp1 in R). 
 #' @param K the carrying capacity in number of individuals. 
 
 #' @return N the population size at a given time. 
