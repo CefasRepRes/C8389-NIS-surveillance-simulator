@@ -15,7 +15,7 @@ source("functions/GetAbundance.R")
 source("functions/ProcessMultipleResults.R")
 
 pkgs <- c("yaml", "here", "truncnorm", "reshape2", "gtools",
-          "ggplot2", "patchwork", "EnvStats", "ReIns", "data.table")
+          "ggplot2", "patchwork", "EnvStats", "ReIns", "data.table", "dplyr")
 lapply(pkgs, library, character.only = T)
 
 ## INPUTS ----------------------------------------------------------------------------
@@ -56,6 +56,39 @@ site_visit_rate_A <- rep(x = config$mean_visit_rate, # if each site visited once
 
 # Stopped here still working on this. 
 # run simulation A to determine the number of years which is takes to detect an introduction (1000 simulations in total)
+
+# settings to change.... 
+multiple_seed <- F
+detection_dynamic <- "constant"
+growth_model <- "exponential"
+
+resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
+                                      site_revisit = F,
+                                      surveillance_period = config$num_years,
+                                      site_visit_rate = site_visit_rate_A,
+                                      p_detection = config$det_prob,
+                                      max_p_detect = config$det_prob_max,
+                                      min_p_detect = config$det_prob_min,
+                                      detection_dynamic = "threshold",
+                                      site_vector = site_vector,
+                                      p_intro_establish = p_intro_establish, 
+                                      multiple_seed = T, 
+                                      seed_prop = 0.01,
+                                      start_pop = rep(1000, 10),
+                                      start_possion = T,
+                                      pop_R = 2,
+                                      growth_model = "exponential",
+                                      pop_cap = 500,
+                                      APrb = 10,
+                                      Abund_Threshold = 1000,
+                                      Prob_Below = 0.1,
+                                      Prob_Above = 0.8)
+
+head(resultsA)
+
+### Code works... 
+# But some more isolated checks of sections of functions out be good. 
+
 resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       site_revisit = F,
                                       surveillance_period = config$num_years,
@@ -81,8 +114,11 @@ resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
 
 exmp <- resultsA
 
-exmp <- ProcessMultipleResults(result.df = resultsA, detection.summary = "fefea")
+exmp <- ProcessMultipleResults(result.df = resultsA, detection.summary = "mean")
 summary(exmp)
+
+
+# mean, median, first, last
 
 resultsB <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       site_revisit = F,
