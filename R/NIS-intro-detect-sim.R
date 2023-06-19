@@ -63,7 +63,6 @@ detection_dynamic <- "constant"
 growth_model <- "exponential"
 
 resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
-                                      site_revisit = F,
                                       surveillance_period = config$num_years,
                                       site_visit_rate = site_visit_rate_A,
                                       p_detection = config$det_prob,
@@ -72,10 +71,9 @@ resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       detection_dynamic = "threshold",
                                       site_vector = site_vector,
                                       p_intro_establish = p_intro_establish, 
-                                      multiple_seed = T, 
-                                      seed_prop = 0.01,
-                                      start_pop = rep(1000, 10),
-                                      start_possion = T,
+                                      seed_n = 1,
+                                      start_pop = 1,
+                                      start_possion = F,
                                       pop_R = 2,
                                       growth_model = "exponential",
                                       pop_cap = 500,
@@ -90,7 +88,6 @@ head(resultsA)
 # But some more isolated checks of sections of functions out be good. 
 
 resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
-                                      site_revisit = F,
                                       surveillance_period = config$num_years,
                                       site_visit_rate = site_visit_rate_A,
                                       p_detection = config$det_prob,
@@ -98,8 +95,8 @@ resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       min_p_detect = config$det_prob_min,
                                       detection_dynamic = "threshold",
                                       site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish, 
-                                      multiple_seed = T, 
+                                      p_intro_establish = p_intro_establish,
+                                      seed_n = 1,
                                       seed_prop = 0.10,
                                       start_pop = 1000,
                                       pop_R = 2,
@@ -109,8 +106,6 @@ resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       Abund_Threshold = 1000,
                                       Prob_Below = 0.1,
                                       Prob_Above = 0.8)
-
-
 
 exmp <- resultsA
 
