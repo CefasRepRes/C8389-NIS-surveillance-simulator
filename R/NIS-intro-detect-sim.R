@@ -60,7 +60,7 @@ resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       p_detection = config$det_prob,
                                       max_p_detect = config$det_prob_max,
                                       min_p_detect = config$det_prob_min,
-                                      detection_dynamic = "threshold",
+                                      detection_dynamic = "constant",
                                       site_vector = site_vector,
                                       p_intro_establish = p_intro_establish, 
                                       seed_n = 1,
@@ -74,7 +74,105 @@ resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       Prob_Below = 0.1,
                                       Prob_Above = 0.8)
 
-head(resultsA)
+resultsB <- runSurveillanceSimulation(n_simulations = config$num_sim,
+                                      surveillance_period = config$num_years,
+                                      site_visit_rate = site_visit_rate_A,
+                                      p_detection = config$det_prob,
+                                      max_p_detect = config$det_prob_max,
+                                      min_p_detect = config$det_prob_min,
+                                      detection_dynamic = "constant",
+                                      site_vector = site_vector,
+                                      p_intro_establish = p_intro_establish, 
+                                      seed_n = 10,
+                                      start_pop = 1,
+                                      start_possion = F,
+                                      pop_R = 2,
+                                      growth_model = "exponential",
+                                      pop_cap = 500,
+                                      APrb = 10,
+                                      Abund_Threshold = 1000,
+                                      Prob_Below = 0.1,
+                                      Prob_Above = 0.8)
+
+resultsB_pros <- ProcessMultipleResults(result.df = resultsB, detection.summary = "last", create.plot = T)
+
+resultsC <- runSurveillanceSimulation(n_simulations = config$num_sim,
+                                      surveillance_period = config$num_years,
+                                      site_visit_rate = site_visit_rate_A,
+                                      p_detection = config$det_prob,
+                                      max_p_detect = config$det_prob_max,
+                                      min_p_detect = config$det_prob_min,
+                                      detection_dynamic = "linear",
+                                      site_vector = site_vector,
+                                      p_intro_establish = p_intro_establish, 
+                                      seed_n = 10,
+                                      start_pop = 10,
+                                      start_possion = T,
+                                      pop_R = 0.5,
+                                      growth_model = "exponential",
+                                      pop_cap = 500,
+                                      APrb = 50,
+                                      Abund_Threshold = 1000,
+                                      Prob_Below = 0.1,
+                                      Prob_Above = 0.8)
+
+resultsC_pros <- ProcessMultipleResults(result.df = resultsC, detection.summary = "last", create.plot = T)
+
+resultsD <- runSurveillanceSimulation(n_simulations = config$num_sim,
+                                      surveillance_period = 20,
+                                      site_visit_rate = site_visit_rate_A,
+                                      p_detection = config$det_prob,
+                                      max_p_detect = config$det_prob_max,
+                                      min_p_detect = config$det_prob_min,
+                                      detection_dynamic = "threshold",
+                                      site_vector = site_vector,
+                                      p_intro_establish = p_intro_establish, 
+                                      seed_n = 10,
+                                      start_pop = 10,
+                                      start_possion = T,
+                                      pop_R = 0.5,
+                                      growth_model = "exponential",
+                                      pop_cap = 500,
+                                      APrb = 50,
+                                      Abund_Threshold = 500,
+                                      Prob_Below = 0.2,
+                                      Prob_Above = 0.8)
+
+resultsE_pros <- ProcessMultipleResults(result.df = resultsD, detection.summary = "last", create.plot = T)
+
+resultsE <- runSurveillanceSimulation(n_simulations = config$num_sim,
+                                      surveillance_period = 20,
+                                      site_visit_rate = site_visit_rate_A,
+                                      p_detection = config$det_prob,
+                                      max_p_detect = config$det_prob_max,
+                                      min_p_detect = config$det_prob_min,
+                                      detection_dynamic = "threshold",
+                                      site_vector = site_vector,
+                                      p_intro_establish = p_intro_establish, 
+                                      seed_n = 10,
+                                      start_pop = 10,
+                                      start_possion = T,
+                                      pop_R = 0.5,
+                                      growth_model = "exponential",
+                                      pop_cap = 500,
+                                      APrb = 50,
+                                      Abund_Threshold = 500,
+                                      Prob_Below = 0.2,
+                                      Prob_Above = 0.8)
+
+
+
+par(mfrow = c(2,2))
+
+summary(resultsA$dtime)
+summary(resultsB_pros)
+summary(resultsC_pros)
+summary(resultsD_pros)
+
+hist(resultsA$dtime, breaks = 50)
+hist(resultsB_pros, breaks = 50)
+hist(resultsC_pros, breaks = 50)
+hist(resultsD_pros, breaks = 50)
 
 ### Code works... 
 # But some more isolated checks of sections of functions out be good. 
