@@ -54,14 +54,6 @@ p_intro_establish <- p_intro * p_establish
 site_visit_rate_A <- rep(x = config$mean_visit_rate, # if each site visited once (mean_visit_rate = 1)
                          times = config$num_sites)
 
-# Stopped here still working on this. 
-# run simulation A to determine the number of years which is takes to detect an introduction (1000 simulations in total)
-
-# settings to change.... 
-multiple_seed <- F
-detection_dynamic <- "constant"
-growth_model <- "exponential"
-
 resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       surveillance_period = config$num_years,
                                       site_visit_rate = site_visit_rate_A,
@@ -116,7 +108,6 @@ summary(exmp)
 # mean, median, first, last
 
 resultsB <- runSurveillanceSimulation(n_simulations = config$num_sim,
-                                      site_revisit = F,
                                       surveillance_period = config$num_years,
                                       site_visit_rate = site_visit_rate_A,
                                       p_detection = 0.5,
@@ -125,20 +116,16 @@ resultsB <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       detection_dynamic = "constant",
                                       site_vector = site_vector,
                                       p_intro_establish = p_intro_establish, 
-                                      multiple_seed = F, 
-                                      seed_prop = 0.10,
-                                      gen_time = 50,
+                                      seed_n = 10,
                                       start_pop = 100,
+                                      start_possion, 
                                       pop_R = 2,
                                       growth_model = "exponential",
                                       APrb = 100,
                                       Abund_Threshold = 1000,
                                       Prob_Below = 0.1,
-                                      Prob_Above = 0.8)
-
-summary(resultsB)
-
-
+                                      Prob_Above = 0.8.
+                                      pop_cap = 1200)
 
 
 ## SCENARIO B: RISK BASED SURVEILLANCE FOCUSSED ON HIGH RISK SITES ----------------------
