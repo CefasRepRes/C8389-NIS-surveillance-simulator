@@ -20,7 +20,7 @@ lapply(pkgs, library, character.only = T)
 
 ## INPUTS ----------------------------------------------------------------------------
 # load input parameters from config file
-config <- yaml.load_file("parameters/config.yaml")
+str <- yaml.load_file("parameters/config.yaml")
 
 # set seed
 set.seed(config$seed)
@@ -60,171 +60,24 @@ resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       p_detection = config$det_prob,
                                       max_p_detect = config$det_prob_max,
                                       min_p_detect = config$det_prob_min,
-                                      detection_dynamic = "constant",
-                                      site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish, 
-                                      seed_n = 1,
-                                      start_pop = 1,
-                                      start_possion = F,
-                                      pop_R = 2,
-                                      growth_model = "exponential",
-                                      pop_cap = 500,
-                                      APrb = 10,
-                                      Abund_Threshold = 1000,
-                                      Prob_Below = 0.1,
-                                      Prob_Above = 0.8)
-
-resultsB <- runSurveillanceSimulation(n_simulations = config$num_sim,
-                                      surveillance_period = config$num_years,
-                                      site_visit_rate = site_visit_rate_A,
-                                      p_detection = config$det_prob,
-                                      max_p_detect = config$det_prob_max,
-                                      min_p_detect = config$det_prob_min,
-                                      detection_dynamic = "constant",
-                                      site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish, 
-                                      seed_n = 10,
-                                      start_pop = 1,
-                                      start_possion = F,
-                                      pop_R = 2,
-                                      growth_model = "exponential",
-                                      pop_cap = 500,
-                                      APrb = 10,
-                                      Abund_Threshold = 1000,
-                                      Prob_Below = 0.1,
-                                      Prob_Above = 0.8)
-
-resultsB_pros <- ProcessMultipleResults(result.df = resultsB, detection.summary = "last", create.plot = T)
-
-resultsC <- runSurveillanceSimulation(n_simulations = config$num_sim,
-                                      surveillance_period = config$num_years,
-                                      site_visit_rate = site_visit_rate_A,
-                                      p_detection = config$det_prob,
-                                      max_p_detect = config$det_prob_max,
-                                      min_p_detect = config$det_prob_min,
-                                      detection_dynamic = "linear",
-                                      site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish, 
-                                      seed_n = 10,
-                                      start_pop = 10,
-                                      start_possion = T,
-                                      pop_R = 0.5,
-                                      growth_model = "exponential",
-                                      pop_cap = 500,
-                                      APrb = 50,
-                                      Abund_Threshold = 1000,
-                                      Prob_Below = 0.1,
-                                      Prob_Above = 0.8)
-
-resultsC_pros <- ProcessMultipleResults(result.df = resultsC, detection.summary = "last", create.plot = T)
-
-resultsD <- runSurveillanceSimulation(n_simulations = config$num_sim,
-                                      surveillance_period = 20,
-                                      site_visit_rate = site_visit_rate_A,
-                                      p_detection = config$det_prob,
-                                      max_p_detect = config$det_prob_max,
-                                      min_p_detect = config$det_prob_min,
-                                      detection_dynamic = "threshold",
-                                      site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish, 
-                                      seed_n = 10,
-                                      start_pop = 10,
-                                      start_possion = T,
-                                      pop_R = 0.5,
-                                      growth_model = "exponential",
-                                      pop_cap = 500,
-                                      APrb = 50,
-                                      Abund_Threshold = 500,
-                                      Prob_Below = 0.2,
-                                      Prob_Above = 0.8)
-
-resultsE_pros <- ProcessMultipleResults(result.df = resultsD, detection.summary = "last", create.plot = T)
-
-resultsE <- runSurveillanceSimulation(n_simulations = config$num_sim,
-                                      surveillance_period = 20,
-                                      site_visit_rate = site_visit_rate_A,
-                                      p_detection = config$det_prob,
-                                      max_p_detect = config$det_prob_max,
-                                      min_p_detect = config$det_prob_min,
-                                      detection_dynamic = "threshold",
-                                      site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish, 
-                                      seed_n = 10,
-                                      start_pop = 10,
-                                      start_possion = T,
-                                      pop_R = 0.5,
-                                      growth_model = "exponential",
-                                      pop_cap = 500,
-                                      APrb = 50,
-                                      Abund_Threshold = 500,
-                                      Prob_Below = 0.2,
-                                      Prob_Above = 0.8)
-
-
-
-par(mfrow = c(2,2))
-
-summary(resultsA$dtime)
-summary(resultsB_pros)
-summary(resultsC_pros)
-summary(resultsD_pros)
-
-hist(resultsA$dtime, breaks = 50)
-hist(resultsB_pros, breaks = 50)
-hist(resultsC_pros, breaks = 50)
-hist(resultsD_pros, breaks = 50)
-
-### Code works... 
-# But some more isolated checks of sections of functions out be good. 
-
-resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
-                                      surveillance_period = config$num_years,
-                                      site_visit_rate = site_visit_rate_A,
-                                      p_detection = config$det_prob,
-                                      max_p_detect = config$det_prob_max,
-                                      min_p_detect = config$det_prob_min,
-                                      detection_dynamic = "threshold",
+                                      detection_dynamic = config$detect_dynamic,
                                       site_vector = site_vector,
                                       p_intro_establish = p_intro_establish,
-                                      seed_n = 1,
-                                      seed_prop = 0.10,
-                                      start_pop = 1000,
-                                      pop_R = 2,
-                                      growth_model = "exponential",
-                                      pop_cap = 500,
-                                      APrb = 10,
-                                      Abund_Threshold = 1000,
-                                      Prob_Below = 0.1,
-                                      Prob_Above = 0.8)
+                                      seed_n = config$seed_n,
+                                      start_pop = config$start_pop,
+                                      start_possion = as.logical(config$start_possion),
+                                      pop_R = config$pop_R,
+                                      growth_model = config$growth_model,
+                                      pop_cap = config$pop_cap,
+                                      APrb = config$APrb,
+                                      Abund_Threshold = config$Abund_Threshold,
+                                      Prob_Below = config$Prob_Below,
+                                      Prob_Above = config$Prob_Above)
 
-exmp <- resultsA
+# Extract the results of interest depending on n length. 
+if(config$seed_n == 1){resultsA_dt <- resultsA$dtime
 
-exmp <- ProcessMultipleResults(result.df = resultsA, detection.summary = "mean")
-summary(exmp)
-
-
-# mean, median, first, last
-
-resultsB <- runSurveillanceSimulation(n_simulations = config$num_sim,
-                                      surveillance_period = config$num_years,
-                                      site_visit_rate = site_visit_rate_A,
-                                      p_detection = 0.5,
-                                      max_p_detect = config$det_prob_max,
-                                      min_p_detect = config$det_prob_min,
-                                      detection_dynamic = "constant",
-                                      site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish, 
-                                      seed_n = 10,
-                                      start_pop = 100,
-                                      start_possion, 
-                                      pop_R = 2,
-                                      growth_model = "exponential",
-                                      APrb = 100,
-                                      Abund_Threshold = 1000,
-                                      Prob_Below = 0.1,
-                                      Prob_Above = 0.8.
-                                      pop_cap = 1200)
-
+}else if(config$seed_n > 1){resultsA_dt <- ProcessMultipleResults(result.df = resultsA, detect_summary = config$detection.summary)}
 
 ## SCENARIO B: RISK BASED SURVEILLANCE FOCUSSED ON HIGH RISK SITES ----------------------
 # B: rate at which risk-based sites are visited (vector)
@@ -232,16 +85,29 @@ site_visit_rate_B <- rep(x = config$mean_visit_rate,
                          times = config$num_sites) * p_intro_establish / mean(p_intro_establish)
 
 resultsB <- runSurveillanceSimulation(n_simulations = config$num_sim,
-                                      site_revisit = F,
                                       surveillance_period = config$num_years,
                                       site_visit_rate = site_visit_rate_B,
                                       p_detection = config$det_prob,
-                                      max_p_detection = config$det_prob_max,
-                                      min_p_detection = config$det_prob_min,
+                                      max_p_detect = config$det_prob_max,
+                                      min_p_detect = config$det_prob_min,
                                       detection_dynamic = config$detect_dynamic,
                                       site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish, 
-                                      multiple_seed = T, seed_prop = 0.10)
+                                      p_intro_establish = p_intro_establish,
+                                      seed_n = config$seed_n,
+                                      start_pop = config$start_pop,
+                                      start_possion = as.logical(config$start_possion),
+                                      pop_R = config$pop_R,
+                                      growth_model = config$growth_model,
+                                      pop_cap = config$pop_cap,
+                                      APrb = config$APrb,
+                                      Abund_Threshold = config$Abund_Threshold,
+                                      Prob_Below = config$Prob_Below,
+                                      Prob_Above = config$Prob_Above)
+
+# Extract the results of interest depending on n length. 
+if(config$seed_n == 1){resultsB_dt <- resultsB$dtime
+
+}else if(config$seed_n > 1){resultsB_dt <- ProcessMultipleResults(result.df = resultsB, detect_summary = config$detection.summary)}
 
 ## SCENARIO C: RISK BASED SURVEILLANCE VERY FOCUSSED ON HIGH RISK SITES -----------------
 # site visit rate with heavy focus on high risk sites
@@ -252,16 +118,29 @@ site_visit_rate_C <- (rep(x = config$mean_visit_rate,
 
 ## TODO: WHY IS THE SITE_REVISIT PARAMETER NOW TRUE?
 resultsC <- runSurveillanceSimulation(n_simulations = config$num_sim,
-                                      site_revisit = F,
                                       surveillance_period = config$num_years,
                                       site_visit_rate = site_visit_rate_C,
                                       p_detection = config$det_prob,
-                                      max_p_detection = config$det_prob_max,
-                                      min_p_detection = config$det_prob_min,
+                                      max_p_detect = config$det_prob_max,
+                                      min_p_detect = config$det_prob_min,
                                       detection_dynamic = config$detect_dynamic,
                                       site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish, 
-                                      multiple_seed = T, seed_prop = 0.10)
+                                      p_intro_establish = p_intro_establish,
+                                      seed_n = config$seed_n,
+                                      start_pop = config$start_pop,
+                                      start_possion = config$start_possion,
+                                      pop_R = config$pop_R,
+                                      growth_model = as.logical(config$start_possion),
+                                      pop_cap = config$pop_cap,
+                                      APrb = config$APrb,
+                                      Abund_Threshold = config$Abund_Threshold,
+                                      Prob_Below = config$Prob_Below,
+                                      Prob_Above = config$Prob_Above)
+
+# Extract the results of interest depending on n length. 
+if(config$seed_n == 1){resultsC_dt <- resultsC$dtime
+
+}else if(config$seed_n > 1){resultsC_dt <- ProcessMultipleResults(result.df = resultsC, detect_summary = config$detection.summary)}
 
 ## GENERATE RESULTS REPORT -----------------------------------------------------------------------
 rmarkdown::render(input = "R/report-NIS-intro-detect-sim.Rmd", # Rmd to run
@@ -272,9 +151,9 @@ rmarkdown::render(input = "R/report-NIS-intro-detect-sim.Rmd", # Rmd to run
                                 p_establish = p_establish,
                                 p_intro = p_intro,
                                 p_intro_establish = p_intro_establish,
-                                resultsA = resultsA,
-                                resultsB = resultsB,
-                                resultsC = resultsC,
+                                resultsA = resultsA_dt,
+                                resultsB = resultsB_dt,
+                                resultsC = resultsC_dt,
                                 site_visit_rate_A = site_visit_rate_A,
                                 site_visit_rate_B = site_visit_rate_B,
                                 site_visit_rate_C = site_visit_rate_C))
