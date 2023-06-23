@@ -35,7 +35,6 @@ runSurveillanceSensitvity <- function(X, surveillance_scenario) {
     # combined introduction and establishment probs to give overall introduction rate
     p_intro_establish <- p_intro * p_establish
     
-    
     # calculate the visit rate based on user input ----
     if (surveillance_scenario == "a_random") {
 
@@ -60,8 +59,7 @@ runSurveillanceSensitvity <- function(X, surveillance_scenario) {
     
 
     # run each of the input scenarios ----
-    out[i, ][[1]] <- list(runSurveillanceSimulation(n_simulations = config$num_sim,
-                                                    site_revisit = F,
+    resultsS <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                                     surveillance_period = X$num_years[i],
                                                     site_visit_rate = visit_rate,
                                                     p_detection = X$p_detection[i],
@@ -69,8 +67,27 @@ runSurveillanceSensitvity <- function(X, surveillance_scenario) {
                                                     min_p_detect = X$min_p_detect[i],
                                                     detection_dynamic = X$detect_dynamic[i],
                                                     site_vector = site_vector,
-                                                    p_intro_establish = p_intro_establish))
-    #rownames(out[i, ]) <- X$name
+                                                    p_intro_establish = p_intro_establish,
+                                                    seed_n = X$seed_n,
+                                                    start_pop = X$start_pop,
+                                                    start_possion = X$start_possion,
+                                                    pop_R = X$pop_R,
+                                                    growth_model = as.logical(X$start_possion),
+                                                    pop_cap = X$pop_cap,
+                                                    APrb = X$APrb,
+                                                    Abund_Threshold = X$Abund_Threshold,
+                                                    Prob_Below = X$Prob_Below,
+                                                    Prob_Above = X$Prob_Above
+                                          )
+    
+    # Select out the appropriate result 
+    if(X$seed_n == 1){resultsS_dt <- resultsS$dtime
+    
+    }else if(X$seed_n > 1){resultsS_dt <- ProcessMultipleResults(result.df = resultsS, detect_summary = X$detect_summary)}
+    
+    # Import into the data.frame. 
+    out[i, ][[1]] <- list(resultsS_dt)
+    
   }
   
   out <- as.data.frame(out)
