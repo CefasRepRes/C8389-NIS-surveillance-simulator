@@ -14,6 +14,8 @@
 #' 
 #' @export
 #'
+#' Initial update done, needs line by line check. 
+#'
 makeSensitivityParamsTable <- function(defaults, params) {
   # create dataframe of scenarios with differing parameters
   # create the rows
@@ -58,8 +60,16 @@ makeSensitivityParamsTable <- function(defaults, params) {
                                  return(defaults)
                                })
   
+  seed_n <- lapply(seq(from = params$seed_n$min,
+                          to = params$seed_n$max,
+                          by = params$seed_n$interval), function(x) {
+                            defaults[ , "seed_n"] <- x # edit the value
+                            defaults[ , "name"] <- paste0("seed_n_", x) # rename the column 
+                            return(defaults)
+                          })
+  
   # combine the list of rows containing parameters to test
-  rows <- c(num_sites, num_years, mean_visit_rate, p_detection, establish_prob)
+  rows <- c(num_sites, num_years, mean_visit_rate, p_detection, establish_prob, seed_n)
   scenarios <- do.call(rbind.data.frame, rows)
   
   # return data frame containing scenario parameters
