@@ -20,7 +20,7 @@ lapply(pkgs, library, character.only = T)
 
 ## INPUTS ----------------------------------------------------------------------------
 # load input parameters from config file
-str <- yaml.load_file("parameters/config.yaml")
+config <- yaml.load_file("parameters/config.yaml")
 
 # set seed
 set.seed(config$seed)
@@ -34,7 +34,6 @@ lapply(dirs, dir.create, showWarnings = FALSE)
 # define the surveillance scenarios to run
 surveillance <- c("a_random", "b_risk_based", "c_heavy_risk_based")
 
-
 ## CREATE SIMULATION INPUTS -----------------------------------------------------------
 # create vector of sites
 site_vector <- 1:config$num_sites
@@ -44,7 +43,7 @@ p_establish <- getEstablishProbability(method = config$establish_risk,
                                        n_sites = config$num_sites,
                                        x = config$establish_prob)
 
-p_intro <- getIntroProbability(method = "equal uniform", n_sites = config$num_sites, x = 0.8)
+p_intro <- getIntroProbability(method = config$intro_risk, n_sites = config$num_sites, x = 0.8)
 
 # combined introduction and establishment probs to give overall introduction rate
 p_intro_establish <- p_intro * p_establish
@@ -77,7 +76,7 @@ resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
 # Extract the results of interest depending on n length. 
 if(config$seed_n == 1){resultsA_dt <- resultsA$dtime
 
-}else if(config$seed_n > 1){resultsA_dt <- ProcessMultipleResults(result.df = resultsA, detect_summary = config$detection.summary)}
+}else if(config$seed_n > 1){resultsA_dt <- ProcessMultipleResults(result.df = resultsA, detect_summary = config$detect_summary)}
 
 ## SCENARIO B: RISK BASED SURVEILLANCE FOCUSSED ON HIGH RISK SITES ----------------------
 # B: rate at which risk-based sites are visited (vector)
@@ -107,7 +106,7 @@ resultsB <- runSurveillanceSimulation(n_simulations = config$num_sim,
 # Extract the results of interest depending on n length. 
 if(config$seed_n == 1){resultsB_dt <- resultsB$dtime
 
-}else if(config$seed_n > 1){resultsB_dt <- ProcessMultipleResults(result.df = resultsB, detect_summary = config$detection.summary)}
+}else if(config$seed_n > 1){resultsB_dt <- ProcessMultipleResults(result.df = resultsB, detect_summary = config$detect_summary)}
 
 ## SCENARIO C: RISK BASED SURVEILLANCE VERY FOCUSSED ON HIGH RISK SITES -----------------
 # site visit rate with heavy focus on high risk sites
@@ -116,7 +115,6 @@ if(config$seed_n == 1){resultsB_dt <- resultsB$dtime
 site_visit_rate_C <- (rep(x = config$mean_visit_rate,
                           times = config$num_sites) * p_intro_establish ^ 3) / mean(p_intro_establish ^ 3)
 
-## TODO: WHY IS THE SITE_REVISIT PARAMETER NOW TRUE?
 resultsC <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       surveillance_period = config$num_years,
                                       site_visit_rate = site_visit_rate_C,
@@ -140,7 +138,7 @@ resultsC <- runSurveillanceSimulation(n_simulations = config$num_sim,
 # Extract the results of interest depending on n length. 
 if(config$seed_n == 1){resultsC_dt <- resultsC$dtime
 
-}else if(config$seed_n > 1){resultsC_dt <- ProcessMultipleResults(result.df = resultsC, detect_summary = config$detection.summary)}
+}else if(config$seed_n > 1){resultsC_dt <- ProcessMultipleResults(result.df = resultsC, detect_summary = config$detect_summary)}
 
 ## GENERATE RESULTS REPORT -----------------------------------------------------------------------
 rmarkdown::render(input = "R/report-NIS-intro-detect-sim.Rmd", # Rmd to run
@@ -158,6 +156,8 @@ rmarkdown::render(input = "R/report-NIS-intro-detect-sim.Rmd", # Rmd to run
                                 site_visit_rate_B = site_visit_rate_B,
                                 site_visit_rate_C = site_visit_rate_C))
 
+# Checked up to here and looks fine. 
+# Outputs checked and they look fine. 
 
 ## RUN SENSITIVITY ANALYSIS ----------------------------------------------------------------------
 
@@ -181,8 +181,18 @@ if (config$sensitivity_analysis == TRUE) {
     p_detection = config$defaults$p_detection,
     max_p_detect = config$defaults$max_p_detect,
     min_p_detect = config$defaults$min_p_detect,
-    detect_dynamic = config$defaults$detect_dynamic
-  )
+    detect_dynamic = config$defaults$detect_dynamic,
+    seed_n = config$defaults$seed_n,
+    start_pop = config$defaults$start_pop,
+    start_possion = config$defaults$start_possion,
+    pop_R = config$defaults$pop_R,
+    growth_model = config$defaults$growth_model,
+    pop_cap = config$defaults$pop_cap,
+    APrb = config$defaults$APrb,
+    Abund_Threshold = config$defaults$Abund_Threshold,
+    Prob_Below = config$defaults$Prob_Below,
+    Prob_Above = config$defaults$Prob_Above
+    )
   
   # adjust each parameter according to input sensitivity config
   scenarios <- makeSensitivityParamsTable(defaults = defaults,
@@ -218,16 +228,16 @@ if (config$sensitivity_analysis == TRUE) {
   })
   
   ## PRODUCE SENSITIVITY ANALYSIS REPORT
-  rmarkdown::render(input = "R/report-NIS-intro-detect-sensitivity.Rmd", # Rmd to run
-                    output_format ="html_document",
-                    output_file = paste0("report-", config$run_name, "-sensitivity.html"),
-                    output_dir = dirs[["results"]],
-                    params = list(user_inputs = config,
-                                  sensitivity_inputs = sens,
-                                  factors = factors,
-                                  df_factors_all = df_factors_all,
-                                  defaults = defaults)
-  )
+  # rmarkdown::render(input = "R/report-NIS-intro-detect-sensitivity.Rmd", # Rmd to run
+  #                   output_format ="html_document",
+  #                   output_file = paste0("report-", config$run_name, "-sensitivity.html"),
+  #                   output_dir = dirs[["results"]],
+  #                   params = list(user_inputs = config,
+  #                                 sensitivity_inputs = sens,
+  #                                 factors = factors,
+  #                                 df_factors_all = df_factors_all,
+  #                                 defaults = defaults)
+  #)
 
 }
 
