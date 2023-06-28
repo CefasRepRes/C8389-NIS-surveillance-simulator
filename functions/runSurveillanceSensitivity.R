@@ -13,12 +13,15 @@
 #' 
 #' @export
 #'
-runSurveillanceSensitvity <- function(X, surveillance_scenario) {
+runSurveillanceSensitvity <- function(X, surveillance_scenario, show.rows = T) {
   
   out <- as.data.frame(matrix(nrow = nrow(X), ncol = 1, NA))
   
   # FOR EACH OF THE ROWS
   for (i in 1:nrow(X)) {
+    
+    # if desired state the name of the sensitivity simulation
+    if(show.rows == T){print(X$name[i])}
     
     # create vector of sites
     site_vector <- 1:X$num_sites[i]
@@ -57,7 +60,6 @@ runSurveillanceSensitvity <- function(X, surveillance_scenario) {
       
     }
     
-
     # run each of the input scenarios ----
     resultsS <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                                     surveillance_period = X$num_years[i],
@@ -68,22 +70,22 @@ runSurveillanceSensitvity <- function(X, surveillance_scenario) {
                                                     detection_dynamic = X$detect_dynamic[i],
                                                     site_vector = site_vector,
                                                     p_intro_establish = p_intro_establish,
-                                                    seed_n = X$seed_n,
-                                                    start_pop = X$start_pop,
-                                                    start_possion = X$start_possion,
-                                                    pop_R = X$pop_R,
-                                                    growth_model = as.logical(X$start_possion),
-                                                    pop_cap = X$pop_cap,
-                                                    APrb = X$APrb,
-                                                    Abund_Threshold = X$Abund_Threshold,
-                                                    Prob_Below = X$Prob_Below,
-                                                    Prob_Above = X$Prob_Above
+                                                    seed_n = X$seed_n[i],
+                                                    start_pop = X$start_pop[i],
+                                                    start_possion = X$start_possion[i],
+                                                    pop_R = X$pop_R[i],
+                                                    growth_model = as.logical(X$start_possion)[i],
+                                                    pop_cap = X$pop_cap[i],
+                                                    APrb = X$APrb[i],
+                                                    Abund_Threshold = X$Abund_Threshold[i],
+                                                    Prob_Below = X$Prob_Below[i],
+                                                    Prob_Above = X$Prob_Above[i]
                                           )
     
     # Select out the appropriate result 
-    if(X$seed_n == 1){resultsS_dt <- resultsS$dtime
+    if(X$seed_n[i] == 1){resultsS_dt <- resultsS$dtime
     
-    }else if(X$seed_n > 1){resultsS_dt <- ProcessMultipleResults(result.df = resultsS, detect_summary = X$detect_summary)}
+    }else if(X$seed_n[i] > 1){resultsS_dt <- ProcessMultipleResults(result.df = resultsS, detection.summary = config$detect_summary)}
     
     # Import into the data.frame. 
     out[i, ][[1]] <- list(resultsS_dt)
