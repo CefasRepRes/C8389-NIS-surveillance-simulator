@@ -157,11 +157,12 @@ runSurveillanceSimulation <- function(n_simulations,
       # due to the way this while loop works, replacement cannot be controlled by sample as it is 
       # being repeatedly re-run and does not 'remember the site' drawn in the previous run. 
       # this is controlled later 
+      # Note I as.character and as.numeric is to avoid the 1:x behavior which happens. 
       
-      visit <- sample(x = site_df$site_vector,
+      visit <- as.numeric(sample(x = as.character(site_df$site_vector),
                       size = 1,
                       replace = F, # kept as a default
-                      prob = site_df$site_visit_rate)
+                      prob = site_df$site_visit_rate))
       
       # if constant detection probability over time:
       if (grepl("constant", detection_dynamic, ignore.case = T)){ # i.e. is detection constant. 
