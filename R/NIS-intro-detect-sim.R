@@ -198,20 +198,17 @@ if (config$sensitivity_analysis == TRUE) {
   scenarios <- makeSensitivityParamsTable(defaults = defaults,
                                           params = sens)
   
-  # max_p_detect # min_p_detect
-  
   # calculate sensitivity results for each scenario under each surveillance strategy
   # note this step can take some time to run
   s_results_all <- lapply(setNames(surveillance, surveillance), function(y) {
     
     # run the surveillance sensitivity 
     # NOTE this includes generation of p_intro and p_establish as well as runSurveillanceSimulation()
-    s_results <- runSurveillanceSensitvity(X = scenarios,
+    s_results <- runSurveillanceSensitvity(X = scenarios, show.rows = T,
                                            surveillance_scenario = y)
     
     # summarise sensitivity results: total non detected/percent detected etc
-    s_results <- summariseSensitvityResults(results = s_results,
-                                            config = config)
+    s_results <- SummariseSensitivityResults(results = s_results, config = config)
     
   })
   
@@ -228,16 +225,16 @@ if (config$sensitivity_analysis == TRUE) {
   })
   
   ## PRODUCE SENSITIVITY ANALYSIS REPORT
-  # rmarkdown::render(input = "R/report-NIS-intro-detect-sensitivity.Rmd", # Rmd to run
-  #                   output_format ="html_document",
-  #                   output_file = paste0("report-", config$run_name, "-sensitivity.html"),
-  #                   output_dir = dirs[["results"]],
-  #                   params = list(user_inputs = config,
-  #                                 sensitivity_inputs = sens,
-  #                                 factors = factors,
-  #                                 df_factors_all = df_factors_all,
-  #                                 defaults = defaults)
-  #)
+  rmarkdown::render(input = "R/report-NIS-intro-detect-sensitivity.Rmd", # Rmd to run
+                     output_format ="html_document",
+                     output_file = paste0("report-", config$run_name, "-sensitivity.html"),
+                     output_dir = dirs[["results"]],
+                     params = list(user_inputs = config,
+                                   sensitivity_inputs = sens,
+                                   factors = factors,
+                                   df_factors_all = df_factors_all,
+                                   defaults = defaults)
+  )
 
 }
 
