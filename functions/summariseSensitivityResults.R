@@ -11,7 +11,7 @@
 #'
 #' @return (class data frame) summary statistics from surveillance simulations.
 #'
-summariseSensitvityResults <- function(results,
+SummariseSensitivityResults <- function(results,
                                        config) {
   
   results$ct_detect <- apply(results, 1, function(x) length(unlist(x[[1]])[unlist(x[[1]]) != 1000]))
