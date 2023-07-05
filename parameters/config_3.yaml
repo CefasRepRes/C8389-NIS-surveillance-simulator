@@ -3,13 +3,13 @@ user: "Tom Gibson"
 
 # unique run name (directory and results name)
 # to include letters, numbers, underscores or dashes, no special characters
-run_name: "test_run1"
+run_name: "test_run3"
 
 # seed number
 seed: 2022
 
 # number of simulations to run
-num_sim: 1000
+num_sim: 10000
 
 ## SIMULATION PARAMETERS ---------------------------------------------------------------------
 # number of years that sites are visited
@@ -21,8 +21,8 @@ num_sites: 100
 # define distributions to use for introduction and establishment probabilities
 # establishment and introduction is either: (1) 'random uniform' OR (2) 'equal uniform' OR (3) 'lognormal' 
 # (4) 'exponential' OR (5) 'positive normal' (case insensitive)
-establish_risk: "lognormal"
-intro_risk: "lognormal"  # if normal majority of sites are intermediate risk
+establish_risk: "random uniform"
+intro_risk: "random uniform"  # if normal majority of sites are intermediate risk
 
 # probability of establishment, required if 'equal uniform' establish_risk
 establish_prob: 0.8
@@ -92,7 +92,7 @@ elasticity_proportion: 0.01
 defaults:
     name: "default"
     num_sites: 100
-    num_years: 10
+    num_years: 11
     establish_risk: "lognormal"
     establish_prob: 0.5
     intro_risk: "lognormal"
@@ -111,3 +111,4 @@ defaults:
     Abund_Threshold: 1000
     Prob_Below: 0.1
     Prob_Above: 0.8 
+    detect_summary: "last"

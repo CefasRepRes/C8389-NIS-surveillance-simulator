@@ -1,4 +1,5 @@
 #' makeElasticityParamsTable
+#' checked 05/07/23
 #' 
 #' Function takes ranges for parameters (`params`) and generates a data frame of surveillance 
 #' simulator input parameters in each row, modifying only one parameter from the input default 
@@ -77,8 +78,16 @@ makeElasticityParamsTable <- function(defaults, elasticity_prop) {
                                   return(defaults)
                                 })
   
+  seed_n <- lapply(seq(from = defaults$seed_n - (defaults$seed_n * elasticity_prop),
+                          to = defaults$seed_n + (defaults$seed_n * elasticity_prop),
+                          by = (defaults$seed_n * elasticity_prop)), function(x) {
+                            defaults[ , "seed_n"] <- x # edit the value
+                            defaults[ , "name"] <- paste0("seed_n_", x) # rename the column 
+                            return(defaults)
+                          })
+  
   # combine the list of rows containing parameters to test
-  rows <- c(num_sites, num_years, mean_visit_rate, p_detection, establish_prob, min_p_detect, max_p_detect)
+  rows <- c(num_sites, num_years, mean_visit_rate, p_detection, establish_prob, min_p_detect, max_p_detect, seed_n)
   scenarios <- do.call(rbind.data.frame, rows)
   scenarios <- rbind(defaults, scenarios)
   

@@ -11,7 +11,7 @@
 
 #' @return final a processed vector of results, one element per simulation 
 
-ProcessMultipleResults <- function(result.df = resultsA, detection.summary = "last", create.plot = T){
+ProcessMultipleResults <- function(result.df = resultsA, detection.summary = "last", create.plot = F){
   
   # Generate Summary Information
   if(detection.summary == "mean"){ # get the mean time to detection per simulation

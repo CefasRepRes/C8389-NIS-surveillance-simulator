@@ -74,7 +74,7 @@ plots <- lapply(names(params$df_factors_all), function(w) {
   
   lapply(params$factors, function(x) {
     
-  # violin plot - time taken to detect NIS where detection != 100
+  # violin plot - time taken to detect NIS where detection != 1000
   p1 <- ggplot2::ggplot(df_factors[[x]],
                         aes(x = name, y = value, fill = name)) +
     geom_violin() +

@@ -1,5 +1,5 @@
 #' #' runSurveillanceSimulation 
-#' This function was checked line by line on 20/06/23 
+#' This function was checked line by line on 20/06/23; Updated on 28/06/23
 
 #' @param n_simulations numeric number of simulations to run.
 #' @param surveillance_period numeric period of time (years) for which 

@@ -14,7 +14,7 @@
 #' 
 #' @export
 #'
-#' Initial update done, needs line by line check. 
+#' Checked on 29/06/2023
 #'
 makeSensitivityParamsTable <- function(defaults, params) {
   # create dataframe of scenarios with differing parameters

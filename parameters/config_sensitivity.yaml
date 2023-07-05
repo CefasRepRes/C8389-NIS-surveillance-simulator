@@ -4,17 +4,17 @@
 seed_n:
   min: 1
   max: 100
-  interval: 1
+  interval: 10
 
 num_sites:
   min: 50
   max: 200
-  interval: 10
+  interval: 25
 
 num_years:
-  min: 5
-  max: 20
-  interval: 1
+  min: 10
+  max: 50
+  interval: 5
   
 mean_visit_rate:
   min: 0.25

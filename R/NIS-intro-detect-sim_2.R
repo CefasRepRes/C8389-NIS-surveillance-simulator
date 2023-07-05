@@ -20,7 +20,7 @@ lapply(pkgs, library, character.only = T)
 
 ## INPUTS ----------------------------------------------------------------------------
 # load input parameters from config file
-config <- yaml.load_file("parameters/config.yaml")
+config <- yaml.load_file("parameters/config_2.yaml")
 
 # set seed
 set.seed(config$seed)
@@ -198,17 +198,20 @@ if (config$sensitivity_analysis == TRUE) {
   scenarios <- makeSensitivityParamsTable(defaults = defaults,
                                           params = sens)
   
+  # max_p_detect # min_p_detect
+  
   # calculate sensitivity results for each scenario under each surveillance strategy
   # note this step can take some time to run
   s_results_all <- lapply(setNames(surveillance, surveillance), function(y) {
     
     # run the surveillance sensitivity 
     # NOTE this includes generation of p_intro and p_establish as well as runSurveillanceSimulation()
-    s_results <- runSurveillanceSensitvity(X = scenarios, show.rows = T,
+    s_results <- runSurveillanceSensitvity(X = scenarios,
                                            surveillance_scenario = y)
     
     # summarise sensitivity results: total non detected/percent detected etc
-    s_results <- SummariseSensitivityResults(results = s_results, config = config)
+    s_results <- summariseSensitvityResults(results = s_results,
+                                            config = config)
     
   })
   
@@ -225,16 +228,16 @@ if (config$sensitivity_analysis == TRUE) {
   })
   
   ## PRODUCE SENSITIVITY ANALYSIS REPORT
-  rmarkdown::render(input = "R/report-NIS-intro-detect-sensitivity.Rmd", # Rmd to run
-                     output_format ="html_document",
-                     output_file = paste0("report-", config$run_name, "-sensitivity.html"),
-                     output_dir = dirs[["results"]],
-                     params = list(user_inputs = config,
-                                   sensitivity_inputs = sens,
-                                   factors = factors,
-                                   df_factors_all = df_factors_all,
-                                   defaults = defaults)
-  )
+  # rmarkdown::render(input = "R/report-NIS-intro-detect-sensitivity.Rmd", # Rmd to run
+  #                   output_format ="html_document",
+  #                   output_file = paste0("report-", config$run_name, "-sensitivity.html"),
+  #                   output_dir = dirs[["results"]],
+  #                   params = list(user_inputs = config,
+  #                                 sensitivity_inputs = sens,
+  #                                 factors = factors,
+  #                                 df_factors_all = df_factors_all,
+  #                                 defaults = defaults)
+  #)
 
 }
 
@@ -259,17 +262,7 @@ if (config$elasticity_analysis == TRUE) {
     p_detection = config$defaults$p_detection,
     max_p_detect = config$defaults$max_p_detect,
     min_p_detect = config$defaults$min_p_detect,
-    detect_dynamic = config$defaults$detect_dynamic,
-    seed_n = config$defaults$seed_n,
-    start_pop = config$defaults$start_pop,
-    start_possion = config$defaults$start_possion,
-    pop_R = config$defaults$pop_R,
-    growth_model = config$defaults$growth_model,
-    pop_cap = config$defaults$pop_cap,
-    APrb = config$defaults$APrb,
-    Abund_Threshold = config$defaults$Abund_Threshold,
-    Prob_Below = config$defaults$Prob_Below,
-    Prob_Above = config$defaults$Prob_Above
+    detect_dynamic = config$defaults$detect_dynamic
   )
   
   # adjust each parameter according to input sensitivity config
@@ -282,7 +275,7 @@ if (config$elasticity_analysis == TRUE) {
   e_results_all <- lapply(setNames(surveillance, surveillance), function(y) {
     
     e_results <- runSurveillanceSensitvity(X = scenarios,
-                                           surveillance_scenario = "a_random")
+                                           surveillance_scenario = y)
     
     # summarise elasticity results: total non detected/percent detected etc
     e_results <- summariseElasticityResults(results = e_results,
@@ -295,7 +288,7 @@ if (config$elasticity_analysis == TRUE) {
   cols_elasticity <- colnames(e_results_all[[1]])[!colnames(e_results_all[[1]]) %in% cols_to_remove]
   
   # define names of factors to analyse elasticity for
-  factors <- c("num_sites", "num_years", "mean_visit_rate", "p_detection", "establish_prob", "min_p_detect", "max_p_detect", "seed_n")
+  factors <- c("num_sites", "num_years", "mean_visit_rate", "p_detection", "establish_prob", "min_p_detect", "max_p_detect" )
   
   # set up data frames to record results
   elasticity_calcs_reduce <- data.frame(matrix(nrow = length(factors),

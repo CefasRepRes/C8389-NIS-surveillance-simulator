@@ -11,16 +11,26 @@
 #'
 #' @return (class data frame) summary statistics from surveillance simulations.
 #'
-SummariseSensitivityResults <- function(results,
-                                       config) {
+#' Checked and looks OK on 30/06/23
+#'
+SummariseSensitivityResults <- function(results, config){
   
   results$ct_detect <- apply(results, 1, function(x) length(unlist(x[[1]])[unlist(x[[1]]) != 1000]))
+  
   results$pct_detect <- apply(results, 1, function(x) length(unlist(x[[1]])[unlist(x[[1]]) != 1000])/config$num_sim * 100)
+  
   results$mean <- apply(results, 1, function(x) mean(unlist(x[[1]])[unlist(x[[1]]) != 1000]))
+  
   results$median <- apply(results, 1, function(x) median(unlist(x[[1]])[unlist(x[[1]]) != 1000]))
+  
   results$min <- apply(results, 1, function(x) min(unlist(x[[1]])[unlist(x[[1]]) != 1000]))
+  results$min[is.infinite(results$min)] <- NA # to clean any results where all was 1000
+  
   results$max <- apply(results, 1, function(x) max(unlist(x[[1]])[unlist(x[[1]]) != 1000]))
+  results$max[is.infinite(results$max)] <- NA # to clean any results where all was 1000
+  
   results$ct_no_detect <- apply(results, 1, function(x) length(unlist(x[[1]])[unlist(x[[1]]) == 1000]))
+  
   results$pct_no_detect <- apply(results, 1, function(x) length(unlist(x[[1]])[unlist(x[[1]]) == 1000])/config$num_sim * 100)
   
   return(results)

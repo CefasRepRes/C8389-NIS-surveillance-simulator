@@ -1,5 +1,5 @@
 #' runSurveillanceSensitivity
-#' 
+#' Checked 29/06/23
 #' Note: this function assumes that sites are visited at the same rate.
 #'
 #' @param X (class data.frame)  expanded data frame containing a row detailing the input parameters 
@@ -85,7 +85,8 @@ runSurveillanceSensitvity <- function(X, surveillance_scenario, show.rows = T) {
     # Select out the appropriate result 
     if(X$seed_n[i] == 1){resultsS_dt <- resultsS$dtime
     
-    }else if(X$seed_n[i] > 1){resultsS_dt <- ProcessMultipleResults(result.df = resultsS, detection.summary = config$detect_summary)}
+    }else if(X$seed_n[i] > 1){resultsS_dt <- ProcessMultipleResults(result.df = resultsS, detection.summary = config$detect_summary,
+                                                                    create.plot = F)}
     
     # Import into the data.frame. 
     out[i, ][[1]] <- list(resultsS_dt)
