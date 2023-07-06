@@ -3,7 +3,7 @@ user: "Tom Gibson"
 
 # unique run name (directory and results name)
 # to include letters, numbers, underscores or dashes, no special characters
-run_name: "test_run3"
+run_name: "Scenario_1"
 
 # seed number
 seed: 2022
@@ -13,16 +13,16 @@ num_sim: 10000
 
 ## SIMULATION PARAMETERS ---------------------------------------------------------------------
 # number of years that sites are visited
-num_years: 30
+num_years: 100
 
 # number of sites to survey
-num_sites: 100
+num_sites: 200
 
 # define distributions to use for introduction and establishment probabilities
 # establishment and introduction is either: (1) 'random uniform' OR (2) 'equal uniform' OR (3) 'lognormal' 
 # (4) 'exponential' OR (5) 'positive normal' (case insensitive)
-establish_risk: "random uniform"
-intro_risk: "random uniform"  # if normal majority of sites are intermediate risk
+establish_risk: "lognormal"
+intro_risk: "random"  # if normal majority of sites are intermediate risk
 
 # probability of establishment, required if 'equal uniform' establish_risk
 establish_prob: 0.8
@@ -84,24 +84,25 @@ Prob_Above: 0.8
 sensitivity_analysis: TRUE
 
 # logical stating whether elasticity analysis and report should be generated
-elasticity_analysis: TRUE
+elasticity_analysis: FALSE
 
 # percentage of change to test each parameters
-elasticity_proportion: 0.01
+elasticity_proportion: 0.1
 
 defaults:
     name: "default"
     num_sites: 100
-    num_years: 11
+    num_years: 10
     establish_risk: "lognormal"
     establish_prob: 0.5
-    intro_risk: "lognormal"
+    intro_risk: "random"
     mean_visit_rate: 1
     p_detection: 0.5
     max_p_detect: 0.9
     min_p_detect: 0.1
     detect_dynamic: "constant"
     seed_n: 1
+    seed_n_elasticity: 10
     start_pop: 1
     start_possion: F
     pop_R: 2
@@ -111,4 +112,3 @@ defaults:
     Abund_Threshold: 1000
     Prob_Below: 0.1
     Prob_Above: 0.8 
-    detect_summary: "last"

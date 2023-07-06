@@ -3,26 +3,26 @@ user: "Tom Gibson"
 
 # unique run name (directory and results name)
 # to include letters, numbers, underscores or dashes, no special characters
-run_name: "test_run1"
+run_name: "Scenario_2"
 
 # seed number
 seed: 2022
 
 # number of simulations to run
-num_sim: 1000
+num_sim: 10000
 
 ## SIMULATION PARAMETERS ---------------------------------------------------------------------
 # number of years that sites are visited
-num_years: 30
+num_years: 100
 
 # number of sites to survey
-num_sites: 100
+num_sites: 200
 
 # define distributions to use for introduction and establishment probabilities
 # establishment and introduction is either: (1) 'random uniform' OR (2) 'equal uniform' OR (3) 'lognormal' 
 # (4) 'exponential' OR (5) 'positive normal' (case insensitive)
 establish_risk: "lognormal"
-intro_risk: "lognormal"  # if normal majority of sites are intermediate risk
+intro_risk: "random"  # if normal majority of sites are intermediate risk
 
 # probability of establishment, required if 'equal uniform' establish_risk
 establish_prob: 0.8
@@ -43,7 +43,7 @@ det_prob_min: 0
 det_prob_max: 1
 
 # Number of seed sites can be 1 to num_sites
-seed_n: 1
+seed_n: 25
 
 # Detection summary - if value of seed_n is greater than 1 this is used to get the time of detection from the multiple simulations
 # can be first, last, mean, median
@@ -84,7 +84,7 @@ Prob_Above: 0.8
 sensitivity_analysis: TRUE
 
 # logical stating whether elasticity analysis and report should be generated
-elasticity_analysis: TRUE
+elasticity_analysis: FALSE
 
 # percentage of change to test each parameters
 elasticity_proportion: 0.1
@@ -95,7 +95,7 @@ defaults:
     num_years: 10
     establish_risk: "lognormal"
     establish_prob: 0.5
-    intro_risk: "lognormal"
+    intro_risk: "random"
     mean_visit_rate: 1
     p_detection: 0.5
     max_p_detect: 0.9

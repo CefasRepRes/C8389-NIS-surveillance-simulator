@@ -1,5 +1,5 @@
 #' makeElasticityParamsTable
-#' checked 05/07/23
+#' checked 05/07/23 - will need rechecking as I am tired
 #' 
 #' Function takes ranges for parameters (`params`) and generates a data frame of surveillance 
 #' simulator input parameters in each row, modifying only one parameter from the input default 
@@ -78,13 +78,66 @@ makeElasticityParamsTable <- function(defaults, elasticity_prop) {
                                   return(defaults)
                                 })
   
-  seed_n <- lapply(seq(from = defaults$seed_n - (defaults$seed_n * elasticity_prop),
-                          to = defaults$seed_n + (defaults$seed_n * elasticity_prop),
-                          by = (defaults$seed_n * elasticity_prop)), function(x) {
+  # For seed_n, must be integers, which are greater than one and less than defaults$num_sites. 
+  
+  seed_n_seq <- seq(from = defaults$seed_n - (defaults$seed_n * elasticity_prop),
+                   to = defaults$seed_n + (defaults$seed_n * elasticity_prop),
+                   by = defaults$seed_n * elasticity_prop)
+  
+  # If seed_n_seq are not all whole numbers
+  if(!all(seed_n_seq == floor(seed_n_seq))){
+    
+    warning("In makeElasticityParamsTable: Rounded seed_n_seq. Elasticity may not be correct")
+    
+    # Print the initial values
+    print("Initial seed_n_seq Values:"); print(seed_n_seq)
+    
+    # Correct the Values
+    seed_n_seq <- round(seed_n_seq, 0) # round values to the nearest whole number
+    
+    # Print the original and correction
+    print("Corrected Values:"); print(seed_n_seq)
+    
+  }
+  
+  # If any values are below 1. 
+  if(any(seed_n_seq < 1)){
+    
+    # Print the warning
+    warning("In makeElasticityParamsTable: Corrected seed_n value to 1. Elasticity may not be correct")
+    
+    # Print the initial values
+    print("Initial seed_n_seq Values:"); print(seed_n_seq)
+    
+    # Correct the values
+    seed_n_seq[seed_n_seq < 1] <- 1
+    
+    # Print the original and correction
+    print("Corrected Values:"); print(seed_n_seq)
+    
+  }
+  
+  # If any values are greater than the defaults$num_sites
+  if(any(seed_n_seq > defaults$num_sites)){
+    
+    # Print the warning
+    warning(paste0("In makeElasticityParamsTable: Corrected seed_n value to ", defaults$num_sites, ". Elasticity may not be correct"))
+    
+    # Print the initial values
+    print("Initial seed_n_seq Values:"); print(seed_n_seq)
+    
+    # Correct the values
+    seed_n_seq[seed_n_seq > defaults$num_sites] <- defaults$num_sites
+    
+    # Print the original and correction
+    print("Corrected Values:"); print(seed_n_seq)
+    
+  }
+
+  seed_n <- lapply(seed_n_seq, function(x) {
                             defaults[ , "seed_n"] <- x # edit the value
                             defaults[ , "name"] <- paste0("seed_n_", x) # rename the column 
-                            return(defaults)
-                          })
+                            return(defaults)})
   
   # combine the list of rows containing parameters to test
   rows <- c(num_sites, num_years, mean_visit_rate, p_detection, establish_prob, min_p_detect, max_p_detect, seed_n)
@@ -93,4 +146,5 @@ makeElasticityParamsTable <- function(defaults, elasticity_prop) {
   
   # return data frame containing scenario parameters
   return(scenarios)
+  
 }

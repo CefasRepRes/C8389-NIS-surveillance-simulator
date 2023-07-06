@@ -238,7 +238,6 @@ if (config$sensitivity_analysis == TRUE) {
 
 }
 
-
 ## RUN ELASTICITY ANALYSIS ----------------------------------------------------------------------
 
 # Elasticity analysis determines the impact that each parameter has on the outputs 
@@ -260,7 +259,7 @@ if (config$elasticity_analysis == TRUE) {
     max_p_detect = config$defaults$max_p_detect,
     min_p_detect = config$defaults$min_p_detect,
     detect_dynamic = config$defaults$detect_dynamic,
-    seed_n = config$defaults$seed_n,
+    seed_n = config$defaults$seed_n_elasticity,
     start_pop = config$defaults$start_pop,
     start_possion = config$defaults$start_possion,
     pop_R = config$defaults$pop_R,
