@@ -1,5 +1,5 @@
 #' makeElasticityParamsTable
-#' checked 05/07/23 - will need rechecking as I am tired
+#' Update checked 10/07/23
 #' 
 #' Function takes ranges for parameters (`params`) and generates a data frame of surveillance 
 #' simulator input parameters in each row, modifying only one parameter from the input default 
@@ -10,13 +10,15 @@
 #' @param elasticity_prop (class numeric) proportion to change each parameter above and below 
 #' default for elasticity testing. These data are obtained from `config.yaml` file and must be 
 #' between 0 and 1.
+#' 
+#' @param drop_var this defines any variables which you may want to drop. 
 #'
 #' @return (class data.frame) expanded data frame containing a row detailing the input parameters 
 #' to use for each of the simulations run. One parameter is altered at a time.
 #' 
 #' @export
 #'
-makeElasticityParamsTable <- function(defaults, elasticity_prop) {
+makeElasticityParamsTable <- function(defaults, elasticity_prop, drop_var = NA) {
   # create dataframe of scenarios with differing parameters
   # create the rows
   num_sites <- lapply(seq(from = defaults$num_sites - (defaults$num_sites * elasticity_prop),
@@ -140,7 +142,13 @@ makeElasticityParamsTable <- function(defaults, elasticity_prop) {
                             return(defaults)})
   
   # combine the list of rows containing parameters to test
-  rows <- c(num_sites, num_years, mean_visit_rate, p_detection, establish_prob, min_p_detect, max_p_detect, seed_n)
+  rows <- list(num_sites, num_years, mean_visit_rate, p_detection, establish_prob, min_p_detect, max_p_detect, seed_n)
+  names(rows) <- c("num_sites", "num_years", "mean_visit_rate", "p_detection", "establish_prob", "min_p_detect", "max_p_detect", "seed_n")
+  
+  # Drop any unrequired variables and unlist
+  rows <- rows[!names(rows) %in% drop_var] # drop unrequired variables
+  rows <- unlist(rows, recursive = F) # just unlist the initial list, not the list components 
+  
   scenarios <- do.call(rbind.data.frame, rows)
   scenarios <- rbind(defaults, scenarios)
   

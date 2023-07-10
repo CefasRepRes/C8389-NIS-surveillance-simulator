@@ -30,7 +30,7 @@ Three scenarios for site surveillance to detect non indigenous species (NIS) int
 
 * **B.** Risk-based surveillance, where sites with a higher probability of NIS introduction and establishment are visited at a higher visit rate due to their elevated risk.
 
-* **C.** Heavy risk-based surveillance, where sites with higher probability of NIS introduction and establishment form the main focus of surveillance programmes and are visited at a 
+* **C.** Heavy risk-based surveillance, where sites with higher probability of NIS introduction and establishment form the main focus of surveillance programmes and are visited at a substantially higher visit rate due to their elevated risk. 
 
 
 \

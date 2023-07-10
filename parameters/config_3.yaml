@@ -3,17 +3,17 @@ user: "Tom Gibson"
 
 # unique run name (directory and results name)
 # to include letters, numbers, underscores or dashes, no special characters
-run_name: "Scenario_3"
+run_name: "test_run3"
 
 # seed number
 seed: 2022
 
 # number of simulations to run
-num_sim: 10000
+num_sim: 1000
 
 ## SIMULATION PARAMETERS ---------------------------------------------------------------------
 # number of years that sites are visited
-num_years: 50
+num_years: 30
 
 # number of sites to survey
 num_sites: 100
@@ -21,8 +21,8 @@ num_sites: 100
 # define distributions to use for introduction and establishment probabilities
 # establishment and introduction is either: (1) 'random uniform' OR (2) 'equal uniform' OR (3) 'lognormal' 
 # (4) 'exponential' OR (5) 'positive normal' (case insensitive)
-establish_risk: "random uniform"
-intro_risk: "random uniform"  # if normal majority of sites are intermediate risk
+establish_risk: "equal uniform"
+intro_risk: "equal uniform"  # if normal majority of sites are intermediate risk
 
 # probability of establishment, required if 'equal uniform' establish_risk
 establish_prob: 0.8
@@ -84,7 +84,7 @@ Prob_Above: 0.8
 sensitivity_analysis: TRUE
 
 # logical stating whether elasticity analysis and report should be generated
-elasticity_analysis: TRUE
+elasticity_analysis: FALSE
 
 # percentage of change to test each parameters
 elasticity_proportion: 0.1
@@ -93,9 +93,9 @@ defaults:
     name: "default"
     num_sites: 100
     num_years: 10
-    establish_risk: "lognormal"
+    establish_risk: "equal uniform"
     establish_prob: 0.5
-    intro_risk: "random"
+    intro_risk: "equal uniform"
     mean_visit_rate: 1
     p_detection: 0.5
     max_p_detect: 0.9

@@ -13,16 +13,16 @@ num_sim: 10000
 
 ## SIMULATION PARAMETERS ---------------------------------------------------------------------
 # number of years that sites are visited
-num_years: 100
+num_years: 50
 
 # number of sites to survey
-num_sites: 200
+num_sites: 100
 
 # define distributions to use for introduction and establishment probabilities
 # establishment and introduction is either: (1) 'random uniform' OR (2) 'equal uniform' OR (3) 'lognormal' 
 # (4) 'exponential' OR (5) 'positive normal' (case insensitive)
-establish_risk: "lognormal"
-intro_risk: "random"  # if normal majority of sites are intermediate risk
+establish_risk: "exponential"
+intro_risk: "exponential"  # if normal majority of sites are intermediate risk
 
 # probability of establishment, required if 'equal uniform' establish_risk
 establish_prob: 0.8
@@ -84,7 +84,7 @@ Prob_Above: 0.8
 sensitivity_analysis: TRUE
 
 # logical stating whether elasticity analysis and report should be generated
-elasticity_analysis: FALSE
+elasticity_analysis: TRUE
 
 # percentage of change to test each parameters
 elasticity_proportion: 0.1
