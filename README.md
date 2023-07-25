@@ -29,4 +29,4 @@ It may include variation in detection probability relative to abundance at each 
   * report-NIS-intro-detect-sensitivity.Rmd - script for generating sensitivity mark down report
   * report-NIS-intro-detect-sim.Rmd - script for generating standard mark down report
   
-#### NIS-intro-detect-sim.Rproj - file to load before opening NIS-intro-detect-sim.R 
+#### NIS-intro-detect-sim.Rproj - load before opening NIS-intro-detect-sim.R 
