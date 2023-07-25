@@ -33,7 +33,7 @@ Three scenarios for site surveillance to detect non indigenous species (NIS) int
 
 * **B.** Risk-based surveillance, where sites with a higher probability of NIS introduction and establishment are visited at a higher visit rate due to their elevated risk.
 
-* **C.** Heavy risk-based surveillance, where sites with higher probability of NIS introduction and establishment form the main focus of surveillance programmes and are visited at a 
+* **C.** Heavy risk-based surveillance, where sites with higher probability of NIS introduction and establishment form the main focus of surveillance programmes and are visited at a substantially higher visit rate due to their elevated risk. 
 
 \
 
@@ -60,7 +60,7 @@ df_probs <- data.frame("p_establish" = params$p_establish,
 
 # generate histograms of probabilities
 p1 <- ggplot2::ggplot(df_probs, aes(x = p_establish)) +
-  geom_histogram(aes(y = ..density..), binwidth = 0.05, colour = "black", fill = "gray") +
+  geom_histogram(binwidth = 0.05, colour = "black", fill = "gray") +
   theme_bw() +
   scale_x_continuous(name = "Probability of Establishment",
                      limits = c(0, 1)) +
@@ -68,7 +68,7 @@ p1 <- ggplot2::ggplot(df_probs, aes(x = p_establish)) +
   ggtitle("Probability of Establishment")
 
 p2 <- ggplot2::ggplot(df_probs, aes(x = p_intro)) +
-  geom_histogram(aes(y = ..density..), binwidth = 0.05, colour = "black", fill = "gray") +
+  geom_histogram(binwidth = 0.05, colour = "black", fill = "gray") +
   theme_bw() +
   scale_x_continuous(name = "Probability of Establishment",
                      limits = c(0, 1)) +
@@ -76,7 +76,7 @@ p2 <- ggplot2::ggplot(df_probs, aes(x = p_intro)) +
   ggtitle("Probability of Introduction")
 
 p3 <- ggplot2::ggplot(df_probs, aes(x = p_intro)) +
-  geom_histogram(aes(y = ..density..), binwidth = 0.05, colour = "black", fill = "gray") +
+  geom_histogram(binwidth = 0.05, colour = "black", fill = "gray") +
   theme_bw() +
   scale_x_continuous(name = "Probability of Establishment",
                      limits = c(0, 1)) +
@@ -98,32 +98,34 @@ Note that for each of these surveillance strategies the overall visit rate, as d
 
 ```{r, echo = FALSE, fig.width = 12, fig.height = 4, fig.align = 'center'}
 # generate data frame of site visit rates
+# added plus 0.05 to xlim as it was cutting off site visit rates all at 1.0
 df_visits <- data.frame("site_visit_rate_A" = params$site_visit_rate_A,
                         "site_visit_rate_B" = params$site_visit_rate_B,
                         "site_visit_rate_C" = params$site_visit_rate_C)
 
-
 p1 <- ggplot2::ggplot(df_visits, aes(x = site_visit_rate_A)) +
-  geom_histogram(aes(y = ..density..), binwidth = 0.05, colour = "gray", fill = "gray") +
+  geom_histogram(binwidth = 0.05, colour = "gray", fill = "gray") +
   theme_bw() +
   scale_x_continuous(name = "Site Visit Rate (per year)",
-                     limits = c(0, max(df_visits$site_visit_rate_C))) +
+                     limits = c(0, max(df_visits$site_visit_rate_C)+0.05)) +
+  
   ylab("Frequency") +
+  
   ggtitle("Random Surveillance")
 
 p2 <- ggplot2::ggplot(df_visits, aes(x = site_visit_rate_B)) +
-  geom_histogram(aes(y = ..density..), binwidth = 0.05, colour = "lightblue2", fill = "lightblue2") +
+  geom_histogram(binwidth = 0.05, colour = "lightblue2", fill = "lightblue2") +
   theme_bw() +
   scale_x_continuous(name = "Site Visit Rate (per year)",
-                     limits = c(0, max(df_visits$site_visit_rate_C))) +
+                     limits = c(0, max(df_visits$site_visit_rate_C)+0.05)) +
   ylab("Frequency") +
   ggtitle("Risk-based surveillance")
 
 p3 <- ggplot2::ggplot(df_visits, aes(x = site_visit_rate_C)) +
-  geom_histogram(aes(y = ..density..), binwidth = 0.05, colour = "royalblue3", fill = "royalblue3") +
+  geom_histogram(binwidth = 0.05, colour = "royalblue3", fill = "royalblue3") +
   theme_bw() +
   scale_x_continuous(name = "Site Visit Rate (per year)",
-                     limits = c(0, max(df_visits$site_visit_rate_C))) +
+                     limits = c(0, max(df_visits$site_visit_rate_C)+0.05)) +
   ylab("Frequency") +
   ggtitle("Heavy risk-based surveillance")
 
@@ -147,7 +149,7 @@ df_results <- data.frame("resultsA" = params$resultsA,
                          "resultsC" = params$resultsC)
 
 p1 <- ggplot2::ggplot(df_results, aes(x = resultsA)) +
-  geom_histogram(aes(y = ..density..), binwidth = 0.05, colour = "gray", fill = "gray") +
+  geom_histogram(binwidth = 0.05, colour = "gray", fill = "gray") +
   theme_bw() +
   ylab("Frequency") +
   ggtitle("Random surveillance") +
@@ -155,7 +157,7 @@ p1 <- ggplot2::ggplot(df_results, aes(x = resultsA)) +
                      limits = c(0, 101))
 
 p2 <- ggplot2::ggplot(df_results, aes(x = resultsB)) +
-  geom_histogram(aes(y = ..density..), binwidth = 0.05, colour = "lightblue2", fill = "lightblue2") +
+  geom_histogram(binwidth = 0.05, colour = "lightblue2", fill = "lightblue2") +
   theme_bw() +
   ylab("Frequency") +
   ggtitle("Risk-based surveillance") +
@@ -163,7 +165,7 @@ p2 <- ggplot2::ggplot(df_results, aes(x = resultsB)) +
                      limits = c(0, 101))
 
 p3 <- ggplot2::ggplot(df_results, aes(x = resultsC)) +
-  geom_histogram(aes(y = ..density..), binwidth = 0.05, colour = "royalblue3", fill = "royalblue3") +
+  geom_histogram(binwidth = 0.05, colour = "royalblue3", fill = "royalblue3") +
   theme_bw() +
   ylab("Frequency") +
   ggtitle("Heavy risk-based surveillance") +
@@ -274,6 +276,32 @@ summary(params$resultsC)
 ```
 
 \
+
+#### Simulations with No Detections (%):
+
+**A:** Random surveillance
+
+```{r, echo = F}
+
+(length(params$resultsA[params$resultsA == 1000])/length(params$resultsA))*100
+
+```
+
+**B:** Risk-based surveillance
+
+```{r, echo = F}
+
+(length(params$resultsB[params$resultsB == 1000])/length(params$resultsB))*100
+
+```
+
+**C:** Heavy risk-based surveillance
+
+```{r, echo = F}
+
+(length(params$resultsC[params$resultsC == 1000])/length(params$resultsC))*100
+
+```
 
 #### Version
 

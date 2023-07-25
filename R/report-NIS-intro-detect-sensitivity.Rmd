@@ -30,7 +30,7 @@ Three scenarios for site surveillance to detect non indigenous species (NIS) int
 
 * **B.** Risk-based surveillance, where sites with a higher probability of NIS introduction and establishment are visited at a higher visit rate due to their elevated risk.
 
-* **C.** Heavy risk-based surveillance, where sites with higher probability of NIS introduction and establishment form the main focus of surveillance programmes and are visited at a 
+* **C.** Heavy risk-based surveillance, where sites with higher probability of NIS introduction and establishment form the main focus of surveillance programmes and are visited at a substantially higher visit rate due to their elevated risk. 
 
 
 \
@@ -74,7 +74,7 @@ plots <- lapply(names(params$df_factors_all), function(w) {
   
   lapply(params$factors, function(x) {
     
-  # violin plot - time taken to detect NIS where detection != 100
+  # violin plot - time taken to detect NIS where detection != 1000
   p1 <- ggplot2::ggplot(df_factors[[x]],
                         aes(x = name, y = value, fill = name)) +
     geom_violin() +

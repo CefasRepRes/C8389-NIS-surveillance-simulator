@@ -6,13 +6,15 @@
 #'
 #' @param defaults (class data.frame) default simulation parameters.
 #' 
-#' @param params (class list) ranges for each parameter for sensitivity testing (with minumum, 
+#' @param params (class list) ranges for each parameter for sensitivity testing (with minimum, 
 #' maximum and interval values). These data are obtained from `config_sensitivity.yaml` file.
 #'
 #' @return (class data.frame) expanded data frame containing a row detailing the input parameters 
 #' to use for each of the simulations run. One parameter is altered at a time.
 #' 
 #' @export
+#'
+#' Checked on 29/06/2023
 #'
 makeSensitivityParamsTable <- function(defaults, params) {
   # create dataframe of scenarios with differing parameters
@@ -58,8 +60,16 @@ makeSensitivityParamsTable <- function(defaults, params) {
                                  return(defaults)
                                })
   
+  seed_n <- lapply(seq(from = params$seed_n$min,
+                          to = params$seed_n$max,
+                          by = params$seed_n$interval), function(x) {
+                            defaults[ , "seed_n"] <- x # edit the value
+                            defaults[ , "name"] <- paste0("seed_n_", x) # rename the column 
+                            return(defaults)
+                          })
+  
   # combine the list of rows containing parameters to test
-  rows <- c(num_sites, num_years, mean_visit_rate, p_detection, establish_prob)
+  rows <- c(num_sites, num_years, mean_visit_rate, p_detection, establish_prob, seed_n)
   scenarios <- do.call(rbind.data.frame, rows)
   
   # return data frame containing scenario parameters

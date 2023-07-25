@@ -28,8 +28,7 @@ Three scenarios for site surveillance to detect non indigenous species (NIS) int
 
 * **B.** Risk-based surveillance, where sites with a higher probability of NIS introduction and establishment are visited at a higher visit rate due to their elevated risk.
 
-* **C.** Heavy risk-based surveillance, where sites with higher probability of NIS introduction and establishment form the main focus of surveillance programmes and are visited at a 
-
+* **C.** Heavy risk-based surveillance, where sites with higher probability of NIS introduction and establishment form the main focus of surveillance programmes and are visited at a substantially higher visit rate due to their elevated risk. 
 
 \
 
@@ -51,7 +50,7 @@ The following input parameters (`r factors`) are increased and decreased by `r c
 # DATA WRANGLING -----------------------------------------
 surveillance <- names(elasticity_dfs)
 
-# for each of the surveillace strategy results
+# for each of the surveillance strategy results
 elasticity_dfs1 <- lapply(setNames(surveillance, surveillance), function(x) {
   
   lapply(names(elasticity_dfs[[x]]), function(y) {

@@ -11,9 +11,11 @@ source("functions/runSurveillanceSensitivity.R")
 source("functions/formatSensitivityResults.R")
 source("functions/summariseSensitivityResults.R")
 source("functions/summariseElasticityResults.R")
+source("functions/GetAbundance.R")
+source("functions/ProcessMultipleResults.R")
 
 pkgs <- c("yaml", "here", "truncnorm", "reshape2", "gtools",
-          "ggplot2", "patchwork")
+          "ggplot2", "patchwork", "EnvStats", "ReIns", "data.table", "dplyr")
 lapply(pkgs, library, character.only = T)
 
 ## INPUTS ----------------------------------------------------------------------------
@@ -32,7 +34,6 @@ lapply(dirs, dir.create, showWarnings = FALSE)
 # define the surveillance scenarios to run
 surveillance <- c("a_random", "b_risk_based", "c_heavy_risk_based")
 
-
 ## CREATE SIMULATION INPUTS -----------------------------------------------------------
 # create vector of sites
 site_vector <- 1:config$num_sites
@@ -42,22 +43,19 @@ p_establish <- getEstablishProbability(method = config$establish_risk,
                                        n_sites = config$num_sites,
                                        x = config$establish_prob)
 
-# probability of introduction
-p_intro <- getIntroProbability(method = config$intro_risk,
-                               n_sites = config$num_sites)
+p_intro <- getIntroProbability(method = config$intro_risk, 
+                               n_sites = config$num_sites, 
+                               x = config$intro_prob)
 
 # combined introduction and establishment probs to give overall introduction rate
 p_intro_establish <- p_intro * p_establish
-
 
 ## SCENARIO A: RANDOM SURVEILLANCE STRATEGY (independent of risk) -----------------------
 # A: rate at which random sites are visited (vector)
 site_visit_rate_A <- rep(x = config$mean_visit_rate, # if each site visited once (mean_visit_rate = 1)
                          times = config$num_sites)
 
-# run simulation A to determine the number of years which is takes to detect an introduction (1000 simulations in total)
 resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
-                                      site_revisit = F,
                                       surveillance_period = config$num_years,
                                       site_visit_rate = site_visit_rate_A,
                                       p_detection = config$det_prob,
@@ -65,8 +63,22 @@ resultsA <- runSurveillanceSimulation(n_simulations = config$num_sim,
                                       min_p_detect = config$det_prob_min,
                                       detection_dynamic = config$detect_dynamic,
                                       site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish)
+                                      p_intro_establish = p_intro_establish,
+                                      seed_n = config$seed_n,
+                                      start_pop = config$start_pop,
+                                      start_possion = as.logical(config$start_possion),
+                                      pop_R = config$pop_R,
+                                      growth_model = config$growth_model,
+                                      pop_cap = config$pop_cap,
+                                      APrb = config$APrb,
+                                      Abund_Threshold = config$Abund_Threshold,
+                                      Prob_Below = config$Prob_Below,
+                                      Prob_Above = config$Prob_Above)
 
+# Extract the results of interest depending on n length. 
+if(config$seed_n == 1){resultsA_dt <- resultsA$dtime
+
+}else if(config$seed_n > 1){resultsA_dt <- ProcessMultipleResults(result.df = resultsA, detect_summary = config$detect_summary)}
 
 ## SCENARIO B: RISK BASED SURVEILLANCE FOCUSSED ON HIGH RISK SITES ----------------------
 # B: rate at which risk-based sites are visited (vector)
@@ -74,16 +86,29 @@ site_visit_rate_B <- rep(x = config$mean_visit_rate,
                          times = config$num_sites) * p_intro_establish / mean(p_intro_establish)
 
 resultsB <- runSurveillanceSimulation(n_simulations = config$num_sim,
-                                      site_revisit = F,
                                       surveillance_period = config$num_years,
                                       site_visit_rate = site_visit_rate_B,
                                       p_detection = config$det_prob,
-                                      max_p_detection = config$det_prob_max,
-                                      min_p_detection = config$det_prob_min,
+                                      max_p_detect = config$det_prob_max,
+                                      min_p_detect = config$det_prob_min,
                                       detection_dynamic = config$detect_dynamic,
                                       site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish)
+                                      p_intro_establish = p_intro_establish,
+                                      seed_n = config$seed_n,
+                                      start_pop = config$start_pop,
+                                      start_possion = as.logical(config$start_possion),
+                                      pop_R = config$pop_R,
+                                      growth_model = config$growth_model,
+                                      pop_cap = config$pop_cap,
+                                      APrb = config$APrb,
+                                      Abund_Threshold = config$Abund_Threshold,
+                                      Prob_Below = config$Prob_Below,
+                                      Prob_Above = config$Prob_Above)
 
+# Extract the results of interest depending on n length. 
+if(config$seed_n == 1){resultsB_dt <- resultsB$dtime
+
+}else if(config$seed_n > 1){resultsB_dt <- ProcessMultipleResults(result.df = resultsB, detect_summary = config$detect_summary)}
 
 ## SCENARIO C: RISK BASED SURVEILLANCE VERY FOCUSSED ON HIGH RISK SITES -----------------
 # site visit rate with heavy focus on high risk sites
@@ -92,18 +117,30 @@ resultsB <- runSurveillanceSimulation(n_simulations = config$num_sim,
 site_visit_rate_C <- (rep(x = config$mean_visit_rate,
                           times = config$num_sites) * p_intro_establish ^ 3) / mean(p_intro_establish ^ 3)
 
-## TODO: WHY IS THE SITE_REVISIT PARAMETER NOW TRUE?
 resultsC <- runSurveillanceSimulation(n_simulations = config$num_sim,
-                                      site_revisit = T,
                                       surveillance_period = config$num_years,
                                       site_visit_rate = site_visit_rate_C,
                                       p_detection = config$det_prob,
-                                      max_p_detection = config$det_prob_max,
-                                      min_p_detection = config$det_prob_min,
+                                      max_p_detect = config$det_prob_max,
+                                      min_p_detect = config$det_prob_min,
                                       detection_dynamic = config$detect_dynamic,
                                       site_vector = site_vector,
-                                      p_intro_establish = p_intro_establish)
+                                      p_intro_establish = p_intro_establish,
+                                      seed_n = config$seed_n,
+                                      start_pop = config$start_pop,
+                                      start_possion = config$start_possion,
+                                      pop_R = config$pop_R,
+                                      growth_model = as.logical(config$start_possion),
+                                      pop_cap = config$pop_cap,
+                                      APrb = config$APrb,
+                                      Abund_Threshold = config$Abund_Threshold,
+                                      Prob_Below = config$Prob_Below,
+                                      Prob_Above = config$Prob_Above)
 
+# Extract the results of interest depending on n length. 
+if(config$seed_n == 1){resultsC_dt <- resultsC$dtime
+
+}else if(config$seed_n > 1){resultsC_dt <- ProcessMultipleResults(result.df = resultsC, detect_summary = config$detect_summary)}
 
 ## GENERATE RESULTS REPORT -----------------------------------------------------------------------
 rmarkdown::render(input = "R/report-NIS-intro-detect-sim.Rmd", # Rmd to run
@@ -114,14 +151,12 @@ rmarkdown::render(input = "R/report-NIS-intro-detect-sim.Rmd", # Rmd to run
                                 p_establish = p_establish,
                                 p_intro = p_intro,
                                 p_intro_establish = p_intro_establish,
-                                resultsA = resultsA,
-                                resultsB = resultsB,
-                                resultsC = resultsC,
+                                resultsA = resultsA_dt,
+                                resultsB = resultsB_dt,
+                                resultsC = resultsC_dt,
                                 site_visit_rate_A = site_visit_rate_A,
                                 site_visit_rate_B = site_visit_rate_B,
-                                site_visit_rate_C = site_visit_rate_C)
-                  )
-
+                                site_visit_rate_C = site_visit_rate_C))
 
 ## RUN SENSITIVITY ANALYSIS ----------------------------------------------------------------------
 
@@ -145,14 +180,22 @@ if (config$sensitivity_analysis == TRUE) {
     p_detection = config$defaults$p_detection,
     max_p_detect = config$defaults$max_p_detect,
     min_p_detect = config$defaults$min_p_detect,
-    detect_dynamic = config$defaults$detect_dynamic
-  )
+    detect_dynamic = config$defaults$detect_dynamic,
+    seed_n = config$defaults$seed_n,
+    start_pop = config$defaults$start_pop,
+    start_possion = config$defaults$start_possion,
+    pop_R = config$defaults$pop_R,
+    growth_model = config$defaults$growth_model,
+    pop_cap = config$defaults$pop_cap,
+    APrb = config$defaults$APrb,
+    Abund_Threshold = config$defaults$Abund_Threshold,
+    Prob_Below = config$defaults$Prob_Below,
+    Prob_Above = config$defaults$Prob_Above
+    )
   
   # adjust each parameter according to input sensitivity config
   scenarios <- makeSensitivityParamsTable(defaults = defaults,
                                           params = sens)
-  
-  # max_p_detect # min_p_detect
   
   # calculate sensitivity results for each scenario under each surveillance strategy
   # note this step can take some time to run
@@ -160,12 +203,11 @@ if (config$sensitivity_analysis == TRUE) {
     
     # run the surveillance sensitivity 
     # NOTE this includes generation of p_intro and p_establish as well as runSurveillanceSimulation()
-    s_results <- runSurveillanceSensitvity(X = scenarios,
+    s_results <- runSurveillanceSensitvity(X = scenarios, show.rows = T,
                                            surveillance_scenario = y)
     
     # summarise sensitivity results: total non detected/percent detected etc
-    s_results <- summariseSensitvityResults(results = s_results,
-                                            config = config)
+    s_results <- SummariseSensitivityResults(results = s_results, config = config)
     
   })
   
@@ -183,18 +225,17 @@ if (config$sensitivity_analysis == TRUE) {
   
   ## PRODUCE SENSITIVITY ANALYSIS REPORT
   rmarkdown::render(input = "R/report-NIS-intro-detect-sensitivity.Rmd", # Rmd to run
-                    output_format ="html_document",
-                    output_file = paste0("report-", config$run_name, "-sensitivity.html"),
-                    output_dir = dirs[["results"]],
-                    params = list(user_inputs = config,
-                                  sensitivity_inputs = sens,
-                                  factors = factors,
-                                  df_factors_all = df_factors_all,
-                                  defaults = defaults)
+                     output_format ="html_document",
+                     output_file = paste0("report-", config$run_name, "-sensitivity.html"),
+                     output_dir = dirs[["results"]],
+                     params = list(user_inputs = config,
+                                   sensitivity_inputs = sens,
+                                   factors = factors,
+                                   df_factors_all = df_factors_all,
+                                   defaults = defaults)
   )
 
 }
-
 
 ## RUN ELASTICITY ANALYSIS ----------------------------------------------------------------------
 
@@ -216,7 +257,17 @@ if (config$elasticity_analysis == TRUE) {
     p_detection = config$defaults$p_detection,
     max_p_detect = config$defaults$max_p_detect,
     min_p_detect = config$defaults$min_p_detect,
-    detect_dynamic = config$defaults$detect_dynamic
+    detect_dynamic = config$defaults$detect_dynamic,
+    seed_n = config$defaults$seed_n_elasticity,
+    start_pop = config$defaults$start_pop,
+    start_possion = config$defaults$start_possion,
+    pop_R = config$defaults$pop_R,
+    growth_model = config$defaults$growth_model,
+    pop_cap = config$defaults$pop_cap,
+    APrb = config$defaults$APrb,
+    Abund_Threshold = config$defaults$Abund_Threshold,
+    Prob_Below = config$defaults$Prob_Below,
+    Prob_Above = config$defaults$Prob_Above
   )
   
   # adjust each parameter according to input sensitivity config
@@ -229,7 +280,7 @@ if (config$elasticity_analysis == TRUE) {
   e_results_all <- lapply(setNames(surveillance, surveillance), function(y) {
     
     e_results <- runSurveillanceSensitvity(X = scenarios,
-                                           surveillance_scenario = y)
+                                           surveillance_scenario = "a_random")
     
     # summarise elasticity results: total non detected/percent detected etc
     e_results <- summariseElasticityResults(results = e_results,
@@ -242,7 +293,7 @@ if (config$elasticity_analysis == TRUE) {
   cols_elasticity <- colnames(e_results_all[[1]])[!colnames(e_results_all[[1]]) %in% cols_to_remove]
   
   # define names of factors to analyse elasticity for
-  factors <- c("num_sites", "num_years", "mean_visit_rate", "p_detection", "establish_prob", "min_p_detect", "max_p_detect" )
+  factors <- c("num_sites", "num_years", "mean_visit_rate", "p_detection", "establish_prob", "min_p_detect", "max_p_detect", "seed_n")
   
   # set up data frames to record results
   elasticity_calcs_reduce <- data.frame(matrix(nrow = length(factors),
