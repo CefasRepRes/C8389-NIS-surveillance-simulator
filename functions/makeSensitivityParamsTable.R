@@ -6,7 +6,7 @@
 #'
 #' @param defaults (class data.frame) default simulation parameters.
 #' 
-#' @param params (class list) ranges for each parameter for sensitivity testing (with minumum, 
+#' @param params (class list) ranges for each parameter for sensitivity testing (with minimum, 
 #' maximum and interval values). These data are obtained from `config_sensitivity.yaml` file.
 #'
 #' @return (class data.frame) expanded data frame containing a row detailing the input parameters 

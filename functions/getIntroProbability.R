@@ -9,12 +9,13 @@
 #' "lognormal", "exponential" and "positive normal" outputs are constrained between 0 and 1. 
 #' Parameter is case insensitive.
 #' @param n_sites numeric containing the number of sites within the simulation.
+#' @param ... additional parameters of runif and rep functions.
 #'
 #' @return vector of length n_sites with results of probability of introduction
 #' at each site.
 #'
-#' @examples p_intro <- getIntroProbability(method = "positive_normal",
-#'                                          n_sites = 100)
+#' @examples p_intro <- getIntroProbability(method = "positive_normal", n_sites = 100)
+#'           p_intro <- getIntroProbability(method = "equal uniform", n_sites = 100, x = 0.8)
 #'
 #' Checked by TG: 22/05/23
 #' @importFrom truncnorm rtruncnorm

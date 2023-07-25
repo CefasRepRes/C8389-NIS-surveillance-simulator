@@ -36,7 +36,7 @@ ProcessMultipleResults <- function(result.df = resultsA, detection.summary = "la
 
   }else{return(print("Error: Wrongly specified process option"))}
   
-  # Create Plot - stops needs checking. 
+  # Create Plot 
   if(create.plot == T){
   
   final.plot <- final # copy to prevent data loss. 

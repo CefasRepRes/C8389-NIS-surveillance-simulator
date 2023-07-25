@@ -1,5 +1,5 @@
 # user running simulations
-user: "Tom Gibson"
+user: "User"
 
 # unique run name (directory and results name)
 # to include letters, numbers, underscores or dashes, no special characters
@@ -13,7 +13,7 @@ num_sim: 1000
 
 ## SIMULATION PARAMETERS ---------------------------------------------------------------------
 # number of years that sites are visited
-num_years: 30
+num_years: 11
 
 # number of sites to survey
 num_sites: 100
@@ -26,6 +26,9 @@ intro_risk: "exponential"  # if normal majority of sites are intermediate risk
 
 # probability of establishment, required if 'equal uniform' establish_risk
 establish_prob: 0.8
+
+# probability of introduction, required if 'equal uniform' intro_risk
+intro_prob: 0.8
 
 # frequency of site visits (e.g. 0.5 = once every 2 years)
 mean_visit_rate: 1
@@ -80,7 +83,7 @@ Prob_Below: 0.1
 Prob_Above: 0.8
 
 ## ADDITIONAL ANALYSES -----------------------------------------------------------------------
-# logical stating whether sensitvity analysis and report should be generated
+# logical stating whether sensitivity analysis and report should be generated
 sensitivity_analysis: TRUE
 
 # logical stating whether elasticity analysis and report should be generated

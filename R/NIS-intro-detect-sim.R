@@ -43,7 +43,9 @@ p_establish <- getEstablishProbability(method = config$establish_risk,
                                        n_sites = config$num_sites,
                                        x = config$establish_prob)
 
-p_intro <- getIntroProbability(method = config$intro_risk, n_sites = config$num_sites, x = 0.8)
+p_intro <- getIntroProbability(method = config$intro_risk, 
+                               n_sites = config$num_sites, 
+                               x = config$intro_prob)
 
 # combined introduction and establishment probs to give overall introduction rate
 p_intro_establish <- p_intro * p_establish
@@ -155,9 +157,6 @@ rmarkdown::render(input = "R/report-NIS-intro-detect-sim.Rmd", # Rmd to run
                                 site_visit_rate_A = site_visit_rate_A,
                                 site_visit_rate_B = site_visit_rate_B,
                                 site_visit_rate_C = site_visit_rate_C))
-
-# Checked up to here and looks fine. 
-# Outputs checked and they look fine. 
 
 ## RUN SENSITIVITY ANALYSIS ----------------------------------------------------------------------
 
