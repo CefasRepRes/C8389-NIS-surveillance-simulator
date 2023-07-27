@@ -3,7 +3,7 @@ user: "User"
 
 # unique run name (directory and results name)
 # to include letters, numbers, underscores or dashes, no special characters
-run_name: "test_run1"
+run_name: "Sim_1"
 
 # seed number
 seed: 2022
@@ -13,7 +13,7 @@ num_sim: 1000
 
 ## SIMULATION PARAMETERS ---------------------------------------------------------------------
 # number of years that sites are visited
-num_years: 11
+num_years: 30
 
 # number of sites to survey
 num_sites: 100
@@ -87,7 +87,7 @@ Prob_Above: 0.8
 sensitivity_analysis: TRUE
 
 # logical stating whether elasticity analysis and report should be generated
-elasticity_analysis: FALSE
+elasticity_analysis: TRUE
 
 # percentage of change to test each parameters
 elasticity_proportion: 0.1
