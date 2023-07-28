@@ -256,7 +256,7 @@ ggplot2::ggplot(df_scenarios, aes(results, y = probability, group = scenario)) +
 **A:** Random surveillance
 
 ```{r, echo = FALSE}
-summary(params$resultsA)
+summary(params$resultsA[!params$resultsA == 1000])
 ```
 
 \
@@ -264,7 +264,7 @@ summary(params$resultsA)
 **B:** Risk-based surveillance
 
 ```{r, echo = FALSE}
-summary(params$resultsB)
+summary(params$resultsB[!params$resultsB == 1000])
 ```
 
 \
@@ -272,7 +272,7 @@ summary(params$resultsB)
 **C:** Heavy risk-based surveillance
 
 ```{r, echo = FALSE}
-summary(params$resultsC)
+summary(params$resultsC[!params$resultsC == 1000])
 ```
 
 \
