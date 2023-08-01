@@ -242,6 +242,9 @@ if (config$sensitivity_analysis == TRUE) {
                                    defaults = defaults)
   )
 
+  ## Produce graphs
+  Sensitivity_Graphs()
+  
 }
 
 ## RUN ELASTICITY ANALYSIS ----------------------------------------------------------------------
@@ -311,7 +314,6 @@ if (config$elasticity_analysis == TRUE) {
   elasticity_calcs_increase$direction <- "Parameter Increased"
   elasticity_calcs_reduce$direction <- "Parameter Reduced"
   
-  
   # loop over scenarios (random, risk based, heavy risk based)
   elasticity_dfs <- lapply(setNames(surveillance, surveillance), function(w) {
   
@@ -358,4 +360,7 @@ if (config$elasticity_analysis == TRUE) {
                                   factors = factors,
                                   elasticity_dfs = elasticity_dfs))
   
+  ## Produce graphs
+  Elasticity_Graphs()
+
 }

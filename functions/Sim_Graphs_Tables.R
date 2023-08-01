@@ -1,11 +1,11 @@
 # 26/07/2023
 # Tom Gibson
 # Sim_Graph_Tables
+# Checked 31/07/23
 
 # This plot takes the code from report-NIS-intro-detect-sim.Rmd 
 # And makes it easier to export plots in .png and saved in a list to /Graphs and 
 # 1 table of summary results to /Table. 
-# This needs a final check. 
 
 Sim_Graphs_Tables <- function(){
 
@@ -119,7 +119,7 @@ df_results <- data.frame("resultsA" = resultsA_dt,
                          "resultsB" = resultsB_dt,
                          "resultsC" = resultsC_dt)
 
-# Random Survillance
+# Random Surveillance
 p7 <- ggplot2::ggplot(df_results, aes(x = resultsA)) +
   geom_histogram(binwidth = 0.05, colour = "gray", fill = "gray") +
   theme_bw() +
@@ -128,7 +128,7 @@ p7 <- ggplot2::ggplot(df_results, aes(x = resultsA)) +
   scale_x_continuous(name = "Time to Detection (Years)",
                      limits = c(0, 101))
 
-plot_ls[[7]] <- p7; names(plot_ls)[7] <- paste0(config$run_name, "_T_Detect_Hst_Rsk_Surveil") # save into list
+plot_ls[[7]] <- p7; names(plot_ls)[7] <- paste0(config$run_name, "_T_Detect_Hst_Rdm_Surveil") # save into list
 
 # Risk Based Surveillance
 p8 <- ggplot2::ggplot(df_results, aes(x = resultsB)) +
@@ -150,7 +150,7 @@ p9 <- ggplot2::ggplot(df_results, aes(x = resultsC)) +
   scale_x_continuous(name = "Time to Detection (Years)",
                      limits = c(0, 101))
 
-plot_ls[[9]] <- p9; names(plot_ls)[9] <- paste0(config$run_name, "_T_Detect_Hst_Rsk_Surveil") # save into list
+plot_ls[[9]] <- p9; names(plot_ls)[9] <- paste0(config$run_name, "_T_Detect_Hst_Hvy_Rsk_Surveil") # save into list
 
 png(filename = file.path("outputs", config$run_name, "Graphs", paste0(config$run_name, "_Time_Detection_hist.png")),
     width = 35, height = (35/3), units = "cm", res = 300)
@@ -170,7 +170,7 @@ p10 <- ggplot2::ggplot(df_results, aes(x = 1:config$num_sim, y = resultsA)) +
                      limits = c(0, 101)) +
   ggtitle("Random surveillance")
 
-plot_ls[[10]] <- p10; names(plot_ls)[10] <- paste0(config$run_name, "_T_Detect_Pnt_Rsk_Surveil") # save into list
+plot_ls[[10]] <- p10; names(plot_ls)[10] <- paste0(config$run_name, "_T_Detect_Pnt_Rdm_Surveil") # save into list
 
 # Risk based surveillance
 p11 <- ggplot2::ggplot(df_results, aes(x = 1:config$num_sim, y = resultsB)) +
@@ -192,7 +192,7 @@ p12 <- ggplot2::ggplot(df_results, aes(x = 1:config$num_sim, y = resultsC)) +
                      limits = c(0, 101)) +
   ggtitle("Heavy risk-based surveillance")
 
-plot_ls[[12]] <- p12; names(plot_ls)[12] <- paste0(config$run_name, "_T_Detect_Pnt_Rsk_Surveil") # save into list
+plot_ls[[12]] <- p12; names(plot_ls)[12] <- paste0(config$run_name, "_T_Detect_Pnt_Hvy_Rsk_Surveil") # save into list
 
 png(filename = file.path("outputs", config$run_name, "Graphs", paste0(config$run_name, "_Time_Detection_plot.png")),
     width = 35, height = (35/3), units = "cm", res = 300)
@@ -250,7 +250,7 @@ resultsC_df <- data.frame("results" = resultsC_dt, "scenario" = rep("resultsC_dt
 results_df <- rbind(resultsA_df, resultsB_df, resultsC_df)
 
 # Generate Summary Statistics
-results_df %>% group_by(scenario) %>% summarise(Mean.Result = mean(results),
+results_df[!results_df$results == 1000,] %>% group_by(scenario) %>% summarise(Mean.Result = mean(results),
                                                  Median.Result = median(results),
                                                  Min.Result = min(results),
                                                  Max.Result = max(results),
