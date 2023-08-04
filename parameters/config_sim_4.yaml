@@ -3,7 +3,7 @@ user: "T.Gibson"
 
 # unique run name (directory and results name)
 # to include letters, numbers, underscores or dashes, no special characters
-run_name: "Sim_1"
+run_name: "Sim_4"
 
 # seed number
 seed: 2022
@@ -21,8 +21,8 @@ num_sites: 100
 # define distributions to use for introduction and establishment probabilities
 # establishment and introduction is either: (1) 'random uniform' OR (2) 'equal uniform' OR (3) 'lognormal' 
 # (4) 'exponential' OR (5) 'positive normal' (case insensitive)
-establish_risk: "exponential"
-intro_risk: "exponential"  # if normal majority of sites are intermediate risk
+establish_risk: "lognormal"
+intro_risk: "lognormal"  # if normal majority of sites are intermediate risk
 
 # probability of establishment, required if 'equal uniform' establish_risk
 establish_prob: 0.8
@@ -96,10 +96,10 @@ defaults:
     name: "default"
     num_sites: 100
     num_years: 30
-    establish_risk: "exponential"
+    establish_risk: "lognormal"
     establish_prob: 0.8
     intro_prob: 0.8
-    intro_risk: "exponential"
+    intro_risk: "lognormal"
     mean_visit_rate: 1
     p_detection: 0.8
     max_p_detect: 0.9

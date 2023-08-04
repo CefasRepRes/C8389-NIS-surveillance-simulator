@@ -46,7 +46,7 @@ p2 <- ggplot2::ggplot(df_probs, aes(x = p_intro)) +
 plot_ls[[2]] <- p2; names(plot_ls)[2] <- paste0(config$run_name, "_Prob_Intro") # save into list
 
 # Probability of Establishment and Introduction
-p3 <- ggplot2::ggplot(df_probs, aes(x = p_intro)) +
+p3 <- ggplot2::ggplot(df_probs, aes(x = p_intro_establish)) +
   geom_histogram(binwidth = 0.05, colour = "black", fill = "gray") +
   theme_bw() +
   scale_x_continuous(name = "Probability",

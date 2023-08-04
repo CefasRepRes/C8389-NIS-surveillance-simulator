@@ -3,7 +3,7 @@ user: "T.Gibson"
 
 # unique run name (directory and results name)
 # to include letters, numbers, underscores or dashes, no special characters
-run_name: "Sim_1"
+run_name: "Sim_5"
 
 # seed number
 seed: 2022
@@ -46,7 +46,7 @@ det_prob_min: 0
 det_prob_max: 1
 
 # Number of seed sites can be 1 to num_sites
-seed_n: 1
+seed_n: 25
 
 # Detection summary - if value of seed_n is greater than 1 this is used to get the time of detection from the multiple simulations
 # can be first, last, mean, median
@@ -84,10 +84,10 @@ Prob_Above: 0.8
 
 ## ADDITIONAL ANALYSES -----------------------------------------------------------------------
 # logical stating whether sensitivity analysis and report should be generated
-sensitivity_analysis: TRUE
+sensitivity_analysis: FALSE
 
 # logical stating whether elasticity analysis and report should be generated
-elasticity_analysis: TRUE
+elasticity_analysis: FALSE
 
 # percentage of change to test each parameters
 elasticity_proportion: 0.1

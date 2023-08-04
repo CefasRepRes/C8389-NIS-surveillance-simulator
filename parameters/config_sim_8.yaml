@@ -3,7 +3,7 @@ user: "T.Gibson"
 
 # unique run name (directory and results name)
 # to include letters, numbers, underscores or dashes, no special characters
-run_name: "Sim_1"
+run_name: "Sim_8"
 
 # seed number
 seed: 2022
@@ -38,7 +38,7 @@ mean_visit_rate: 1
 # if "linear" the probability of detection increases with abundance
 # if "threshold" the probability of detection is Prob_Below until abundance reaches a threshold value at which point it 
 # increases to Prob_Above
-detect_dynamic: "constant"
+detect_dynamic: "threshold"
 
 # mean, minimum and maximum detection probability
 det_prob: 0.8
@@ -62,19 +62,19 @@ start_pop: 1
 start_possion: F
 
 # numeric the finite rate of population increase.
-pop_R: 2
+pop_R: 1
 
 # character defines the population growth model in "logistic" or "exponential"
-growth_model: "exponential"
+growth_model: "logistic"
 
 # numeric the carrying capacity at each site.
-pop_cap: 500
+pop_cap: 100000 
 
 # numeric the abundance required to increase the probability of detection by 0.01 if detection_dynmaic = linear
-APrb: 10
+APrb: 500
 
 # numeric the abundance which defines if a value of Prob_Below or Prob_Above is used for detection probability 
-Abund_Threshold: 1000
+Abund_Threshold: 10000
 
 # numeric the value given to the detection probability if abundance is below the threshold
 Prob_Below: 0.1
@@ -84,10 +84,10 @@ Prob_Above: 0.8
 
 ## ADDITIONAL ANALYSES -----------------------------------------------------------------------
 # logical stating whether sensitivity analysis and report should be generated
-sensitivity_analysis: TRUE
+sensitivity_analysis: FALSE
 
 # logical stating whether elasticity analysis and report should be generated
-elasticity_analysis: TRUE
+elasticity_analysis: FALSE
 
 # percentage of change to test each parameters
 elasticity_proportion: 0.1

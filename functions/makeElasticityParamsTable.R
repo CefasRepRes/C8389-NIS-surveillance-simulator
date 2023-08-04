@@ -18,7 +18,7 @@
 #' 
 #' @export
 #'
-makeElasticityParamsTable <- function(defaults, elasticity_prop, drop_var = NA) {
+makeElasticityParamsTable <- function(defaults, elasticity_prop, drop_var = "NA") {
   # create dataframe of scenarios with differing parameters
   # create the rows
   num_sites <- lapply(seq(from = defaults$num_sites - (defaults$num_sites * elasticity_prop),
