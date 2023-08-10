@@ -46,7 +46,7 @@ det_prob_min: 0
 det_prob_max: 1
 
 # Number of seed sites can be 1 to num_sites
-seed_n: 25
+seed_n: 5
 
 # Detection summary - if value of seed_n is greater than 1 this is used to get the time of detection from the multiple simulations
 # can be first, last, mean, median

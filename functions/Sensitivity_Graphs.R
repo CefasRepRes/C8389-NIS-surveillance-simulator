@@ -43,9 +43,10 @@ for(i in 1:length(df_factors_all)){
                          replacement = "",
                          x = unique(df_factors[[x]][["name"]])
                        ))) +
-      scale_y_continuous(name = "Time to detection (years)") +
+      scale_y_continuous(name = "Time to detection (years)", limits = c(0, config$num_years)) +
       labs(title = paste(w),
-           subtitle = paste("Sensivitiy analysis: ", x))
+           subtitle = paste("Sensivitiy analysis: ", x)) + 
+      stat_summary(fun.y = median, geom = "point", size = 1.5, shape = 21, fill = "white")
     
     plot_ls[[w]][[paste0(x, "_T_detect")]] <- p1 # _T_detect
     
@@ -67,9 +68,7 @@ for(i in 1:length(df_factors_all)){
                          x = unique(df_factors[[x]][["name"]])
                        ))) +
       scale_y_continuous(name = "Simulations NIS not detected (%)",
-                         limits = c(seq(
-                           from = 0, to = 100, by = 10
-                         )))
+                         limits = c(0,100))
     
     # _Pct_No_Detect
     plot_ls[[w]][[paste0(x, "_Pct_No_Detect")]] <- p2 # _Pct_No_Detect

@@ -295,7 +295,7 @@ if (config$elasticity_analysis == TRUE) {
   e_results_all <- lapply(setNames(surveillance, surveillance), function(y) {
     
     e_results <- runSurveillanceSensitvity(X = scenarios,
-                                           surveillance_scenario = "a_random")
+                                           surveillance_scenario = y)
     
     # summarise elasticity results: total non detected/percent detected etc
     e_results <- summariseElasticityResults(results = e_results,

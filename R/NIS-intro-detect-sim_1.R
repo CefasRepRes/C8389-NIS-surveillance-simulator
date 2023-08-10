@@ -16,7 +16,8 @@ source("functions/GetAbundance.R")
 source("functions/ProcessMultipleResults.R")
 source("functions/Sim_Graphs_Tables.R")
 source("functions/Sensitivity_Graphs.R")
-source("functions/Elasticity_Graphs.R")
+source("functions/Elasticity_Graphs_All.R")
+source("functions/Elasticity_Graphs_Main.R")
 
 pkgs <- c("yaml", "here", "truncnorm", "reshape2", "gtools",
           "ggplot2", "patchwork", "EnvStats", "ReIns", "data.table", "dplyr")
@@ -287,15 +288,17 @@ if (config$elasticity_analysis == TRUE) {
   
   # adjust each parameter according to input sensitivity config
   scenarios <- makeElasticityParamsTable(defaults = defaults,
-                                         elasticity_prop = config$elasticity_proportion, drop_var = "seed_n")
+                                         elasticity_prop = config$elasticity_proportion, 
+                                         drop_var = c("seed_n", "min_p_detect", "max_p_detect", "establish_prob"))
   
   # run the surveillance elasticity 
   # NOTE this includes generation of p_intro and p_establish as well as runSurveillanceSimulation()
   # NOTE the runSurveillanceSensitivity function just runs the model multiple times so is ok for elasticity analysis
   e_results_all <- lapply(setNames(surveillance, surveillance), function(y) {
     
+    # This generates results for every simulation
     e_results <- runSurveillanceSensitvity(X = scenarios,
-                                           surveillance_scenario = "a_random")
+                                           surveillance_scenario = y)
     
     # summarise elasticity results: total non detected/percent detected etc
     e_results <- summariseElasticityResults(results = e_results,
@@ -308,7 +311,7 @@ if (config$elasticity_analysis == TRUE) {
   cols_elasticity <- colnames(e_results_all[[1]])[!colnames(e_results_all[[1]]) %in% cols_to_remove]
   
   # define names of factors to analyse elasticity for
-  factors <- c("num_sites", "num_years", "mean_visit_rate", "p_detection", "establish_prob", "min_p_detect", "max_p_detect")
+  factors <- c("num_sites", "num_years", "mean_visit_rate", "p_detection")
   
   # set up data frames to record results
   elasticity_calcs_reduce <- data.frame(matrix(nrow = length(factors),
@@ -366,6 +369,6 @@ if (config$elasticity_analysis == TRUE) {
                                   elasticity_dfs = elasticity_dfs))
   
   ## Produce graphs
-  Elasticity_Graphs()
+  Elasticity_Graphs_Main()
 
 }

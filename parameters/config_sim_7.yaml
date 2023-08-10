@@ -41,7 +41,7 @@ mean_visit_rate: 1
 detect_dynamic: "linear"
 
 # mean, minimum and maximum detection probability
-det_prob: 0.8
+det_prob: 0.1
 det_prob_min: 0
 det_prob_max: 1
 
