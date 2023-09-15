@@ -15,6 +15,13 @@ It may include variation in detection probability relative to abundance at each 
   * runSurveillanceSimulation.R -  runs the standard surveillance simulation
   * summariseElasticityResults.R - summarises the simulation results from multiple runs for elasticity analysis 
   * summariseSensitivityResults.R - summarises the simulation results from multiple runs for sensitivity analysis 
+  * Elasticity_Graphs_All.R - Plots all graphs from elasticity analysis to /Graphs
+  * Elasticity_Graphs_Main.R - Plots key graphs from elasticity analysis to /Graphs
+  * Elasticity_Tables - Exports Elasticity Results used in the graphs. 
+  * GetAbundance.R - creates abundances for runSurveillanceSimulation.R
+  * Sensitivity_Graphs.R - Plots all graphs from sensitivity analysis to /Graphs
+  * Sensitivity_Tables.R - Creates all tables from sensitivity analysis to /Table
+  * Sim_Graphs_Tables.R - Creates tables for the main simulations to /Table
 
 #### outputs - folder for output htmls
   * test_run_1 - folder for example test run

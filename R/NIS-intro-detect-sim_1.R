@@ -18,6 +18,8 @@ source("functions/Sim_Graphs_Tables.R")
 source("functions/Sensitivity_Graphs.R")
 source("functions/Elasticity_Graphs_All.R")
 source("functions/Elasticity_Graphs_Main.R")
+source("functions/Sensitivity_Tables.R")
+source("functions/Elasticity_Tables.R")
 
 pkgs <- c("yaml", "here", "truncnorm", "reshape2", "gtools",
           "ggplot2", "patchwork", "EnvStats", "ReIns", "data.table", "dplyr")
@@ -250,6 +252,9 @@ if (config$sensitivity_analysis == TRUE) {
   ## Produce graphs
   Sensitivity_Graphs()
   
+  ## Create Tables
+  Sensitivity_Tables()
+  
 }
 
 ## RUN ELASTICITY ANALYSIS ----------------------------------------------------------------------
@@ -371,4 +376,7 @@ if (config$elasticity_analysis == TRUE) {
   ## Produce graphs
   Elasticity_Graphs_Main()
 
+  ## Produce Tables
+  Elasticity_Tables()
+  
 }

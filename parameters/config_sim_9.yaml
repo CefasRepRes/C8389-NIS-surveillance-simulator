@@ -3,7 +3,7 @@ user: "T.Gibson"
 
 # unique run name (directory and results name)
 # to include letters, numbers, underscores or dashes, no special characters
-run_name: "Sim_8"
+run_name: "Sim_9"
 
 # seed number
 seed: 2022
@@ -38,15 +38,15 @@ mean_visit_rate: 1
 # if "linear" the probability of detection increases with abundance
 # if "threshold" the probability of detection is Prob_Below until abundance reaches a threshold value at which point it 
 # increases to Prob_Above
-detect_dynamic: "linear"
+detect_dynamic: "threshold"
 
 # mean, minimum and maximum detection probability
-det_prob: 0.1
+det_prob: 0.8
 det_prob_min: 0
 det_prob_max: 1
 
 # Number of seed sites can be 1 to num_sites
-seed_n: 5
+seed_n: 1
 
 # Detection summary - if value of seed_n is greater than 1 this is used to get the time of detection from the multiple simulations
 # can be first, last, mean, median

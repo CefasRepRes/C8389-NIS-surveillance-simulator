@@ -1,8 +1,8 @@
 # sensitivity parameters
 # define the minimum, maximum and interval of values between these ranges to test output sensitivity
 
-seed_n:
-  min: 1
+seed_n: 
+  min: 0 # Zero will be replaced with 1 within the script after sequence generation. 
   max: 100
   interval: 10
 

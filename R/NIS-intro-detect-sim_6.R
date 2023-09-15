@@ -16,7 +16,8 @@ source("functions/GetAbundance.R")
 source("functions/ProcessMultipleResults.R")
 source("functions/Sim_Graphs_Tables.R")
 source("functions/Sensitivity_Graphs.R")
-source("functions/Elasticity_Graphs.R")
+source("functions/Elasticity_Graphs_All.R")
+source("functions/Elasticity_Graphs_Main.R")
 
 pkgs <- c("yaml", "here", "truncnorm", "reshape2", "gtools",
           "ggplot2", "patchwork", "EnvStats", "ReIns", "data.table", "dplyr")

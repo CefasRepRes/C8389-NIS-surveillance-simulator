@@ -84,10 +84,10 @@ Prob_Above: 0.8
 
 ## ADDITIONAL ANALYSES -----------------------------------------------------------------------
 # logical stating whether sensitivity analysis and report should be generated
-sensitivity_analysis: TRUE
+sensitivity_analysis: FALSE
 
 # logical stating whether elasticity analysis and report should be generated
-elasticity_analysis: TRUE
+elasticity_analysis: FALSE
 
 # percentage of change to test each parameters
 elasticity_proportion: 0.1
