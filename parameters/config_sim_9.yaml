@@ -41,9 +41,9 @@ mean_visit_rate: 1
 detect_dynamic: "threshold"
 
 # mean, minimum and maximum detection probability
-det_prob: 0.8
+det_prob: 0.1
 det_prob_min: 0
-det_prob_max: 1
+det_prob_max: 0.8
 
 # Number of seed sites can be 1 to num_sites
 seed_n: 1
@@ -62,7 +62,7 @@ start_pop: 1
 start_possion: F
 
 # numeric the finite rate of population increase.
-pop_R: 1
+pop_R: 1.5
 
 # character defines the population growth model in "logistic" or "exponential"
 growth_model: "logistic"

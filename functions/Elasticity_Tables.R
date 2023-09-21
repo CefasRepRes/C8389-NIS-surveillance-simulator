@@ -27,7 +27,7 @@ elasticity_dfs2 <- lapply(setNames(surveillance, surveillance), function(x) {
   cols <- c("variable", "direction", "names")
   df_long[cols] <- lapply(df_long[cols], factor)
   
-  # # make elastcity values positive
+  # # make elasticity values positive
   df_long$value <- abs(df_long$value)
   
   return(df_long)})

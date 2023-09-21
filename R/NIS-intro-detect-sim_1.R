@@ -1,4 +1,4 @@
-# Study simulation 1. 
+# Simulation 1 - Exponential x Exponential
 # Simulator to evaluate time to detection based on a variety of surveillance strategies
 # (assuming no spread from initial intro site)
 

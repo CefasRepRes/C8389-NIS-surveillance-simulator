@@ -1,4 +1,4 @@
-# Study simulation 2. 
+# Study simulation 2 - Random Uniform x Random Uniform
 # Simulator to evaluate time to detection based on a variety of surveillance strategies
 # (assuming no spread from initial intro site)
 
@@ -250,6 +250,9 @@ if (config$sensitivity_analysis == TRUE) {
   ## Produce graphs
   Sensitivity_Graphs()
   
+  ## Create Tables
+  Sensitivity_Tables()
+
 }
 
 ## RUN ELASTICITY ANALYSIS ----------------------------------------------------------------------
@@ -367,6 +370,9 @@ if (config$elasticity_analysis == TRUE) {
                                   elasticity_dfs = elasticity_dfs))
   
   ## Produce graphs
-  Elasticity_Graphs()
-
+  Elasticity_Graphs_Main()
+  
+  ## Produce Tables
+  Elasticity_Tables()
+  
 }

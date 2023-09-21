@@ -42,11 +42,11 @@ detect_dynamic: "linear"
 
 # mean, minimum and maximum detection probability
 det_prob: 0.1
-det_prob_min: 0
-det_prob_max: 1
+det_prob_min: 0.1
+det_prob_max: 0.8
 
 # Number of seed sites can be 1 to num_sites
-seed_n: 5
+seed_n: 10
 
 # Detection summary - if value of seed_n is greater than 1 this is used to get the time of detection from the multiple simulations
 # can be first, last, mean, median
@@ -56,13 +56,13 @@ detect_summary: "last"
 # These are required if detection_dynamic is "linear" or "threshold
 
 # the starting initial population. For single sites a single value. For multiple sites a single value to define the possion distribution mean or a vector of values for each site. 
-start_pop: 1
+start_pop: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 # logical, indicating if a single start_pop value should be used as a mean value to draw from a possion distribution
 start_possion: F
 
 # numeric the finite rate of population increase.
-pop_R: 1
+pop_R: 1.5
 
 # character defines the population growth model in "logistic" or "exponential"
 growth_model: "logistic"

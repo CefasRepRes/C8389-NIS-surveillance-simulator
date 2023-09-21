@@ -90,7 +90,7 @@ sensitivity_analysis: TRUE
 elasticity_analysis: TRUE
 
 # percentage of change to test each parameters
-elasticity_proportion: 0.1
+elasticity_proportion: 0.25
 
 defaults:
     name: "default"
