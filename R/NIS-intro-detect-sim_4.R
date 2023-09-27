@@ -1,4 +1,4 @@
-# Study simulation 4. - Lognormal x Lognormal
+# Study simulation 4. - Exponential x Exponential Logistic Growth - Linear 1 Site
 # Simulator to evaluate time to detection based on a variety of surveillance strategies
 # (assuming no spread from initial intro site)
 
@@ -250,9 +250,6 @@ if (config$sensitivity_analysis == TRUE) {
   ## Produce graphs
   Sensitivity_Graphs()
   
-  ## Create Tables
-  Sensitivity_Tables()
-  
 }
 
 ## RUN ELASTICITY ANALYSIS ----------------------------------------------------------------------
@@ -370,9 +367,6 @@ if (config$elasticity_analysis == TRUE) {
                                   elasticity_dfs = elasticity_dfs))
   
   ## Produce graphs
-  Elasticity_Graphs_Main()
-  
-  ## Produce Tables
-  Elasticity_Tables()
-  
+  Elasticity_Graphs()
+
 }

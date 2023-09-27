@@ -21,8 +21,8 @@ num_sites: 100
 # define distributions to use for introduction and establishment probabilities
 # establishment and introduction is either: (1) 'random uniform' OR (2) 'equal uniform' OR (3) 'lognormal' 
 # (4) 'exponential' OR (5) 'positive normal' (case insensitive)
-establish_risk: "lognormal"
-intro_risk: "lognormal"  # if normal majority of sites are intermediate risk
+establish_risk: "exponential"
+intro_risk: "exponential"  # if normal majority of sites are intermediate risk
 
 # probability of establishment, required if 'equal uniform' establish_risk
 establish_prob: 0.8
@@ -38,12 +38,12 @@ mean_visit_rate: 1
 # if "linear" the probability of detection increases with abundance
 # if "threshold" the probability of detection is Prob_Below until abundance reaches a threshold value at which point it 
 # increases to Prob_Above
-detect_dynamic: "constant"
+detect_dynamic: "linear"
 
 # mean, minimum and maximum detection probability
-det_prob: 0.8
-det_prob_min: 0
-det_prob_max: 1
+det_prob: 0.1
+det_prob_min: 0.1
+det_prob_max: 0.8
 
 # Number of seed sites can be 1 to num_sites
 seed_n: 1
@@ -62,19 +62,19 @@ start_pop: 1
 start_possion: F
 
 # numeric the finite rate of population increase.
-pop_R: 2
+pop_R: 1.5
 
 # character defines the population growth model in "logistic" or "exponential"
-growth_model: "exponential"
+growth_model: "logistic"
 
 # numeric the carrying capacity at each site.
-pop_cap: 500
+pop_cap: 100000 
 
 # numeric the abundance required to increase the probability of detection by 0.01 if detection_dynmaic = linear
-APrb: 10
+APrb: 500
 
 # numeric the abundance which defines if a value of Prob_Below or Prob_Above is used for detection probability 
-Abund_Threshold: 1000
+Abund_Threshold: 10000
 
 # numeric the value given to the detection probability if abundance is below the threshold
 Prob_Below: 0.1
@@ -96,10 +96,10 @@ defaults:
     name: "default"
     num_sites: 100
     num_years: 30
-    establish_risk: "lognormal"
+    establish_risk: "exponential"
     establish_prob: 0.8
     intro_prob: 0.8
-    intro_risk: "lognormal"
+    intro_risk: "exponential"
     mean_visit_rate: 1
     p_detection: 0.8
     max_p_detect: 0.9

@@ -107,7 +107,7 @@ defaults:
     min_p_detect: 0.1
     detect_dynamic: "constant"
     seed_n: 1
-    seed_n_elasticity: 10
+    seed_n_elasticity: 1
     start_pop: 1
     start_possion: F
     pop_R: 2

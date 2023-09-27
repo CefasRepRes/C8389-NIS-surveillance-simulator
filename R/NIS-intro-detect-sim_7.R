@@ -1,4 +1,4 @@
-# Study simulation 7. - Exponential x Exponential Logistic Growth - Linear 1 Site
+# Study simulation 7. - Exponential x Exponential Logistic Growth - Threshold 10 Site
 # Simulator to evaluate time to detection based on a variety of surveillance strategies
 # (assuming no spread from initial intro site)
 

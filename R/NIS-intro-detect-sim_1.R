@@ -255,6 +255,9 @@ if (config$sensitivity_analysis == TRUE) {
   ## Create Tables
   Sensitivity_Tables()
   
+  ## Save Raw Data for Plotting
+  save(df_factors_all, file = file.path("outputs", config$run_name, "Tables", paste0(config$run_name, "_Sensitivity_Data.RData")))
+  
 }
 
 ## RUN ELASTICITY ANALYSIS ----------------------------------------------------------------------
@@ -378,5 +381,8 @@ if (config$elasticity_analysis == TRUE) {
 
   ## Produce Tables
   Elasticity_Tables()
+  
+  ## Save the Elasticity Results
+  save(elasticity_dfs, file = file.path("outputs", config$run_name, "Tables", paste0(config$run_name, "_Elasticity_Data.RData")))
   
 }
