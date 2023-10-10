@@ -1,4 +1,4 @@
-# Simulation 1 - Exponential x Exponential
+# Simulation 8 - Exponential x Exponential
 # Simulator to evaluate time to detection based on a variety of surveillance strategies
 # (assuming no spread from initial intro site)
 
@@ -27,7 +27,7 @@ lapply(pkgs, library, character.only = T)
 
 ## INPUTS ----------------------------------------------------------------------------
 # load input parameters from config file
-config <- yaml.load_file("parameters/config_sim_1.yaml")
+config <- yaml.load_file("parameters/config_sim_8.yaml")
 
 # set seed
 set.seed(config$seed)

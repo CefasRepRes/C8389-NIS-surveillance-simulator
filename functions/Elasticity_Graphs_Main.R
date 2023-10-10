@@ -1,7 +1,7 @@
 # 27/07/23
 # Tom Gibson
 # Elasticity_Graphs_Main
-# Checked on 10/08/23
+# Checked on 10/08/23 # updated to ensure its pct_no_detect being plotted. 
 
 # This plot takes the code from report-NIS-intro-detect-sensitivity.Rmd
 # But it only exports the key plots. 
@@ -20,7 +20,7 @@ Elasticity_Graphs_Main <- function(){
       
       # place row names in column and reset row names
       new_df <- data.frame(names = row.names(elasticity_dfs[[x]][[y]]), elasticity_dfs[[x]][[y]], row.names = NULL)
-      new_df <- new_df[,c("names", "median", "ct_no_detect", "direction")]
+      new_df <- new_df[,c("names", "median", "pct_no_detect", "direction")]
 
     }) })
   
@@ -48,7 +48,7 @@ Elasticity_Graphs_Main <- function(){
   elasticity_dfs3$index <- factor(elasticity_dfs3$index)
   
   Var.lab <- c("Median Detection Time", "No Detection Simulations")
-  names(Var.lab) <- c("median", "ct_no_detect")
+  names(Var.lab) <- c("median", "pct_no_detect")
   
   p2 <- ggplot(data = elasticity_dfs3,
                aes(x = names, y = value, color = index, shape = direction)) + 

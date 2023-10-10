@@ -3,7 +3,7 @@ user: "T.Gibson"
 
 # unique run name (directory and results name)
 # to include letters, numbers, underscores or dashes, no special characters
-run_name: "Sim_1"
+run_name: "Sim_8"
 
 # seed number
 seed: 2022

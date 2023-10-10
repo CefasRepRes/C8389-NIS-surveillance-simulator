@@ -273,7 +273,7 @@ elasticity_dfs1 <- lapply(setNames(surveillance, surveillance), function(x) {
     
     # place row names in column and reset row names
     new_df <- data.frame(names = row.names(elasticity_dfs[[x]][[y]]), elasticity_dfs[[x]][[y]], row.names = NULL)
-    new_df <- new_df[,c("names", "median", "ct_no_detect", "direction")]
+    new_df <- new_df[,c("names", "median", "pct_no_detect", "direction")]
     
   }) })
 
@@ -294,7 +294,7 @@ elasticity_dfs2 <- lapply(setNames(surveillance, surveillance), function(x) {
 # Sort dplyr
 elas <- rbindlist(elasticity_dfs2, idcol = T)
 elas_med <- elas[elas$variable == "median"]
-elas_ct <- elas[elas$variable == "ct_no_detect"]
+elas_ct <- elas[elas$variable == "pct_no_detect"]
 
 # Median Elasticity Values
 elas_p1 <- ggplot(data = elas_med, aes(x = names, y = value, fill = .id, shape = direction))
