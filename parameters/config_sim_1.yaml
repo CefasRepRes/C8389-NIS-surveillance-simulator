@@ -102,7 +102,7 @@ defaults:
     intro_risk: "exponential"
     mean_visit_rate: 1
     p_detection: 0.8
-    max_p_detect: 0.9
+    max_p_detect: 1.0
     max_p_detect_elas: 1.0
     min_p_detect: 0.1
     detect_dynamic: "constant"

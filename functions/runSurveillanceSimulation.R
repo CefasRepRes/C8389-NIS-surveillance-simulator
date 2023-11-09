@@ -1,5 +1,5 @@
 #' #' runSurveillanceSimulation 
-#' This function was checked line by line on 20/06/23; Updated on 28/06/23
+#' This function was checked line by line on 20/06/23; Updated on 28/06/23 and on 09/11/23
 
 #' @param n_simulations numeric number of simulations to run.
 #' @param surveillance_period numeric period of time (years) for which 
@@ -81,14 +81,14 @@ runSurveillanceSimulation <- function(n_simulations,
   ## define empty results list of length n_simulations
   results <- vector(length = n_simulations, mode = "list")
   
-  ## if abundance is used create abundance plot to show growth pattern
+  ## if abundance is used create abundance plot to show growth pattern (of first site)
   if(detection_dynamic %in% c("threshold", "linear")){
   
-  plt.abnds <- GetAbun.t(t = seq(0, surveillance_period, by = 1), N0 = start_pop, 
+  plt.abnds <- GetAbun.t(t = seq(0, surveillance_period, by = 1), N0 = start_pop[1], 
                          r = pop_R, model = growth_model, K = pop_cap)
   
   plot(x = seq(0, surveillance_period, by = 1), y = plt.abnds, xlab = "Years", ylab = "Abundance",
-             main = paste0(growth_model, " Growth", ". Start_Pop:", start_pop, ". R:", pop_R))
+             main = paste0(growth_model, " Growth", ". Start_Pop:", start_pop[1], ". R:", pop_R))
   
   }
   

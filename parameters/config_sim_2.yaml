@@ -9,7 +9,7 @@ run_name: "Sim_2"
 seed: 2022
 
 # number of simulations to run
-num_sim: 1000
+num_sim: 10000
 
 ## SIMULATION PARAMETERS ---------------------------------------------------------------------
 # number of years that sites are visited
