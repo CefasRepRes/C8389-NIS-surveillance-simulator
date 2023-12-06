@@ -1,7 +1,7 @@
 # 26/07/2023
 # Tom Gibson
 # Sim_Graph_Tables
-# Checked 31/07/23
+# Checked 06/12/23
 
 # This plot takes the code from report-NIS-intro-detect-sim.Rmd 
 # And makes it easier to export plots in .png and saved in a list to /Graphs and 
@@ -217,8 +217,11 @@ df_scenarios$scenario <- factor(df_scenarios$scenario,
                                            "Risk-based",
                                            "Heavy risk-based"))
 
+# save this
+write.csv(x = df_scenarios, file = file.path("outputs", config$run_name, "Tables", paste0(config$run_name, "_Survey_Detection_Probability.csv")))
+
 p13 <- ggplot2::ggplot(df_scenarios, aes(results, y = probability, group = scenario)) +
-  geom_line(aes(color = scenario)) +
+  geom_line(aes(color = scenario), size = 1.25) +
   theme_bw() +
   ggtitle("Probability of NIS Detection Through Time") +
   scale_x_continuous(name = "Time (Years)",

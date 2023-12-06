@@ -61,17 +61,17 @@ S3_DP <- Sim_3$Sim_3_Detec_Prob
 # Sim 1 - Exponential Uniform
 S1_DP <- S1_DP + theme(legend.position = "none", panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 S1_DP <- S1_DP + ggtitle("Risk Distribution: Exponential")
-S1_DP <- S1_DP + scale_colour_manual(values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+S1_DP <- S1_DP + scale_colour_manual(values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 S1_DP <- S1_DP + theme(axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = -0.25))
 
 # Sim 2 - Random Uniform
 S2_DP <- S2_DP + theme(legend.position = "none", panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 S2_DP <- S2_DP + ggtitle("Risk Distribution: Random Uniform")
-S2_DP <- S2_DP + scale_colour_manual(values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+S2_DP <- S2_DP + scale_colour_manual(values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 S2_DP <- S2_DP + theme(axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = -0.25))
 
 # Sim 3 - Equal Uniform
-S3_DP <- S3_DP + scale_colour_manual(values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+S3_DP <- S3_DP + scale_colour_manual(values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 DP_Leg <- get_legend(S3_DP + theme(legend.box.margin = margin(t = -5.5, r = 0, b = 0, l = -7.25, unit = "cm")))
 S3_DP <- S3_DP + theme(legend.position = "none", panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 S3_DP <- S3_DP + ggtitle("Risk Distribution: Equal Uniform")
@@ -126,7 +126,7 @@ seed_n_pl <- seed_n_pl + theme_bw() + theme(legend.position = "none", legend.jus
                                   axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = 1.5))
 seed_n_pl <- seed_n_pl + scale_y_continuous(name = "Time to detection (years)", limits = c(0, 30), breaks = seq(0, 30, 5))
 seed_n_pl <- seed_n_pl + scale_x_discrete(name = "Number of Seed Sites", labels = as.character(c(1, seq(10, 100, 10))))
-seed_n_pl <- seed_n_pl + scale_fill_manual(name = "Surveillance Scenario", values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+seed_n_pl <- seed_n_pl + scale_fill_manual(name = "Surveillance Scenario", values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 seed_n_pl <- seed_n_pl + ggtitle("Sensitivity Analysis: Seed Sites")
 seed_n_pl
 
@@ -136,7 +136,7 @@ num_sites_pl <- num_sites_pl + theme_bw() + theme(legend.position = "none", lege
                                             axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = 1.5))
 num_sites_pl <- num_sites_pl + scale_y_continuous(name = "Time to detection (years)", limits = c(0, 30), breaks = seq(0, 30, 5))
 num_sites_pl <- num_sites_pl + scale_x_discrete(name = "Number of Sites", labels = as.character(seq(50, 200, 25)))
-num_sites_pl <- num_sites_pl + scale_fill_manual(name = "Surveillance Scenario", values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+num_sites_pl <- num_sites_pl + scale_fill_manual(name = "Surveillance Scenario", values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 num_sites_pl <- num_sites_pl + ggtitle("Sensitivity Analysis: Number of Sampling Sites")
 num_sites_pl
 
@@ -146,7 +146,7 @@ num_years_pl <- num_years_pl + theme_bw() + theme(legend.position = "none", lege
                                             axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = 1.5))
 num_years_pl <- num_years_pl + scale_y_continuous(name = "Time to detection (years)", limits = c(0, 30), breaks = seq(0, 30, 5))
 num_years_pl <- num_years_pl + scale_x_discrete(name = "Number of Years", labels = as.character(seq(10, 50, 5)))
-num_years_pl <- num_years_pl + scale_fill_manual(name = "Surveillance Scenario", values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+num_years_pl <- num_years_pl + scale_fill_manual(name = "Surveillance Scenario", values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 num_years_pl <- num_years_pl + ggtitle("Sensitivity Analysis: Number of Sampling Years")
 num_years_pl
 
@@ -156,7 +156,7 @@ visit_rate_pl <- visit_rate_pl + theme_bw() + theme(legend.position = "none", le
                                             axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = 1.5))
 visit_rate_pl <- visit_rate_pl + scale_y_continuous(name = "Time to detection (years)", limits = c(0, 30), breaks = seq(0, 30, 5))
 visit_rate_pl <- visit_rate_pl + scale_x_discrete(name = "Mean Visit Rate (per Year)", labels = as.character(seq(0.25, 4, 0.25)))
-visit_rate_pl <- visit_rate_pl + scale_fill_manual(name = "Surveillance Scenario", values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+visit_rate_pl <- visit_rate_pl + scale_fill_manual(name = "Surveillance Scenario", values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 visit_rate_pl <- visit_rate_pl + ggtitle("Sensitivity Analysis: Mean Visit Rate")
 visit_rate_pl
 
@@ -166,7 +166,7 @@ p_detect_pl <- p_detect_pl + theme_bw() + theme(legend.position = "none", legend
                                             axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = 1.5))
 p_detect_pl <- p_detect_pl + scale_y_continuous(name = "Time to detection (years)", limits = c(0, 30), breaks = seq(0, 30, 5))
 p_detect_pl <- p_detect_pl + scale_x_discrete(name = "Detection Probability", labels = as.character(seq(0.1, 1, 0.1)))
-p_detect_pl <- p_detect_pl + scale_fill_manual(name = "Surveillance Scenario", values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+p_detect_pl <- p_detect_pl + scale_fill_manual(name = "Surveillance Scenario", values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 p_detect_pl <- p_detect_pl + ggtitle("Sensitivity Analysis: Detection Probability")
 p_detect_pl
 
@@ -180,9 +180,9 @@ seed_n_bl <- ggplot(seed_n_df2, aes(x = name, y = pct_no_detect, fill = .id))
 seed_n_bl <- seed_n_bl + geom_col(stat = 'identity', position = position_dodge(), color = "black")
 seed_n_bl <- seed_n_bl + theme_bw() + theme(legend.position = "none", legend.justification = "top", panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                             axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = 1.5))
-seed_n_bl <- seed_n_bl + scale_y_continuous(name = "Number of No Detections (%)", limits = c(0, 100), breaks = seq(0, 100, 20))
+seed_n_bl <- seed_n_bl + scale_y_continuous(name = "Number of Detection Failures (%)", limits = c(0, 100), breaks = seq(0, 100, 20))
 seed_n_bl <- seed_n_bl + scale_x_discrete(name = "Number of Seed Sites", labels = as.character(c(1, seq(10, 100, 10))))
-seed_n_bl <- seed_n_bl + scale_fill_manual(name = "Surveillance Scenario", values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+seed_n_bl <- seed_n_bl + scale_fill_manual(name = "Surveillance Scenario", values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 seed_n_bl <- seed_n_bl + ggtitle("")
 seed_n_bl
 
@@ -194,9 +194,9 @@ num_sites_bl <- ggplot(num_sites_df2, aes(x = name, y = pct_no_detect, fill = .i
 num_sites_bl <- num_sites_bl + geom_col(stat = 'identity', position = position_dodge(), color = "black")
 num_sites_bl <- num_sites_bl + theme_bw() + theme(legend.position = "none", legend.justification = "top", panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                             axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = 1.5))
-num_sites_bl <- num_sites_bl + scale_y_continuous(name = "Number of No Detections (%)", limits = c(0, 100), breaks = seq(0, 100, 20))
+num_sites_bl <- num_sites_bl + scale_y_continuous(name = "Number of Detection Failures (%)", limits = c(0, 100), breaks = seq(0, 100, 20))
 num_sites_bl <- num_sites_bl + scale_x_discrete(name = "Number of Sites", labels = as.character(seq(50, 200, 25)))
-num_sites_bl <- num_sites_bl + scale_fill_manual(name = "Surveillance Scenario", values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+num_sites_bl <- num_sites_bl + scale_fill_manual(name = "Surveillance Scenario", values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 num_sites_bl <- num_sites_bl + ggtitle("")
 num_sites_bl
 
@@ -208,9 +208,9 @@ num_years_bl <- ggplot(num_years_df2, aes(x = name, y = pct_no_detect, fill = .i
 num_years_bl <- num_years_bl + geom_col(stat = 'identity', position = position_dodge(), color = "black")
 num_years_bl <- num_years_bl + theme_bw() + theme(legend.position = "none", legend.justification = "top", panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                                   axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = 1.5))
-num_years_bl <- num_years_bl + scale_y_continuous(name = "Number of No Detections (%)", limits = c(0, 100), breaks = seq(0, 100, 20))
+num_years_bl <- num_years_bl + scale_y_continuous(name = "Number of Detection Failures (%)", limits = c(0, 100), breaks = seq(0, 100, 20))
 num_years_bl <- num_years_bl + scale_x_discrete(name = "Number of Years", labels = as.character(seq(10, 50, 5)))
-num_years_bl <- num_years_bl + scale_fill_manual(name = "Surveillance Scenario", values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+num_years_bl <- num_years_bl + scale_fill_manual(name = "Surveillance Scenario", values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 num_years_bl <- num_years_bl + ggtitle("")
 num_years_bl
 
@@ -222,9 +222,9 @@ visit_rate_bl <- ggplot(visit_rate_df2, aes(x = name, y = pct_no_detect, fill = 
 visit_rate_bl <- visit_rate_bl + geom_col(stat = 'identity', position = position_dodge(), color = "black")
 visit_rate_bl <- visit_rate_bl + theme_bw() + theme(legend.position = "none", legend.justification = "top", panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                                   axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = 1.5))
-visit_rate_bl <- visit_rate_bl + scale_y_continuous(name = "Number of No Detections (%)", limits = c(0, 100), breaks = seq(0, 100, 20))
+visit_rate_bl <- visit_rate_bl + scale_y_continuous(name = "Number of Detection Failures (%)", limits = c(0, 100), breaks = seq(0, 100, 20))
 visit_rate_bl <- visit_rate_bl + scale_x_discrete(name = "Mean Visit Rate (per Year)", labels = as.character(seq(0.25, 4, 0.25)))
-visit_rate_bl <- visit_rate_bl + scale_fill_manual(name = "Surveillance Scenario", values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+visit_rate_bl <- visit_rate_bl + scale_fill_manual(name = "Surveillance Scenario", values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 visit_rate_bl <- visit_rate_bl + ggtitle("")
 visit_rate_bl
 
@@ -236,9 +236,9 @@ p_detect_bl <- ggplot(p_detection_df2, aes(x = name, y = pct_no_detect, fill = .
 p_detect_bl <- p_detect_bl + geom_col(stat = 'identity', position = position_dodge(), color = "black")
 p_detect_bl <- p_detect_bl + theme_bw() + theme(legend.position = "right", legend.justification = "top", panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                                     axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = 1.5))
-p_detect_bl <- p_detect_bl + scale_y_continuous(name = "Number of No Detections (%)", limits = c(0, 100), breaks = seq(0, 100, 20))
+p_detect_bl <- p_detect_bl + scale_y_continuous(name = "Number of Detection Failures (%)", limits = c(0, 100), breaks = seq(0, 100, 20))
 p_detect_bl <- p_detect_bl + scale_x_discrete(name = "Detection Probability", labels = as.character(seq(0.1, 1, 0.1)))
-p_detect_bl <- p_detect_bl + scale_fill_manual(name = "Surveillance Scenario", values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+p_detect_bl <- p_detect_bl + scale_fill_manual(name = "Surveillance Scenario", values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 Panel_3_Leg <- get_legend(p_detect_bl + theme(legend.box.margin = margin(t = 0.5, r = 0, b = 0, l = 0, unit = "cm")))
 p_detect_bl <- p_detect_bl + theme(legend.position = "none")
 p_detect_bl <- p_detect_bl + ggtitle("")
@@ -303,7 +303,7 @@ elas_p1 <- elas_p1 + theme(legend.position = "right", legend.justification = "to
                            axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = 1.25))
 elas_p1 <- elas_p1 + ylab("Elasticity") + xlab("Parameter")
 elas_p1 <- elas_p1 + scale_shape_manual(name = "Elasticity Direction",values = c(24, 25))
-elas_p1 <- elas_p1 + scale_fill_manual(name = "Surveillance Scenario", values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+elas_p1 <- elas_p1 + scale_fill_manual(name = "Surveillance Scenario", values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 elas_p1 <- elas_p1 + guides(fill = guide_legend(override.aes = list(shape = 24)))
 elas_p1 <- elas_p1 + scale_y_continuous(name = "Elasticity", limits = c(-0.25, 2.75), breaks = seq(-1, 3, 0.5))
 elas_p1 <- elas_p1 + scale_x_discrete(name = "Parameter", labels = c("Mean Visit Rate", "Number of Sites", "Number of Years", "Detection Probability"))
@@ -319,12 +319,12 @@ elas_p2 <- elas_p2 + theme(panel.grid.major = element_blank(), panel.grid.minor 
                            axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = 1.25))
 elas_p2 <- elas_p2 + ylab("Elasticity") + xlab("Parameter")
 elas_p2 <- elas_p2 + scale_shape_manual(name = "Elasticity Direction",values = c(24, 25))
-elas_p2 <- elas_p2 + scale_fill_manual(name = "Surveillance Scenario", values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+elas_p2 <- elas_p2 + scale_fill_manual(name = "Surveillance Scenario", values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 elas_p2 <- elas_p2 + guides(fill = guide_legend(override.aes = list(shape = 24)))
 elas_p2 <- elas_p2 + scale_y_continuous(name = "Elasticity", limits = c(-0.25, 2.75), breaks = seq(-1, 3, 0.5))
 elas_p2 <- elas_p2 + scale_x_discrete(name = "Parameter", labels = c("Mean Visit Rate", "Number of Sites", "Number of Years", "Detection Probability"))
 elas_p2 <- elas_p2 + theme(legend.position = "none")
-elas_p2 <- elas_p2 + ggtitle("Elasticity for Percentage No Detections")
+elas_p2 <- elas_p2 + ggtitle("Elasticity for Detection Failures (%)")
 elas_p2
 
 # Create Panel Plot 4! 
@@ -365,25 +365,25 @@ S7_IE <- Sim_7$Sim_7_Detec_Prob
 S4_IE <- S4_IE + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                        axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = -0.25))
 S4_IE <- S4_IE + theme(legend.position = "none", panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-S4_IE <- S4_IE + scale_colour_manual(values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+S4_IE <- S4_IE + scale_colour_manual(values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 S4_IE <- S4_IE + ggtitle("Linear Detection & One Seed Site")
 
 S5_IE <- S5_IE + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                        axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = -0.25))
 S5_IE <- S5_IE + theme(legend.position = "none", panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-S5_IE <- S5_IE + scale_colour_manual(values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+S5_IE <- S5_IE + scale_colour_manual(values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 S5_IE <- S5_IE + ggtitle("Linear Detection & Ten Seed Sites")
 
 S6_IE <- S6_IE + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                        axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = -0.25))
 S6_IE <- S6_IE + theme(legend.position = "none", panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-S6_IE <- S6_IE + scale_colour_manual(values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+S6_IE <- S6_IE + scale_colour_manual(values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 S6_IE <- S6_IE + ggtitle("Threshold Detection & One Seed Site")
 
 S7_IE <- S7_IE + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                        legend.position = "right", legend.justification = "top",
                        axis.title.x = element_text(vjust = -0.5), axis.title.y = element_text(vjust = -0.25))
-S7_IE <- S7_IE + scale_colour_manual(values = c("#edf8b1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
+S7_IE <- S7_IE + scale_colour_manual(values = c("goldenrod1", "#7fcdbb", "#2c7fb8"), labels = c("Random", "Risk Based", "Heavy Risk Based"))
 Panel_5_Leg <- get_legend(S7_IE + theme(legend.box.margin = margin(t = 0.6, r = 0, b = 0, l = 0, unit = "cm")))
 S7_IE <- S7_IE + theme(legend.position = "none", panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 S7_IE <- S7_IE + ggtitle("Threshold Detection & Ten Seed Sites")
