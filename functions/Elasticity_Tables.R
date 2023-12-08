@@ -3,6 +3,8 @@
 # Elasticity Tables
 # Checked 15/09/23
 
+# Function to get hold of the elasticity data in a table. 
+
 Elasticity_Tables <- function(){
 
 # DATA WRANGLING -----------------------------------------

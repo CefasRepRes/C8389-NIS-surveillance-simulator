@@ -3,9 +3,7 @@
 # Elasticity_Graphs_All
 # Checked 01/08/23
 
-# This plot takes the code from report-NIS-intro-detect-sensitivity.Rmd 
-# And makes it easier to export plots in .png and saved in a list to /Graphs and 
-# 1 table of summary results to /Table. 
+# This exports all elasticity plots in .png and also saves in a list to /Graphs 
 
 Elasticity_Graphs_All <- function(){
 

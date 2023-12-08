@@ -3,10 +3,7 @@
 # Elasticity_Graphs_Main
 # Checked on 10/08/23 # updated to ensure its pct_no_detect being plotted. 
 
-# This plot takes the code from report-NIS-intro-detect-sensitivity.Rmd
-# But it only exports the key plots. 
-# And makes it easier to export plots in .png and saved in a list to /Graphs and 
-# 1 table of summary results to /Table. 
+# This exports the key plots from the elasticity analysis in .png and saves in a list to /Graphs 
 
 Elasticity_Graphs_Main <- function(){
   
