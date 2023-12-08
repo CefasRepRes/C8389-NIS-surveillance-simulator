@@ -309,7 +309,7 @@ elas_p1 <- elas_p1 + scale_y_continuous(name = "Elasticity", limits = c(-0.25, 2
 elas_p1 <- elas_p1 + scale_x_discrete(name = "Parameter", labels = c("Mean Visit Rate", "Number of Sites", "Number of Years", "Detection Probability"))
 Panel_4_Leg <- get_legend(elas_p1 + theme(legend.box.margin = margin(t = 0.6, r = 0, b = 0, l = 0, unit = "cm")))
 elas_p1 <- elas_p1 + theme(legend.position = "none")
-elas_p1 <- elas_p1 + ggtitle("Elasticity for Median Detection Time")
+elas_p1 <- elas_p1 + ggtitle("Elasticity for Median Detection Time (Years)")
 elas_p1
 
 # Percentage Values
