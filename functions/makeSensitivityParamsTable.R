@@ -14,7 +14,7 @@
 #' 
 #' @export
 #'
-#' Checked on 29/06/2023
+#' Checked on 29/06/2023 # updated and checked on 13/09/23
 #'
 makeSensitivityParamsTable <- function(defaults, params) {
   # create dataframe of scenarios with differing parameters
@@ -60,9 +60,11 @@ makeSensitivityParamsTable <- function(defaults, params) {
                                  return(defaults)
                                })
   
-  seed_n <- lapply(seq(from = params$seed_n$min,
-                          to = params$seed_n$max,
-                          by = params$seed_n$interval), function(x) {
+  # Create sequence for seed_n
+  seed_n_seq <- seq(from = params$seed_n$min, to = params$seed_n$max, by = params$seed_n$interval)
+  seed_n_seq[seed_n_seq == 0] <- 1 # replace any zeros with 1s to prevent model break. 
+  
+  seed_n <- lapply(seed_n_seq, function(x) {
                             defaults[ , "seed_n"] <- x # edit the value
                             defaults[ , "name"] <- paste0("seed_n_", x) # rename the column 
                             return(defaults)

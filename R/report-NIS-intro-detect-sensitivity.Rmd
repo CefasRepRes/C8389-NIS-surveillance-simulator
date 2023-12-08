@@ -87,9 +87,10 @@ plots <- lapply(names(params$df_factors_all), function(w) {
                         replacement = "",
                         x = unique(df_factors[[x]][["name"]])
                       ))) +
-    scale_y_continuous(name = "Time to detection (years)") +
+    scale_y_continuous(name = "Time to detection (years)", limits = c(0, params$user_inputs$num_years)) +
     labs(title = paste(w),
-         subtitle = paste("Sensivitiy analysis: ", x))
+         subtitle = paste("Sensivitiy analysis: ", x)) +
+    stat_summary(fun.y = median, geom = "point", size = 1.5, shape = 21, fill = "white")
 
     # bar plot - percentage of simulations where NIS not detected
   p2 <- ggplot(df_factors[[x]],
@@ -109,9 +110,7 @@ plots <- lapply(names(params$df_factors_all), function(w) {
                         x = unique(df_factors[[x]][["name"]])
                       ))) +
     scale_y_continuous(name = "Simulations NIS not detected (%)",
-                        limits = c(seq(
-                          from = 0, to = 100, by = 10
-                        )))
+                        limits = c(0,100))
 
   # combine plots
   p1 + p2

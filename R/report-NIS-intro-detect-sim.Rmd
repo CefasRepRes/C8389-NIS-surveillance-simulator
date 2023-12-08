@@ -1,6 +1,7 @@
 ---
 title: "NIS-intro-detect-report"
-output: html_document
+output: html_document 
+keep_md: yes
 params:
   user_inputs: !r config
   p_establish: p_establish
@@ -70,15 +71,15 @@ p1 <- ggplot2::ggplot(df_probs, aes(x = p_establish)) +
 p2 <- ggplot2::ggplot(df_probs, aes(x = p_intro)) +
   geom_histogram(binwidth = 0.05, colour = "black", fill = "gray") +
   theme_bw() +
-  scale_x_continuous(name = "Probability of Establishment",
+  scale_x_continuous(name = "Probability of Introduction",
                      limits = c(0, 1)) +
   ylab("Frequency") +
   ggtitle("Probability of Introduction")
 
-p3 <- ggplot2::ggplot(df_probs, aes(x = p_intro)) +
+p3 <- ggplot2::ggplot(df_probs, aes(x = p_intro_establish)) +
   geom_histogram(binwidth = 0.05, colour = "black", fill = "gray") +
   theme_bw() +
-  scale_x_continuous(name = "Probability of Establishment",
+  scale_x_continuous(name = "Probability",
                      limits = c(0, 1)) +
   ylab("Frequency") +
   ggtitle("Probability of Introduction and Establishment")
@@ -132,12 +133,11 @@ p3 <- ggplot2::ggplot(df_visits, aes(x = site_visit_rate_C)) +
 p1 + p2 + p3
 
 ```
-
 \
 
 #### Time to detection for each site 
 
-The time it takes in years to visit a site where the NIS has been introduced and also detect it is illustrated in the histograms below. Where an NIS introduction is not detected within the surveillance period of `r params$user_inputs$num_years` the time to detection reported is 100 year.
+The time it takes in years to visit a site where the NIS has been introduced and also detect it is illustrated in the histograms below. Where an NIS introduction is not detected within the surveillance period of `r params$user_inputs$num_years` the time to detection reported is 1000 years.
 
 \
 

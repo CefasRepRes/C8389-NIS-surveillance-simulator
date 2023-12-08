@@ -29,12 +29,12 @@ runSurveillanceSensitvity <- function(X, surveillance_scenario, show.rows = T) {
     # probability of establishment
     p_establish <- getEstablishProbability(method = X$establish_risk[i],
                                            n_sites = X$num_sites[i],
-                                           x = X$establish_prob[i])
+                                           equ_p = X$establish_prob[i])
     
     # probability of introduction
     p_intro <- getIntroProbability(method = X$intro_risk[i],
                                    n_sites = X$num_sites[i],
-                                   x = x$intro_prob)
+                                   equ_p = X$intro_prob[i])
     
     # combined introduction and establishment probs to give overall introduction rate
     p_intro_establish <- p_intro * p_establish
