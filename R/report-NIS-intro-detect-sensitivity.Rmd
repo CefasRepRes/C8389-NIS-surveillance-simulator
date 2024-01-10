@@ -66,7 +66,7 @@ data_frame
 
 #### Sensivity Analysis
 
-```{r sensivitiy, echo = FALSE, fig.width = 12, fig.height = 4, fig.align = 'center', warnings = FALSE}
+```{r sensivitiy, echo = FALSE, fig.width = 12, fig.height = 4, fig.align = 'center', warning = F}
 # produce plots for each sensitivity factor tested
 plots <- lapply(names(params$df_factors_all), function(w) {
   

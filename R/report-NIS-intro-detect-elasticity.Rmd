@@ -46,7 +46,7 @@ The following input parameters (`r factors`) are increased and decreased by `r c
 
 #### Elasticity Analysis
 
-```{r, fig.height=10, fig.width = 6, fig.align='center', echo = F, warnings = FALSE}
+```{r, fig.height=10, fig.width = 6, fig.align='center', echo = F, warning = F}
 # DATA WRANGLING -----------------------------------------
 surveillance <- names(elasticity_dfs)
 
@@ -81,7 +81,7 @@ elasticity_dfs2 <- lapply(setNames(surveillance, surveillance), function(x) {
 ```
 
 
-```{r, echo = FALSE, fig.width = 12, fig.height = 6, fig.align = 'center', warnings = FALSE}
+```{r, echo = FALSE, fig.width = 12, fig.height = 6, fig.align = 'center', warning = F}
 # produce plots
 lapply(surveillance, function(x) {
   
@@ -101,7 +101,7 @@ lapply(surveillance, function(x) {
 
 ```
 
-```{r, echo = FALSE, fig.width = 12, fig.height = 6, fig.align = 'center', warnings = FALSE}
+```{r, echo = FALSE, fig.width = 12, fig.height = 6, fig.align = 'center', warning = F}
 elasticity_dfs3 <- data.table::rbindlist(elasticity_dfs2, idcol = "index")
 elasticity_dfs3$index <- factor(elasticity_dfs3$index)
 
